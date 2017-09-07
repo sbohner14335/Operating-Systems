@@ -2,6 +2,7 @@ Browser-based Operating System in TypeScript
 ============================================
 
 Stephen Bohner
+
 RollerballOS
 
 This is the Operating Systems class initial project.
