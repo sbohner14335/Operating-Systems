@@ -51,7 +51,10 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             // date
             sc = new TSOS.ShellCommand(this.shellDate, "date", "- Displays the date and time.");
-            this.commandList[this.commandList.length]= sc;
+            this.commandList[this.commandList.length] = sc;
+            // whereami
+            sc = new TSOS.ShellCommand(this.shellWhereami, "whereami", "- Displays your current location.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -250,9 +253,12 @@ var TSOS;
             }
         };
         Shell.prototype.shellDate = function (args) {
-                _StdOut.putText(_Hours + ":" + _Minutes);
-                _StdOut.advanceLine();
-                _StdOut.putText(_Month + "/" + _Day + "/" + _Year);
+            _StdOut.putText(_Hours + ":" + _Minutes);
+            _StdOut.advanceLine();
+            _StdOut.putText(_Month + "/" + _Day + "/" + _Year);
+        };
+        Shell.prototype.shellWhereami = function (args) {
+            _StdOut.putText("You find yourself on rollerblades in a pit with a ball in your hand.");
         };
         return Shell;
     })();
