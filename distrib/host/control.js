@@ -73,6 +73,8 @@ var TSOS;
             document.getElementById("btnReset").disabled = false;
             // Change the status of the OS
             document.getElementById("status").innerText = "{Running}";
+            // Call the time function
+            getTime();
             // .. set focus on the OS console display ...
             document.getElementById("display").focus();
             // ... Create and initialize the CPU (because it's part of the hardware)  ...

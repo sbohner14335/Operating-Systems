@@ -30,8 +30,7 @@ var _DefaultFontSize = 13;
 var _FontHeightMargin = 4; // Additional space added to font size when advancing a line.
 var _Trace = true; // Default the OS trace to be on.
 var _DateTime = new Date(); // Date object instantiated for get function calls.
-var _Hours = _DateTime.getHours(); // Variables used in shellDate function
-var _Minutes = _DateTime.getMinutes();
+var _Time;
 var _Month = _DateTime.getMonth() + 1;
 var _Day = _DateTime.getDate();
 var _Year = _DateTime.getFullYear();

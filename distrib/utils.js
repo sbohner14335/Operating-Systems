@@ -44,7 +44,28 @@ var TSOS;
             }
             return retVal;
         };
+
         return Utils;
     })();
     TSOS.Utils = Utils;
 })(TSOS || (TSOS = {}));
+
+    getTime = function () {
+        // Clock that displays hours, minutes and seconds when the OS is running.
+        var date = new Date(); // Date object created for a clock.
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var seconds = date.getSeconds();
+        minutes = checkTime(minutes);
+        seconds = checkTime(seconds);
+        _Time = hours + ":" + minutes + ":" + seconds;
+        document.getElementById("time").innerHTML = "Time: " + _Time;
+        var t = setTimeout(getTime, 500);
+    };
+
+    checkTime = function (i) {
+        if (i < 10) {
+            i = "0" + i
+        }  // add zero in front of numbers < 10
+        return i;
+    };

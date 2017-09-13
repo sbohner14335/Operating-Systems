@@ -256,7 +256,8 @@ var TSOS;
             }
         };
         Shell.prototype.shellDate = function (args) {
-            _StdOut.putText(_Hours + ":" + _Minutes);
+            getTime();
+            _StdOut.putText(_Time);
             _StdOut.advanceLine();
             _StdOut.putText(_Month + "/" + _Day + "/" + _Year);
         };
