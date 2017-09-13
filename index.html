@@ -35,7 +35,7 @@
    
 </head>
 
-<body onload="onDocumentLoad()">
+<body onload="onDocumentLoad();">
 
 <div id="divMain" style="width:100%;">
    <h2>RollerballOS</h2>
@@ -66,14 +66,14 @@
              value="Reset"
              tabindex="2"
              onclick="TSOS.Control.hostBtnReset_click(this);">
-      &emsp;&emsp;&emsp;&emsp;
+      &emsp;&emsp;&emsp;&emsp;&emsp;
 
       <label id = "status"> {Status} </label>
    </div>
 
-   <div id = "divTimeStatus">
+   <div id = "divTimeStatus" style="margin:4px;">
       <label id = "time"> Time: 00:00:00 </label>
-      <label id = "date"> MM/DD/YYYY </label>
+      <label id = "date" style = "margin-left: 292px"></label>
    </div>
 
    <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">

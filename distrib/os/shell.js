@@ -259,7 +259,7 @@ var TSOS;
             getTime();
             _StdOut.putText(_Time);
             _StdOut.advanceLine();
-            _StdOut.putText(_Month + "/" + _Day + "/" + _Year);
+            _StdOut.putText(_Date);
         };
         Shell.prototype.shellWhereami = function (args) {
             _StdOut.putText("You find yourself on rollerblades in a pit with a ball in your hand.");

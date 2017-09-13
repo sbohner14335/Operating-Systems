@@ -75,6 +75,7 @@ var TSOS;
             document.getElementById("status").innerText = "{Running}";
             // Call the time function
             getTime();
+            document.getElementById("date").innerHTML = _Date;
             // .. set focus on the OS console display ...
             document.getElementById("display").focus();
             // ... Create and initialize the CPU (because it's part of the hardware)  ...

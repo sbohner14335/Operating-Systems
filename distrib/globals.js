@@ -31,9 +31,10 @@ var _FontHeightMargin = 4; // Additional space added to font size when advancing
 var _Trace = true; // Default the OS trace to be on.
 var _DateTime = new Date(); // Date object instantiated for get function calls.
 var _Time;
-var _Month = _DateTime.getMonth() + 1;
+var _Month = _DateTime.getMonth() + 1; // Get functions called on the Date object.
 var _Day = _DateTime.getDate();
 var _Year = _DateTime.getFullYear();
+var _Date = _Month + "/" + _Day + "/" +  _Year;
 // The OS Kernel and its queues.
 var _Kernel;
 var _KernelInterruptQueue; // Initializing this to null (which I would normally do) would then require us to specify the 'any' type, as below.

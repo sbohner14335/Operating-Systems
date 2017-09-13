@@ -62,7 +62,6 @@ var TSOS;
         document.getElementById("time").innerHTML = "Time: " + _Time;
         var t = setTimeout(getTime, 500);
     };
-
     checkTime = function (i) {
         if (i < 10) {
             i = "0" + i
