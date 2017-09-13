@@ -55,6 +55,9 @@ var TSOS;
             // whereami
             sc = new TSOS.ShellCommand(this.shellWhereami, "whereami", "- Displays your current location.");
             this.commandList[this.commandList.length] = sc;
+            // status
+            sc = new TSOS.ShellCommand(this.shellStatus, "status", "<string> - Sets the status.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -259,6 +262,14 @@ var TSOS;
         };
         Shell.prototype.shellWhereami = function (args) {
             _StdOut.putText("You find yourself on rollerblades in a pit with a ball in your hand.");
+        };
+        Shell.prototype.shellStatus = function (args) {
+            if (args.length > 0) {
+                var status = args.toString(); // Parse the array using toString.
+                document.getElementById("status").innerText = "{" + status.split(",").join(" ") + "}";
+            } else {
+                _StdOut.putText("Usage: status <string>  Please supply a string.");
+            }
         };
         return Shell;
     })();
