@@ -36,9 +36,8 @@
 </head>
 
 <body onload="onDocumentLoad();">
-
 <div id="divMain" style="width:100%;">
-   <h2>RollerballOS</h2>
+   <img src="distrib/images/rollerballLogo.png" style=" width:330px; height:70px">
 
    <div id="divButtonBar" style="margin:4px;">
       <input type="button"
@@ -73,13 +72,13 @@
 
    <div id = "divTimeStatus" style="margin:4px;">
       <label id = "time"> Time: 00:00:00 </label>
-      <label id = "date" style = "margin-left: 292px"></label>
+      <label id = "date" style = "margin-left: 300px"></label>
    </div>
 
    <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
       <canvas id="display"
               width="500px"
-              height="500px"
+              height="400px"
               tabindex="3">
       </canvas>
    </div>
@@ -90,7 +89,7 @@
          <br>
          <textarea name="taHostLog"
                    id  ="taHostLog"
-                   rows="26"
+                   rows="15"
                    cols="48"
          ></textarea>
       </label>
@@ -108,7 +107,6 @@
       </label>
    </div>
 </div>
-
 <p class="footerText" style="clear:both;">
    <br>
    Copyright &copy; 2008 - 2016 No Rights Reserved.
