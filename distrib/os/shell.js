@@ -58,6 +58,9 @@ var TSOS;
             // status
             sc = new TSOS.ShellCommand(this.shellStatus, "status", "<string> - Sets the status.");
             this.commandList[this.commandList.length] = sc;
+            // BSOD (blue screen of death)
+            sc = new TSOS.ShellCommand(this.shellBSOD, "bsod", "- When all else fails...");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -271,6 +274,9 @@ var TSOS;
             } else {
                 _StdOut.putText("Usage: status <string>  Please supply a string.");
             }
+        };
+        Shell.prototype.shellBSOD = function (args) {
+            _Kernel.krnTrapError("BSOD");
         };
         return Shell;
     })();

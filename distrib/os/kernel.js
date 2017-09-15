@@ -155,6 +155,15 @@ var TSOS;
         Kernel.prototype.krnTrapError = function (msg) {
             TSOS.Control.hostLog("OS ERROR - TRAP: " + msg);
             // TODO: Display error on console, perhaps in some sort of colored screen. (Maybe blue?)
+            _StdOut.clearScreen();
+            // Insert BSOD
+            _DrawingContext.beginPath();
+            _DrawingContext.rect(0, 0, 500, 400);
+            _DrawingContext.fillStyle = "#ad1000";
+            _DrawingContext.fill();
+            _DrawingContext.fillStyle = "white";
+            _DrawingContext.font = "50px Verdana";
+            _DrawingContext.fillText("RIP :(", 150, 200);
             this.krnShutdown();
         };
         return Kernel;

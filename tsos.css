@@ -31,12 +31,14 @@ h3 {
 
 #display {
   background-color:#DFDBC3;
-  border: 2px solid red;
+  border: 2px solid #ad1000;
   cursor: default;
 }
 
 .normal_button {
   width: 100px;
+  outline-color: #ad1000;
+  outline-width: thick;
 }
 
 .footerText {
