@@ -81,7 +81,14 @@ var TSOS;
             this.currentYPosition += _DefaultFontSize +
                 _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                 _FontHeightMargin;
-            // TODO: Handle scrolling. (iProject 1)
+            // Scrolls when the advanceLine goes off of the canvas.
+            if (this.currentYPosition > _Canvas.height) {
+                var imageData = _DrawingContext.getImageData(0, 20, _Canvas.width, _Canvas.height);
+                this.clearScreen();
+                _DrawingContext.putImageData(imageData, 0, 0);
+                this.currentYPosition = _Canvas.height - 5;
+            }
+
         };
         return Console;
     })();
