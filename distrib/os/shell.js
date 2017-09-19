@@ -61,6 +61,9 @@ var TSOS;
             // BSOD (blue screen of death)
             sc = new TSOS.ShellCommand(this.shellBSOD, "bsod", "- When all else fails...");
             this.commandList[this.commandList.length] = sc;
+            // load (check for hex and spaces)
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Validates user code in the user code.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -265,7 +268,7 @@ var TSOS;
             _StdOut.putText(_Date);
         };
         Shell.prototype.shellWhereami = function (args) {
-            _StdOut.putText("You find yourself on rollerblades in a pit with a ball in your hand.");
+            _StdOut.putText("You're speeding on rollerblades in a pit with a ball in your hand.");
         };
         Shell.prototype.shellStatus = function (args) {
             if (args.length > 0) {
@@ -277,6 +280,26 @@ var TSOS;
         };
         Shell.prototype.shellBSOD = function (args) {
             _Kernel.krnTrapError("BSOD");
+        };
+        Shell.prototype.shellLoad = function (args) {
+            var userCode = document.getElementById("taProgramInput").value.split(" ").join("").toString().toUpperCase();
+            var hexChar = ["A", "B", "C", "D", "E", "F", "0","1", "2", "3", "4", "5", "6", "7", "8", "9"];
+            var validHex = true;
+
+            for (i = 0; i < hexChar.length; i++) {
+                if (userCode.indexOf(hexChar[i]) == -1) {
+                    validHex = false;
+                } else {
+                    validHex = true;
+                }
+            }
+
+            if (validHex == false) {
+                _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
+            } else {
+                // Accepted command
+                _StdOut.putText("Valid Hex")
+            }
         };
         return Shell;
     })();
