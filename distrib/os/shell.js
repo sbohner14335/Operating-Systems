@@ -292,16 +292,13 @@ var TSOS;
                 userCode[i] = userCodeInput[i];
             }
             // Compare each element of the userCode array with each valid hex character.
-            for (j = 0; j < hexChar.length; j++) {
-                for (k = 0; k < userCode.length; k++) {
-                    if (hexChar[j] !== userCode[k]) {
-                        validHex = false;
-                        break;
-                    } else {
-                        validHex = true;
-                    }
+            for (k = 0; k < userCode.length; k++) {
+                if (hexChar.indexOf(userCode[k]) === -1) {
+                    validHex = false;
+                    break;
+                } else {
+                    validHex = true;
                 }
-                console.log(validHex);
             }
 
             if (validHex === false) {
