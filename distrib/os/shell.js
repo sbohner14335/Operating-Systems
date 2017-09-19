@@ -282,19 +282,29 @@ var TSOS;
             _Kernel.krnTrapError("BSOD");
         };
         Shell.prototype.shellLoad = function (args) {
-            var userCode = document.getElementById("taProgramInput").value.split(" ").join("").toString().toUpperCase();
-            var hexChar = ["A", "B", "C", "D", "E", "F", "0","1", "2", "3", "4", "5", "6", "7", "8", "9"];
-            var validHex = true;
-
-            for (i = 0; i < hexChar.length; i++) {
-                if (userCode.indexOf(hexChar[i]) == -1) {
-                    validHex = false;
-                } else {
-                    validHex = true;
+            var userCode = [];
+            // Code below parses all of the data to one long string with no spaces in upper case.
+            var userCodeInput = document.getElementById("taProgramInput").value.split(" ").join("").toString().toUpperCase();
+            var hexChar = ["A", "B", "C", "D", "E", "F", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+            var validHex;
+            // Populate the userCode array by looping through the userCodeInput's length.
+            for (i = 0; i < userCodeInput.length; i++) {
+                userCode[i] = userCodeInput[i];
+            }
+            // Compare each element of the userCode array with each valid hex character.
+            for (j = 0; j < hexChar.length; j++) {
+                for (k = 0; k < userCode.length; k++) {
+                    if (hexChar[j] !== userCode[k]) {
+                        validHex = false;
+                        break;
+                    } else {
+                        validHex = true;
+                    }
                 }
+                console.log(validHex);
             }
 
-            if (validHex == false) {
+            if (validHex === false) {
                 _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
             } else {
                 // Accepted command
