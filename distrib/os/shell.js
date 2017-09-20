@@ -304,7 +304,7 @@ var TSOS;
             if (validHex === false) {
                 _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
             } else {
-                // Accepted command
+                // Accepted command TODO: Do something with the hex command
                 _StdOut.putText("Valid Hex")
             }
         };
