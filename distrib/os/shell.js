@@ -55,6 +55,9 @@ var TSOS;
             // whereami
             sc = new TSOS.ShellCommand(this.shellWhereami, "whereami", "- Displays your current location.");
             this.commandList[this.commandList.length] = sc;
+            // Cool quote
+            sc = new TSOS.ShellCommand(this.shellQuote, "rollerball", "- The Corporations");
+            this.commandList[this.commandList.length] = sc;
             // status
             sc = new TSOS.ShellCommand(this.shellStatus, "status", "<string> - Sets the status.");
             this.commandList[this.commandList.length] = sc;
@@ -276,6 +279,14 @@ var TSOS;
                 document.getElementById("status").innerText = "{" + status.split(",").join(" ") + "}";
             } else {
                 _StdOut.putText("Usage: status <string>  Please supply a string.");
+            }
+        };
+        Shell.prototype.shellQuote = function () {
+            var quote = document.getElementById("quote");
+            if (quote.style.display === "none") {
+                quote.style.display = "inline-block";
+            } else {
+                quote.style.display = "none"
             }
         };
         Shell.prototype.shellBSOD = function (args) {
