@@ -35,7 +35,8 @@ var TSOS;
             var chr = "";
             // Check to see if we even want to deal with the key that was pressed.
             if (keyCode == 8) { // Backspace
-                console.log(_StdOut);
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
             }
             if (((keyCode >= 65) && (keyCode <= 90)) ||
                 ((keyCode >= 97) && (keyCode <= 123))) {

@@ -44,8 +44,10 @@ var TSOS;
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
-                }
-                else {
+                    // Handles backspace
+                } else if (chr === String.fromCharCode(8)) {
+                    this.backspace();
+                } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);
@@ -53,6 +55,16 @@ var TSOS;
                     this.buffer += chr;
                 }
             }
+        };
+        Console.prototype.backspace = function () {
+            this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+            // Clear the row
+            var buffLength = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer);
+            this.currentXPosition = this.currentXPosition - buffLength;
+            _DrawingContext.clearRect(this.currentXPosition, this.currentYPosition, _Canvas.width, this.currentFontSize);
+            this.putText(_OsShell.promptStr + this.buffer);
+            console.log(this.currentXPosition);
+            console.log(this.currentYPosition);
         };
         Console.prototype.putText = function (text) {
             // My first inclination here was to write two functions: putChar() and putString().
