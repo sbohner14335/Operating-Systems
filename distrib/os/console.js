@@ -10,19 +10,23 @@
 var TSOS;
 (function (TSOS) {
     var Console = (function () {
-        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, commandArray) {
+        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, commandArray, startIndex, endIndex) {
             if (currentFont === void 0) { currentFont = _DefaultFontFamily; }
             if (currentFontSize === void 0) { currentFontSize = _DefaultFontSize; }
             if (currentXPosition === void 0) { currentXPosition = 0; }
             if (currentYPosition === void 0) { currentYPosition = _DefaultFontSize; }
             if (buffer === void 0) { buffer = ""; }
-            if (commandArray === void 0) {commandArray = []};
+            if (commandArray === void 0) { commandArray = []; }
+            if (startIndex === void 0) { startIndex = 0; }
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
             this.currentYPosition = currentYPosition;
             this.buffer = buffer;
             this.commandArray = commandArray;
+            if (endIndex === void 0) { endIndex = this.commandArray.length; }
+            this.startIndex = startIndex;
+            this.endIndex = endIndex;
         }
         Console.prototype.init = function () {
             this.clearScreen();
@@ -51,10 +55,8 @@ var TSOS;
                     console.log(this.commandArray);
                 } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
-                } else if (chr === String.fromCharCode(38)) {
-                    this.commandHistory("up");
-                } else if (chr === String.fromCharCode(40)) {
-                    this.commandHistory("down");
+                } else if (chr === String.fromCharCode(38) || chr === String.fromCharCode(40)) {
+                    this.commandHistory();
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -64,24 +66,21 @@ var TSOS;
                 }
             }
         };
-        Console.prototype.commandHistory = function (text) {
-            if (text === "up") {
-                var i = 0;
-                // Clear the screen and prints the previous command.
-                this.clearRow();
-                // Show the most recent command.
-                this.putText(this.commandArray[i]);
-                i++;
-                // Put the command in the buffer.
-                this.buffer = this.commandArray[i];
-            } else {
-                // More or less the same, just show commands at the end first.
-                var k = this.commandArray.length;
-                this.clearRow();
-                this.putText(this.commandArray[k]);
-                k--;
-                this.buffer = this.commandArray[k];
-            }
+        Console.prototype.commandHistory = function () {
+                if (this.startIndex < this.commandArray.length) {
+                    // Clear the screen and prints the previous command.
+                    this.clearRow();
+                    // Show the most recent command.
+                    this.putText(this.commandArray[this.startIndex]);
+                    // Put the command in the buffer.
+                    this.buffer = this.commandArray[this.startIndex];
+                    this.startIndex++;
+                } else {
+                    this.clearRow();
+                    this.putText(this.commandArray[this.endIndex]);
+                    this.buffer = this.commandArray[this.endIndex];
+                    this.endIndex--;
+                }
         };
         Console.prototype.backspace = function () {
             // Store the buffer before we clear it through clearRow.
