@@ -71,10 +71,6 @@ var TSOS;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
-            // Parse out all of the command names into an array.
-            for (i = 0; i < this.commandList.length; i++) {
-                this.commandList[i].command = this.commandNames[i];
-            }
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -90,7 +86,6 @@ var TSOS;
                     _StdOut.putText(" " + this.commandNames[i]);
                 }
             }
-
         };
         Shell.prototype.handleInput = function (buffer) {
             _Kernel.krnTrace("Shell Command~" + buffer);
