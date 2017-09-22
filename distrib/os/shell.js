@@ -76,6 +76,12 @@ var TSOS;
         Shell.prototype.putPrompt = function () {
             _StdOut.putText(this.promptStr);
         };
+        Shell.prototype.tabCompletion = function (buffer) {
+            // Command completion here
+            for (i = 0; i < this.commandList.length; i++) {
+                console.log(this.commandList[i].command);
+            }
+        };
         Shell.prototype.handleInput = function (buffer) {
             _Kernel.krnTrace("Shell Command~" + buffer);
             //

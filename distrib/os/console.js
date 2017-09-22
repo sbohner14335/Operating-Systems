@@ -57,6 +57,8 @@ var TSOS;
                     this.backspace();
                 } else if (chr === String.fromCharCode(38) || chr === String.fromCharCode(40)) {
                     this.commandHistory();
+                } else if (chr === String.fromCharCode(9)) {
+                    _OsShell.tabCompletion(this.buffer);
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
