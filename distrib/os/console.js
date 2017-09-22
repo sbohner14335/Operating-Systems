@@ -47,24 +47,41 @@ var TSOS;
                     // Handles backspace
                 } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
+                } else if (chr === String.fromCharCode(38)) {
+                    this.commandHistory("up");
+                } else if (chr === String.fromCharCode(40)) {
+                    this.commandHistory("down");
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
-                    this.putText(chr);
+                    this.putText(chr)
                     // ... and add it to our buffer.
                     this.buffer += chr;
                 }
             }
         };
+        Console.prototype.commandHistory = function (text) {
+            if (text === "up") {
+                // Clear the screen and print the previous command.
+                this.clearRow();
+
+            } else {
+
+            }
+        };
         Console.prototype.backspace = function () {
-            this.buffer = this.buffer.substring(0, this.buffer.length - 1);
-            // Clear the row
-            var buffLength = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer);
-            this.currentXPosition = this.currentXPosition - buffLength;
-            _DrawingContext.clearRect(this.currentXPosition, this.currentYPosition, _Canvas.width, this.currentFontSize);
-            this.putText(_OsShell.promptStr + this.buffer);
-            console.log(this.currentXPosition);
-            console.log(this.currentYPosition);
+            var buffBeforeBackspace = this.buffer;
+            this.clearRow();
+            buffBeforeBackspace = buffBeforeBackspace.substring(0, buffBeforeBackspace.length - 1);
+            this.putText(buffBeforeBackspace);
+            this.buffer = buffBeforeBackspace;
+        };
+        Console.prototype.clearRow = function () {
+            // Clears a row of text on the canvas.
+            var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer);
+            this.currentXPosition = this.currentXPosition - offset;
+            _DrawingContext.clearRect(this.currentXPosition, this.currentYPosition + 1 - this.currentFontSize, _Canvas.width, this.currentFontSize);
+            this.buffer = "";
         };
         Console.prototype.putText = function (text) {
             // My first inclination here was to write two functions: putChar() and putString().

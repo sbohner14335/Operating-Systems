@@ -34,7 +34,7 @@ var TSOS;
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
             // Check to see if we even want to deal with the key that was pressed.
-            if (keyCode == 8) { // Backspace
+            if (keyCode == 8 || keyCode == 38 || keyCode == 40) { // (Backspace, up and down arrows)
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
