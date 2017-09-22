@@ -5,6 +5,6 @@ Stephen Bohner
 
 RollerballOS
 
-I will be creating a branch for each project to work on (i.e. Project I, Project II, etc..)
+I will be creating a branch for each project GRADE (i.e. Project I, Project II, etc..)
 
-The Master will be for grading :)
+The Master will be for DEVELOPMENT :)
