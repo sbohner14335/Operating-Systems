@@ -18,6 +18,7 @@ var TSOS;
             // Properties
             this.promptStr = ">";
             this.commandList = [];
+            this.commandNames = [];
             this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
             this.apologies = "[sorry]";
         }
@@ -70,6 +71,10 @@ var TSOS;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
+            // Parse out all of the command names into an array.
+            for (i = 0; i < this.commandList.length; i++) {
+                this.commandList[i].command = this.commandNames[i];
+            }
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -77,10 +82,8 @@ var TSOS;
             _StdOut.putText(this.promptStr);
         };
         Shell.prototype.tabCompletion = function (buffer) {
-            // Command completion here
-            for (i = 0; i < this.commandList.length; i++) {
-                console.log(this.commandList[i].command);
-            }
+            // Command completion here (using array)
+
         };
         Shell.prototype.handleInput = function (buffer) {
             _Kernel.krnTrace("Shell Command~" + buffer);
