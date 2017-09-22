@@ -47,8 +47,8 @@ var TSOS;
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
                     // Push command to array.
-                    if (this.buffer.split(" ").join("") !== "") {
-                        this.commandArray.push(this.buffer.split(" ").join(""));
+                    if (this.buffer.trim() !== "") {
+                        this.commandArray.push(this.buffer.trim());
                     }
                     // ... and reset our buffer.
                     this.buffer = "";
@@ -84,6 +84,11 @@ var TSOS;
                     this.clearRow();
                     this.putText(this.commandArray[endIndex - 1]);
                     this.buffer = this.commandArray[endIndex - 1];
+                    endIndex--;
+                } else {
+                    this.clearRow();
+                    this.putText(this.commandArray[this.startIndex]);
+                    this.startIndex++;
                     endIndex--;
                 }
             } else {
