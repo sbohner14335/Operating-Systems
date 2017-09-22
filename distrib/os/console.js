@@ -75,11 +75,19 @@ var TSOS;
                     // Put the command in the buffer.
                     this.buffer = this.commandArray[this.startIndex];
                     this.startIndex++;
-                } else {
+                } else if (this.endIndex > this.startIndex) {
                     this.clearRow();
                     this.putText(this.commandArray[this.endIndex]);
                     this.buffer = this.commandArray[this.endIndex];
                     this.endIndex--;
+                } else {
+                    this.clearRow();
+                    this.startIndex = 0;
+                    this.endIndex = this.commandArray.length - 1;
+                    this.putText(this.commandArray[this.startIndex]);
+                    this.buffer = this.commandArray[this.startIndex];
+                    this.startIndex++;
+
                 }
         };
         Console.prototype.backspace = function () {
