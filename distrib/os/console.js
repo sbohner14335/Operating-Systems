@@ -10,17 +10,19 @@
 var TSOS;
 (function (TSOS) {
     var Console = (function () {
-        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer) {
+        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, commandArray) {
             if (currentFont === void 0) { currentFont = _DefaultFontFamily; }
             if (currentFontSize === void 0) { currentFontSize = _DefaultFontSize; }
             if (currentXPosition === void 0) { currentXPosition = 0; }
             if (currentYPosition === void 0) { currentYPosition = _DefaultFontSize; }
             if (buffer === void 0) { buffer = ""; }
+            if (commandArray === void 0) {commandArray = []};
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
             this.currentYPosition = currentYPosition;
             this.buffer = buffer;
+            this.commandArray = commandArray;
         }
         Console.prototype.init = function () {
             this.clearScreen();
@@ -42,9 +44,11 @@ var TSOS;
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+                    // Push command to array.
+                    this.commandArray.push(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
-                    // Handles backspace
+                    console.log(this.commandArray);
                 } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
                 } else if (chr === String.fromCharCode(38)) {
@@ -54,7 +58,7 @@ var TSOS;
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
-                    this.putText(chr)
+                    this.putText(chr);
                     // ... and add it to our buffer.
                     this.buffer += chr;
                 }
@@ -62,16 +66,28 @@ var TSOS;
         };
         Console.prototype.commandHistory = function (text) {
             if (text === "up") {
-                // Clear the screen and print the previous command.
+                var i = 0;
+                // Clear the screen and prints the previous command.
                 this.clearRow();
-
+                // Show the most recent command.
+                this.putText(this.commandArray[i]);
+                i++;
+                // Put the command in the buffer.
+                this.buffer = this.commandArray[i];
             } else {
-
+                // More or less the same, just show commands at the end first.
+                var k = this.commandArray.length;
+                this.clearRow();
+                this.putText(this.commandArray[k]);
+                k--;
+                this.buffer = this.commandArray[k];
             }
         };
         Console.prototype.backspace = function () {
+            // Store the buffer before we clear it through clearRow.
             var buffBeforeBackspace = this.buffer;
             this.clearRow();
+            // Take one character off the buffer and push the new buffer to the actual buffer.
             buffBeforeBackspace = buffBeforeBackspace.substring(0, buffBeforeBackspace.length - 1);
             this.putText(buffBeforeBackspace);
             this.buffer = buffBeforeBackspace;
