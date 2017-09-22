@@ -18,7 +18,6 @@ var TSOS;
             // Properties
             this.promptStr = ">";
             this.commandList = [];
-            this.commandNames = [];
             this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
             this.apologies = "[sorry]";
         }
@@ -77,7 +76,7 @@ var TSOS;
         Shell.prototype.putPrompt = function () {
             _StdOut.putText(this.promptStr);
         };
-        Shell.prototype.tabCompletion = function (buffer) {
+        /*Shell.prototype.tabCompletion = function (buffer) {
             // Command completion here (using array)
             if (buffer === "") {
                 _StdOut.putText("Available Commands:" + this.commandNames);
@@ -86,7 +85,7 @@ var TSOS;
                     _StdOut.putText(" " + this.commandNames[i]);
                 }
             }
-        };
+        };*/
         Shell.prototype.handleInput = function (buffer) {
             _Kernel.krnTrace("Shell Command~" + buffer);
             //

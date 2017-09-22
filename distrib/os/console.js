@@ -10,7 +10,7 @@
 var TSOS;
 (function (TSOS) {
     var Console = (function () {
-        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, commandArray, startIndex, endIndex) {
+        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, commandArray, startIndex) {
             if (currentFont === void 0) { currentFont = _DefaultFontFamily; }
             if (currentFontSize === void 0) { currentFontSize = _DefaultFontSize; }
             if (currentXPosition === void 0) { currentXPosition = 0; }
@@ -24,9 +24,7 @@ var TSOS;
             this.currentYPosition = currentYPosition;
             this.buffer = buffer;
             this.commandArray = commandArray;
-            if (endIndex === void 0) { endIndex = this.commandArray.length; }
             this.startIndex = startIndex;
-            this.endIndex = endIndex;
         }
         Console.prototype.init = function () {
             this.clearScreen();
@@ -49,16 +47,20 @@ var TSOS;
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
                     // Push command to array.
-                    this.commandArray.push(this.buffer);
+                    if (this.buffer.split(" ").join("") !== "") {
+                        this.commandArray.push(this.buffer.split(" ").join(""));
+                    }
                     // ... and reset our buffer.
                     this.buffer = "";
                     console.log(this.commandArray);
                 } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
-                } else if (chr === String.fromCharCode(38) || chr === String.fromCharCode(40)) {
-                    this.commandHistory();
+                } else if (chr === String.fromCharCode(38)) {
+                    this.commandHistory("up");
+                } else if (chr === String.fromCharCode(40)) {
+                    this.commandHistory("down");
                 } else if (chr === String.fromCharCode(9)) {
-                    _OsShell.tabCompletion(this.buffer);
+                    //_OsShell.tabCompletion(this.buffer);
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -68,29 +70,27 @@ var TSOS;
                 }
             }
         };
-        Console.prototype.commandHistory = function () {
-                if (this.startIndex < this.commandArray.length) {
+        Console.prototype.commandHistory = function (text) {
+            var endIndex = this.commandArray.length;
+            if (endIndex !== 0) {
+                if (text === "up") {
                     // Clear the screen and prints the previous command.
                     this.clearRow();
-                    // Show the most recent command.
                     this.putText(this.commandArray[this.startIndex]);
                     // Put the command in the buffer.
                     this.buffer = this.commandArray[this.startIndex];
                     this.startIndex++;
-                } else if (this.endIndex > this.startIndex) {
+                } else if (text === "down") {
                     this.clearRow();
-                    this.putText(this.commandArray[this.endIndex]);
-                    this.buffer = this.commandArray[this.endIndex];
-                    this.endIndex--;
-                } else {
-                    this.clearRow();
-                    this.startIndex = 0;
-                    this.endIndex = this.commandArray.length - 1;
-                    this.putText(this.commandArray[this.startIndex]);
-                    this.buffer = this.commandArray[this.startIndex];
-                    this.startIndex++;
-
+                    this.putText(this.commandArray[endIndex - 1]);
+                    this.buffer = this.commandArray[endIndex - 1];
+                    endIndex--;
                 }
+            } else {
+                // No command history.
+            }
+            console.log("Start " + this.startIndex);
+            console.log("End " + endIndex);
         };
         Console.prototype.backspace = function () {
             // Store the buffer before we clear it through clearRow.
