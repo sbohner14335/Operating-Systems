@@ -10,21 +10,21 @@
 var TSOS;
 (function (TSOS) {
     var Console = (function () {
-        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, commandArray, startIndex) {
+        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, commandArray, index) {
             if (currentFont === void 0) { currentFont = _DefaultFontFamily; }
             if (currentFontSize === void 0) { currentFontSize = _DefaultFontSize; }
             if (currentXPosition === void 0) { currentXPosition = 0; }
             if (currentYPosition === void 0) { currentYPosition = _DefaultFontSize; }
             if (buffer === void 0) { buffer = ""; }
             if (commandArray === void 0) { commandArray = []; }
-            if (startIndex === void 0) { startIndex = 0; }
+            if (index === void 0) { index = 0; }
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
             this.currentYPosition = currentYPosition;
             this.buffer = buffer;
             this.commandArray = commandArray;
-            this.startIndex = startIndex;
+            this.index = index;
         }
         Console.prototype.init = function () {
             this.clearScreen();
@@ -46,7 +46,7 @@ var TSOS;
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
-                    // Push command to array.
+                    // Push command to array if it is not already in the array.
                     if (this.buffer.trim() !== "") {
                         this.commandArray.push(this.buffer.trim());
                     }
@@ -60,7 +60,7 @@ var TSOS;
                 } else if (chr === String.fromCharCode(40)) {
                     this.commandHistory("down");
                 } else if (chr === String.fromCharCode(9)) {
-                    //_OsShell.tabCompletion(this.buffer);
+                    this.tabCompletion();
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -71,31 +71,68 @@ var TSOS;
             }
         };
         Console.prototype.commandHistory = function (text) {
-            var endIndex = this.commandArray.length;
-            if (endIndex !== 0) {
+            if (this.commandArray.length !== 0) {
                 if (text === "up") {
-                    // Clear the screen and prints the previous command.
-                    this.clearRow();
-                    this.putText(this.commandArray[this.startIndex]);
-                    // Put the command in the buffer.
-                    this.buffer = this.commandArray[this.startIndex];
-                    this.startIndex++;
+                    // Make sure the next increment will not hit the length of the array.
+                    if (this.index +1 !== this.commandArray.length) {
+                        // Clear the screen and prints the previous command.
+                        this.clearRow();
+                        console.log(this.index);
+                        this.putText(this.commandArray[this.index]);
+                        // Put the command in the buffer.
+                        this.buffer = this.commandArray[this.index];
+                        // Increment the array index by 1.
+                        this.index++;
+                    } else {
+                        // If it hits the length of the array, set the index back to 0.
+                        this.index = 0;
+                        this.clearRow();
+                        console.log(this.index);
+                        this.putText(this.commandArray[this.index]);
+                        this.buffer = this.commandArray[this.index];
+                    }
                 } else if (text === "down") {
-                    this.clearRow();
-                    this.putText(this.commandArray[endIndex - 1]);
-                    this.buffer = this.commandArray[endIndex - 1];
-                    endIndex--;
-                } else {
-                    this.clearRow();
-                    this.putText(this.commandArray[this.startIndex]);
-                    this.startIndex++;
-                    endIndex--;
+                    // Make sure the next decrement will not go out of bounds.
+                    if (this.index -1 !== -1) {
+                        this.clearRow();
+                        // Decrement index by 1.
+                        this.index--;
+                        console.log(this.index);
+                        this.putText(this.commandArray[this.index]);
+                        this.buffer = this.commandArray[this.index];
+                    } else {
+                        // If it goes out of bounds, clear screen and set index to 0.
+                        this.clearRow();
+                        this.index = 0;
+                        this.buffer = "";
+                    }
                 }
-            } else {
-                // No command history.
             }
-            console.log("Start " + this.startIndex);
-            console.log("End " + endIndex);
+        };
+        Console.prototype.tabCompletion = function () {
+            var possibleCommands = [];
+            for (i = 0; i < _OsShell.commandList.length; i++) {
+                // If the command is found, print it and put it in the buffer.
+                if (_OsShell.commandList[i].command.indexOf(this.buffer) === 0) {
+                    possibleCommands.push(_OsShell.commandList[i].command);
+                } else {
+                    possibleCommands.push(_OsShell.commandList[i].command);
+                }
+            }
+            // If there is 1 possible command.
+            if (possibleCommands.length < 1) {
+                this.clearRow();
+                var command = possibleCommands.pop();
+                this.putText(command);
+                this.buffer = command;
+            } else {
+                // More than 1 possible command.
+                this.putText("Possible Commands:");
+                for (j = 0; j < possibleCommands.length; j++) {
+                    this.advanceLine();
+                    this.putText("  " + possibleCommands[j]);
+                }
+            }
         };
         Console.prototype.backspace = function () {
             // Store the buffer before we clear it through clearRow.
@@ -147,7 +184,6 @@ var TSOS;
                 _DrawingContext.putImageData(imageData, 0, 0);
                 this.currentYPosition = _Canvas.height - 5;
             }
-
         };
         return Console;
     })();

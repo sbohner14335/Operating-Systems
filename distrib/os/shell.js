@@ -76,16 +76,6 @@ var TSOS;
         Shell.prototype.putPrompt = function () {
             _StdOut.putText(this.promptStr);
         };
-        /*Shell.prototype.tabCompletion = function (buffer) {
-            // Command completion here (using array)
-            if (buffer === "") {
-                _StdOut.putText("Available Commands:" + this.commandNames);
-                for (i = 0; i < this.commandNames.length; i++) {
-                    _StdOut.advanceLine();
-                    _StdOut.putText(" " + this.commandNames[i]);
-                }
-            }
-        };*/
         Shell.prototype.handleInput = function (buffer) {
             _Kernel.krnTrace("Shell Command~" + buffer);
             //
