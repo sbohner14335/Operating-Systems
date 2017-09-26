@@ -34,10 +34,6 @@ var TSOS;
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
             // Check to see if we even want to deal with the key that was pressed.
-            if (keyCode == 8 || keyCode == 38 || keyCode == 40) { // (Backspace, up and down arrows)
-                chr = String.fromCharCode(keyCode);
-                _KernelInputQueue.enqueue(chr);
-            }
             if (((keyCode >= 65) && (keyCode <= 90)) ||
                 ((keyCode >= 97) && (keyCode <= 123))) {
                 // Determine the character we want to display.
@@ -48,6 +44,11 @@ var TSOS;
                     chr = String.fromCharCode(keyCode);
                 }
                 // TODO: Check for caps-lock and handle as shifted if so.
+                _KernelInputQueue.enqueue(chr);
+            }
+            // (Backspace, up and down arrows, and tab)
+            if (keyCode === 8 || keyCode === 38 || keyCode === 40 || keyCode === 9) {
+                chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
             else if (((keyCode >= 48) && (keyCode <= 57)) ||
