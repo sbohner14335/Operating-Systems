@@ -52,7 +52,7 @@ var TSOS;
                     }
                     // ... and reset our buffer.
                     this.buffer = "";
-                    console.log(this.commandArray);
+                    //console.log(this.commandArray);
                 } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
                 } else if (chr === String.fromCharCode(38)) {
@@ -112,26 +112,25 @@ var TSOS;
         Console.prototype.tabCompletion = function () {
             var possibleCommands = [];
             for (i = 0; i < _OsShell.commandList.length; i++) {
-                // If the command is found, print it and put it in the buffer.
+                // Search all possible commands.
                 if (_OsShell.commandList[i].command.indexOf(this.buffer) === 0) {
-                    possibleCommands.push(_OsShell.commandList[i].command);
-                } else {
                     possibleCommands.push(_OsShell.commandList[i].command);
                 }
             }
-            // If there is 1 possible command.
-            if (possibleCommands.length < 1) {
+            // If there is 1 possible command, print it and put it in the buffer.
+            if (possibleCommands.length === 1) {
                 this.clearRow();
-                var command = possibleCommands.pop();
-                this.putText(command);
-                this.buffer = command;
+                this.putText(possibleCommands[0]);
+                this.buffer = possibleCommands[0];
             } else {
-                // More than 1 possible command.
+                // More than 1 possible command, list possible commands based on input.
+                this.clearRow();
                 this.putText("Possible Commands:");
                 for (j = 0; j < possibleCommands.length; j++) {
                     this.advanceLine();
                     this.putText("  " + possibleCommands[j]);
                 }
+                this.advanceLine();
             }
         };
         Console.prototype.backspace = function () {
