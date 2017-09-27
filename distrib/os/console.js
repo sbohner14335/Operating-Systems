@@ -17,7 +17,7 @@ var TSOS;
             if (currentYPosition === void 0) { currentYPosition = _DefaultFontSize; }
             if (buffer === void 0) { buffer = ""; }
             if (commandArray === void 0) { commandArray = []; }
-            if (index === void 0) { index = 0; }
+            if (index === void 0) { index = -1; }
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
@@ -46,13 +46,13 @@ var TSOS;
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
-                    // Push command to array if it is not already in the array.
+                    // Push command to array.
                     if (this.buffer.trim() !== "") {
-                        this.commandArray.push(this.buffer.trim());
+                        this.commandArray.unshift(this.buffer.trim());
                     }
                     // ... and reset our buffer.
                     this.buffer = "";
-                    //console.log(this.commandArray);
+                    console.log(this.commandArray);
                 } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
                 } else if (chr === String.fromCharCode(38)) {
@@ -72,41 +72,31 @@ var TSOS;
         };
         Console.prototype.commandHistory = function (text) {
             if (this.commandArray.length !== 0) {
+                console.log(this.index);
                 if (text === "up") {
-                    // Make sure the next increment will not hit the length of the array.
-                    if (this.index +1 !== this.commandArray.length) {
-                        // Clear the screen and prints the previous command.
-                        this.clearRow();
-                        console.log(this.index);
-                        this.putText(this.commandArray[this.index]);
-                        // Put the command in the buffer.
-                        this.buffer = this.commandArray[this.index];
+                    // Make sure the next increment will not be out of bound.
+                    if (this.index +1 < this.commandArray.length) {
                         // Increment the array index by 1.
                         this.index++;
                     } else {
-                        // If it hits the length of the array, set the index back to 0.
+                        // If it hits out of bounds, set the index back to 0.
                         this.index = 0;
-                        this.clearRow();
-                        console.log(this.index);
-                        this.putText(this.commandArray[this.index]);
-                        this.buffer = this.commandArray[this.index];
                     }
                 } else if (text === "down") {
-                    // Make sure the next decrement will not go out of bounds.
-                    if (this.index -1 !== -1) {
-                        this.clearRow();
+                    // Make sure the next decrement is not out of bounds.
+                    if (this.index -1 > -1) {
                         // Decrement index by 1.
                         this.index--;
-                        console.log(this.index);
-                        this.putText(this.commandArray[this.index]);
-                        this.buffer = this.commandArray[this.index];
                     } else {
-                        // If it goes out of bounds, clear screen and set index to 0.
-                        this.clearRow();
+                        // If it goes out of bounds, clear screen and set index to last element.
                         this.index = 0;
-                        this.buffer = "";
                     }
                 }
+                // Clear the screen and prints the previous command.
+                // Put the command in the buffer.
+                this.clearRow();
+                this.putText(this.commandArray[this.index]);
+                this.buffer = this.commandArray[this.index];
             }
         };
         Console.prototype.tabCompletion = function () {
