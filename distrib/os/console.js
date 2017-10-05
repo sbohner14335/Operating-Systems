@@ -147,7 +147,7 @@ var TSOS;
             //
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             //         Consider fixing that.
-            if (text !== "" && this.currentXPosition < _Canvas.width) { // TODO: Ensure that the next character/word drawn is less than the width of the canvas, else line wrap
+            if (text !== "" && this.currentXPosition < _Canvas.width) {
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                 // Move the current X position.

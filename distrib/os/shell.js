@@ -67,6 +67,9 @@ var TSOS;
             // load (check for hex and spaces)
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Validates user code in the user code.");
             this.commandList[this.commandList.length] = sc;
+            // run <pid> will run a loaded program
+            sc = new TSOS.ShellCommand(this.shellRun, "run", "<pid> - Run a loaded program.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -322,6 +325,9 @@ var TSOS;
                 // Accepted command TODO: Do something with the hex command
                 _StdOut.putText("Valid Hex")
             }
+        };
+        Shell.prototype.shellRun = function (args) {
+            // TODO: If the hex is valid, this command will run the currently loaded hex.
         };
         return Shell;
     })();
