@@ -72,7 +72,6 @@ var TSOS;
         };
         Console.prototype.commandHistory = function (text) {
             if (this.commandArray.length !== 0) {
-                console.log(this.index);
                 if (text === "up") {
                     // Make sure the next increment will not be out of bound.
                     if (this.index +1 < this.commandArray.length) {

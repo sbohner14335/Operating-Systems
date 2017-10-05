@@ -311,6 +311,10 @@ var TSOS;
                     validHex = true;
                 }
             }
+            // Check for an empty textarea
+            if (document.getElementById("taProgramInput").value === "") {
+                validHex = false;
+            }
 
             if (validHex === false) {
                 _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
