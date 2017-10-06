@@ -46,7 +46,6 @@ var _StdOut;
 // UI
 var _Console;
 var _OsShell;
-var _ShellCommand; // Created for checking valid shell commands.
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode = false;
 // Global Device Driver Objects - page 12

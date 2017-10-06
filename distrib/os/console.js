@@ -52,7 +52,6 @@ var TSOS;
                     }
                     // ... and reset our buffer.
                     this.buffer = "";
-                    console.log(this.commandArray);
                 } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
                 } else if (chr === String.fromCharCode(38)) {

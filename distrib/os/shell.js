@@ -17,6 +17,7 @@ var TSOS;
         function Shell() {
             // Properties
             this.promptStr = ">";
+            this.hexCode = [];
             this.commandList = [];
             this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
             this.apologies = "[sorry]";
@@ -322,9 +323,20 @@ var TSOS;
             if (validHex === false) {
                 _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
             } else {
-                // Accepted command TODO: Do something with the hex command
-                _StdOut.putText("Valid Hex")
+                // Accepted command
+                for (j = 0; j < userCode.length; j++) {
+                    this.hexCode[j] = userCode[j];
+                }
+                console.log(this.hexCode);
             }
+/*            var userCodeInput = document.getElementById("taProgramInput").value;
+            console.log(userCodeInput);
+            var regex = /[0-9a-f]/i;
+            if (regex.test(userCodeInput) === true) {
+                _StdOut.putText("Valid Hex");
+            } else {
+                _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
+            }*/
         };
         Shell.prototype.shellRun = function (args) {
             // TODO: If the hex is valid, this command will run the currently loaded hex.
