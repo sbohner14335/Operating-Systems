@@ -119,6 +119,7 @@ var TSOS;
                     this.putText("  " + possibleCommands[j]);
                 }
                 this.advanceLine();
+                this.putText(">");
             }
         };
         Console.prototype.backspace = function () {
