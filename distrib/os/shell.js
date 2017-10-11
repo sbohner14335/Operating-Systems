@@ -323,11 +323,8 @@ var TSOS;
             if (validHex === false) {
                 _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
             } else {
+                _StdOut.putText("Valid Hex");
                 // Accepted command
-                for (j = 0; j < userCode.length; j++) {
-                    this.hexCode[j] = userCode[j];
-                }
-                console.log(this.hexCode);
             }
 /*            var userCodeInput = document.getElementById("taProgramInput").value;
             console.log(userCodeInput);
