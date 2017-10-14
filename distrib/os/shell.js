@@ -297,43 +297,30 @@ var TSOS;
             _Kernel.krnTrapError("BSOD");
         };
         Shell.prototype.shellLoad = function (args) {
-            var userCode = [];
-            // Code below parses all of the data to one long string with no spaces in upper case.
-            var userCodeInput = document.getElementById("taProgramInput").value.split(" ").join("").toString().toUpperCase();
-            var hexChar = ["A", "B", "C", "D", "E", "F", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-            var validHex;
-            // Populate the userCode array by looping through the userCodeInput's length.
-            for (i = 0; i < userCodeInput.length; i++) {
-                userCode[i] = userCodeInput[i];
-            }
-            // Compare each element of the userCode array with each valid hex character.
-            for (k = 0; k < userCode.length; k++) {
-                if (hexChar.indexOf(userCode[k]) === -1) {
-                    validHex = false;
-                    break;
+            // Get the user input through the textarea and place all of the hex commands in an array.
+            var userCodeInput = document.getElementById("taProgramInput").value.trim();
+            var hexArray = userCodeInput.split(" ");
+            var validHex = true;
+            // Check for an empty textarea
+            if (userCodeInput === "") {
+                _StdOut.putText("There is nothing in the program input to load... come on")
+            } else {
+                // Creating a regular expression for valid hex characters. (Accept 0-9 and a-f while ignoring the case)
+                var regex = /^[0-9a-f]+$/i;
+                for (i = 0; i < hexArray.length; i++) {
+                    if (regex.test(hexArray[i]) === false) {
+                        validHex = false;
+                        break;
+                    }
+                }
+
+                if (validHex === true) {
+                    _StdOut.putText("Valid Hex");
+                    // Accepted command
                 } else {
-                    validHex = true;
+                    _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
                 }
             }
-            // Check for an empty textarea
-            if (document.getElementById("taProgramInput").value === "") {
-                validHex = false;
-            }
-
-            if (validHex === false) {
-                _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
-            } else {
-                _StdOut.putText("Valid Hex");
-                // Accepted command
-            }
-/*            var userCodeInput = document.getElementById("taProgramInput").value;
-            console.log(userCodeInput);
-            var regex = /[0-9a-f]/i;
-            if (regex.test(userCodeInput) === true) {
-                _StdOut.putText("Valid Hex");
-            } else {
-                _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
-            }*/
         };
         Shell.prototype.shellRun = function (args) {
             // TODO: If the hex is valid, this command will run the currently loaded hex.
