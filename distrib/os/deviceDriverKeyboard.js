@@ -48,8 +48,12 @@ var TSOS;
             }
             // (Backspace, up and down arrows, and tab)
             if (keyCode === 8 || keyCode === 38 || keyCode === 40 || keyCode === 9) {
-                chr = String.fromCharCode(keyCode);
-                _KernelInputQueue.enqueue(chr);
+                if (keyCode === 38 || keyCode === 40) {
+                    _KernelInputQueue.enqueue(keyCode);
+                } else {
+                    chr = String.fromCharCode(keyCode);
+                    _KernelInputQueue.enqueue(chr);
+                }
             }
             else if (((keyCode >= 48) && (keyCode <= 57)) ||
                 (keyCode == 32) ||

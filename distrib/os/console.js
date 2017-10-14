@@ -54,9 +54,9 @@ var TSOS;
                     this.buffer = "";
                 } else if (chr === String.fromCharCode(8)) {
                     this.backspace();
-                } else if (chr === String.fromCharCode(38)) {
+                } else if (chr === 38) {
                     this.commandHistory("up");
-                } else if (chr === String.fromCharCode(40)) {
+                } else if (chr === 40) {
                     this.commandHistory("down");
                 } else if (chr === String.fromCharCode(9)) {
                     this.tabCompletion();
@@ -124,16 +124,16 @@ var TSOS;
         };
         Console.prototype.backspace = function () {
             // Store the buffer before we clear it through clearRow.
-            var buffBeforeBackspace = this.buffer;
+            var buffAfterBackspace = this.buffer;
             this.clearRow();
-            // Take one character off the buffer and push the new buffer to the actual buffer.
-            buffBeforeBackspace = buffBeforeBackspace.substring(0, buffBeforeBackspace.length - 1);
-            this.putText(buffBeforeBackspace);
-            this.buffer = buffBeforeBackspace;
+            // Take one character off the new buffer and set the actual buffer to the new buffer.
+            buffAfterBackspace = buffAfterBackspace.substring(0, buffAfterBackspace.length - 1);
+            this.putText(buffAfterBackspace);
+            this.buffer = buffAfterBackspace;
         };
         Console.prototype.clearRow = function () {
             // Clears a row of text on the canvas.
-            var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer);
+            var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer); // TODO: This is not correct: should only be that line, not this.buffer.
             this.currentXPosition = this.currentXPosition - offset;
             _DrawingContext.clearRect(this.currentXPosition, this.currentYPosition + 1 - this.currentFontSize, _Canvas.width, this.currentFontSize);
             this.buffer = "";
@@ -153,8 +153,11 @@ var TSOS;
                 // Move the current X position.
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 this.currentXPosition = this.currentXPosition + offset;
-            } else if (this.currentXPosition > _Canvas.width) {
-                this.advanceLine();
+                // Logic for line wrap
+                if (this.currentXPosition > _Canvas.width) {
+                    this.advanceLine();
+                    this.buffer += "\n"; // TODO: Fix line wrap to backspace.
+                }
             }
         };
         Console.prototype.advanceLine = function () {
