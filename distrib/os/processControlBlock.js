@@ -39,5 +39,5 @@ var TSOS;
         }
     return PCB;
 })();
-TSOS.Console = Console;
+TSOS.PCB = PCB;
 })(TSOS || (TSOS = {}));
