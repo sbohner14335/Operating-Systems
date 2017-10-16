@@ -29,6 +29,7 @@
    <script type="text/javascript" src="distrib/os/userCommand.js"></script>
    <script type="text/javascript" src="distrib/os/kernel.js"></script>
    <script type="text/javascript" src="distrib/os/processControlBlock.js"></script>
+   <script type="text/javascript" src="distrib/os/memoryManager.js"></script>
 
    <!-- Other Routines -->
    <script type="text/javascript" src="distrib/utils.js"></script>
@@ -161,10 +162,10 @@
    </div>
    <br>
 
-   <div id="divMemoryDisplay">
+   <div id="divMemoryDisplay" style="width:500px;">
       <label style="color: white; margin:4px; font-weight: bold; border: 1px solid white; background-color: black;">Process Memory</label>
-      <div id="divMemoryTable">
-         <table cellpadding="6" id="memoryTable" style="margin:4px; width:500px;"></table>
+      <div id="divMemoryTable" style="height: 200px; width:505px; overflow: auto">
+         <table cellpadding="6" id="memoryTable" style="margin:4px; width:500px; border: 1px white"></table>
       </div>
    </div>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>

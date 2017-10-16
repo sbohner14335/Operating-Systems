@@ -315,8 +315,8 @@ var TSOS;
                 }
                 // Accepted command
                 if (validHex === true) {
-                    _StdOut.putText("Valid Hex");
                     this.shellRun(hexArray);
+                    // TODO: Put the hex commands in memory.
                 } else {
                     _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
                 }

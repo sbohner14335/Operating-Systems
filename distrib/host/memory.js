@@ -20,16 +20,24 @@ var TSOS;
                 var cell6 = row.insertCell(6);
                 var cell7 = row.insertCell(7);
                 var cell8 = row.insertCell(8);
-                // Logic for parsing the cell data in the HTML table.
+                // Logic for parsing the cell data into the HTML table.
                 if (i < 10) {
                     cell0.innerHTML = "0x" + "00" + i.toString() ;
                 } else if (i < 100){
-                    cell0.innerHTML = "0x" + i.toString();
+                    cell0.innerHTML = "0x0" + i.toString();
                 } else {
                     cell0.innerHTML = "0x" + i.toString();
                 }
+                // Setting all memory available.
+                cell1.innerHTML = "00";
+                cell2.innerHTML = "00";
+                cell3.innerHTML = "00";
+                cell4.innerHTML = "00";
+                cell5.innerHTML = "00";
+                cell6.innerHTML = "00";
+                cell7.innerHTML = "00";
+                cell8.innerHTML = "00";
             }
-
         };
         Memory.prototype.clearMemory = function () {
             for (i = 0; i < this.memory.length; i++) {
