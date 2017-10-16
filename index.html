@@ -95,6 +95,7 @@
                    id  ="taHostLog"
                    rows="15"
                    cols="48"
+                   readonly
          ></textarea>
       </label>
    </div>
@@ -113,15 +114,17 @@
    <br>
 
    <div id="divCpuDisplay" style="margin-left:520px; width:380px; color:white">
-      <label style="color:white">CPU Display</label>
-      <table style="width:200px; height:60px; color:white; border: 1px solid white">
+      <label style="color:white; font-weight: bold; border: 1px solid white; background-color: black">CPU Display</label>
+      <table cellpadding="6" style="width:360px; height:50px; color:white">
+         <tr align="center">
             <th>PC</th>
             <th>AC</th>
             <th>IR</th>
             <th>X</th>
             <th>Y</th>
             <th>Z</th>
-         <tr>
+         </tr>
+         <tr align="center">
             <td>0</td>
             <td>0</td>
             <td>00</td>
@@ -131,7 +134,29 @@
          </tr>
       </table>
    </div>
-</div>
+   <br>
+
+   <div id="divProcessDisplay">
+      <label style="color: white; margin:4px; font-weight: bold; border: 1px solid white; background-color: black;">Processes</label>
+         <div id="divProcessTable">
+            <table id="ProcessTable" style="margin:4px; width:500px; color:white">
+               <tr>
+                  <th>PID</th>
+                  <th>State</th>
+                  <th>PC</th>
+                  <th>IR</th>
+                  <th>AC</th>
+                  <th>X</th>
+                  <th>Y</th>
+                  <th>Z</th>
+                  <th>State</th>
+               </tr>
+               <tbody id="ProcessTableInfo">
+
+               </tbody>
+            </table>
+         </div>
+   </div>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <p class="footerText" style="clear:both; color:white">
    <br>

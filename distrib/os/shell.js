@@ -303,7 +303,7 @@ var TSOS;
             var validHex = true;
             // Check for an empty textarea
             if (userCodeInput === "") {
-                _StdOut.putText("There is nothing in the program input to load... come on")
+                _StdOut.putText("There is nothing in the program input to load... derp")
             } else {
                 // Creating a regular expression for valid hex characters. (Accept 0-9 and a-f while ignoring the case)
                 var regex = /^[0-9a-f]+$/i;
@@ -313,16 +313,16 @@ var TSOS;
                         break;
                     }
                 }
-
+                // Accepted command
                 if (validHex === true) {
                     _StdOut.putText("Valid Hex");
-                    // Accepted command
+                    this.shellRun(hexArray);
                 } else {
                     _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
                 }
             }
         };
-        Shell.prototype.shellRun = function (args) {
+        Shell.prototype.shellRun = function (hex) {
             // TODO: If the hex is valid, this command will run the currently loaded hex.
         };
         return Shell;

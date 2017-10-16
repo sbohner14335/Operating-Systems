@@ -148,16 +148,16 @@ var TSOS;
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             //         Consider fixing that.
             if (text !== "") {
-                // Draw the text at the current X and Y coordinates.
-                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
-                // Move the current X position.
-                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                this.currentXPosition = this.currentXPosition + offset;
                 // Logic for line wrap
                 if (this.currentXPosition > _Canvas.width) {
                     this.advanceLine();
                     this.buffer += "\n"; // TODO: Fix line wrap to backspace.
                 }
+                // Draw the text at the current X and Y coordinates.
+                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+                // Move the current X position.
+                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                this.currentXPosition = this.currentXPosition + offset;
             }
         };
         Console.prototype.advanceLine = function () {

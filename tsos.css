@@ -29,6 +29,11 @@ h3 {
   font-style: normal;
 }
 
+table, thead, tbody, th, td {
+  background-color: black;
+  border: 1px solid white;
+}
+
 #display {
   background-color:#DFDBC3;
   border: 2px solid #ad1000;
