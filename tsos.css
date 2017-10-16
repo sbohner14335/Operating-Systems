@@ -32,6 +32,7 @@ h3 {
 table, thead, tbody, th, td {
   background-color: black;
   border: 1px solid white;
+  color: white;
 }
 
 #display {
