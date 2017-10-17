@@ -311,15 +311,15 @@ var TSOS;
                         _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
                         break;
                     } else {
-                        // TODO: Put the hex commands in memory and return the PID.
-                        _Memory.memory[i] = hexArray[i];
+                        _Memory.memory[i] = hexArray[i]; // Put the program commands in memory.
                     }
                 }
             }
             _Memory.displayProcessMemory();
+            // TODO: Return the PID.
         };
         Shell.prototype.shellRun = function (hexArray) {
-            // TODO: If the hex is valid, this command will run the currently loaded hex.
+            // TODO: This command will run the currently loaded program.
         };
         return Shell;
     })();

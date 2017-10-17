@@ -116,25 +116,19 @@
    </div>
    <br>
 
-   <div id="divCpuDisplay" style="margin-left:520px; width:380px; color:white">
+   <div id="divCpuDisplay" style="margin-left:520px; width:380px; height:72px; color:white">
       <label style="color:white; font-weight: bold; border: 1px solid white; background-color: black">CPU Display</label>
-      <table cellpadding="6" style="width:360px; height:50px;">
+      <table id ="cpuDisplay" cellpadding="6" style="width:360px;">
          <tr align="center">
             <th>PC</th>
-            <th>AC</th>
             <th>IR</th>
+            <th>AC</th>
             <th>X</th>
             <th>Y</th>
             <th>Z</th>
          </tr>
-         <tr align="center">
-            <td>0</td>
-            <td>0</td>
-            <td>00</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-         </tr>
+         <tbody id="cpuDisplayValues">
+         </tbody>
       </table>
    </div>
    <br>
@@ -155,7 +149,6 @@
                   <th>State</th>
                </tr>
                <tbody id="ProcessTableInfo">
-
                </tbody>
             </table>
          </div>
@@ -165,7 +158,7 @@
    <div id="divMemoryDisplay" style="width:500px;">
       <label style="color: white; margin:4px; font-weight: bold; border: 1px solid white; background-color: black;">Process Memory</label>
       <div id="divMemoryTable" style="height: 200px; width:505px; overflow: auto">
-         <table cellpadding="6" id="memoryTable" style="margin:4px; width:500px; border: 1px white"></table>
+         <table cellpadding="6" id="memoryTable" style="margin:4px; height: 200px; width:500px; border: 1px white"></table>
       </div>
    </div>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>

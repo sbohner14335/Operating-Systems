@@ -29,6 +29,7 @@ var TSOS;
             this.Yreg = Yreg;
             this.Zflag = Zflag;
             this.isExecuting = isExecuting;
+            // Variables for displaying CPU data.
         }
         Cpu.prototype.init = function () {
             this.PC = 0;
@@ -37,6 +38,19 @@ var TSOS;
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+            this.displayCPUdata();
+        };
+        Cpu.prototype.displayCPUdata = function () {
+            // Once variables are initialized, display it in the table.
+            var cpuDisplayValues = document.getElementById("cpuDisplayValues");
+            _PCB = new TSOS.PCB(); // Initialize the global PCB object to display the Instruction register.
+            var generatedRow = "<tr align='center'> <td>" + this.PC + "</td>" +
+                                    "<td>" + this.Acc + "</td>" +
+                                    "<td>" + _PCB.IR + "</td>" +
+                                    "<td>" + this.Xreg + "</td>" +
+                                    "<td>" + this.Yreg + "</td>" +
+                                    "<td>" + this.Zflag + "</td> </tr>";
+            cpuDisplayValues.innerHTML = generatedRow;
         };
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
