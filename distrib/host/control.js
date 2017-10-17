@@ -65,9 +65,7 @@ var TSOS;
             // TODO in the future: Optionally update a log database or some streaming service.
         };
         // Initializes the memory space (displayed in the process memory table).
-        Control.processMemoryInit = function () {
-            _Memory = new TSOS.Memory();
-            _Memory.clearMemory();
+        Control.updateProcessMemory = function () {
             var memoryTable = document.getElementById("memoryTable");
             var row;
             var rowCount = 0;   // Every 8 columns create a new row (increment this by 1).
@@ -114,7 +112,9 @@ var TSOS;
             _CPU = new TSOS.Cpu(); // Note: We could simulate multi-core systems by instantiating more than one instance of the CPU here.
             _CPU.init(); //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
             // ... then set the host clock pulse ...
-            this.processMemoryInit();
+            _Memory = new TSOS.Memory();
+            _Memory.clearMemory();
+            this.updateProcessMemory();
             _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
             // .. and call the OS Kernel Bootstrap routine.
             _Kernel = new TSOS.Kernel();
