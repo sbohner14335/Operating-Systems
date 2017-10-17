@@ -322,7 +322,7 @@ var TSOS;
                 }
             }
         };
-        Shell.prototype.shellRun = function (hex) {
+        Shell.prototype.shellRun = function (hexArray) {
             // TODO: If the hex is valid, this command will run the currently loaded hex.
         };
         return Shell;

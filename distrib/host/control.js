@@ -64,6 +64,31 @@ var TSOS;
             taLog.value = str + taLog.value;
             // TODO in the future: Optionally update a log database or some streaming service.
         };
+        // Initializes the memory space (displayed in the process memory table).
+        Control.processMemoryInit = function () {
+            _Memory = new TSOS.Memory();
+            _Memory.clearMemory();
+            var memoryTable = document.getElementById("memoryTable");
+            var row;
+            var rowCount = 0;   // Every 8 columns create a new row.
+            var cellCount = 0;
+            for (i = 0; i < _Memory.memory.length; i++) {
+                if (i === 0 || i % 8 === 0) {
+                    row = memoryTable.insertRow(rowCount);
+                    rowCount++;
+                    // Logic used to parse memory rows.
+                    if (i < 10) {
+                        row.insertCell(cellCount).innerHTML = "0x00" + i.toString();
+                    } else if (i < 100) {
+                        row.insertCell(cellCount).innerHTML = "0x0" + i.toString();
+                    } else {
+                        row.insertCell(cellCount).innerHTML = "0x" + i.toString();
+                    }
+                } else {
+                    row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
+                }
+            }
+        };
         //
         // Host Events
         //
@@ -83,10 +108,8 @@ var TSOS;
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new TSOS.Cpu(); // Note: We could simulate multi-core systems by instantiating more than one instance of the CPU here.
             _CPU.init(); //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
-            // Initialize the OS available memory space.
-            _Memory = new TSOS.Memory();
-            _Memory.init();
             // ... then set the host clock pulse ...
+            this.processMemoryInit();
             _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
             // .. and call the OS Kernel Bootstrap routine.
             _Kernel = new TSOS.Kernel();
