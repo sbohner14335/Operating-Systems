@@ -25,7 +25,6 @@ var _OSclock = 0; // Page 23.
 // Memory
 var _Memory; // Initialize the memory object (used in control.js).
 var _MemorySize = 768;
-var _Control; // Control global
 var _PCB; // Global Process Control Block
 var _Mode = 0; // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
 var _Canvas; // Initialized in Control.hostInit().

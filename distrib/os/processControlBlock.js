@@ -8,7 +8,7 @@
      state = state of the running process
      PC = Program Counter
      AC = Accumulator
-     IR =
+     IR = Instruction register
      x,y registers
      z flag
      ------------ */

@@ -1,7 +1,7 @@
 var TSOS;
 (function (TSOS) {
     var MemoryManager = (function () {
-        function MemoryManager(PID, memoryArray) {
+        function MemoryManager(PID) {
             this.PID = PID;
             this.memoryArray = _Memory.memory;
         }

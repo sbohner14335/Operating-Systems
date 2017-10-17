@@ -315,7 +315,7 @@ var TSOS;
                     }
                 }
             }
-            _Memory.displayProcessMemory();
+            displayProcessMemory();
             // TODO: Return the PID.
         };
         Shell.prototype.shellRun = function (hexArray) {

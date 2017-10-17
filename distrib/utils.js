@@ -50,6 +50,51 @@ var TSOS;
     TSOS.Utils = Utils;
 })(TSOS || (TSOS = {}));
 
+    // Below are all of the utility functions that are used to manipulate tables in html and display the data from CPU, PCB and Memory
+    displayCPUdata = function () {
+        // Function that displays data currently in cpu.js and the currently executing PCB.
+        var cpuDisplayValues = document.getElementById("cpuDisplayValues");
+        _PCB = new TSOS.PCB(); // Initialize the global PCB object to display the Instruction register.
+        var generatedRow = "<tr align='center'> <td>" + _CPU.PC + "</td>" +
+            "<td>" + _CPU.Acc + "</td>" +
+            "<td>" + _PCB.IR + "</td>" +
+            "<td>" + _CPU.Xreg + "</td>" +
+            "<td>" + _CPU.Yreg + "</td>" +
+            "<td>" + _CPU.Zflag + "</td> </tr>";
+        cpuDisplayValues.innerHTML = generatedRow;
+    };
+    // Logic for displaying the memory in the HTML Process Memory table.
+    displayProcessMemory = function () {
+        var memoryTable = document.getElementById("memoryTable");
+        var row;
+        var rowCount = 0;   // Every 8 columns create a new row (increment this by 1).
+        var cellCount;
+        for (i = 0; i < _Memory.memory.length; i++) {
+            if (i === 0 || i % 8 === 0) {
+                row = memoryTable.insertRow(rowCount);
+                rowCount++;
+                cellCount = 0;
+                // Logic used to parse memory rows.
+                if (i < 10) {
+                    row.insertCell(cellCount).innerHTML = "0x00" + i.toString();
+                    cellCount++;
+                    row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
+                } else if (i < 100) {
+                    row.insertCell(cellCount).innerHTML = "0x0" + i.toString();
+                    cellCount++;
+                    row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
+                } else {
+                    row.insertCell(cellCount).innerHTML = "0x" + i.toString();
+                    cellCount++;
+                    row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
+                }
+            } else {
+                cellCount++;
+                row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
+            }
+        }
+    };
+
     getTime = function () {
         // Clock that displays hours, minutes and seconds when the OS is running.
         var date = new Date(); // Date object created for a clock.
