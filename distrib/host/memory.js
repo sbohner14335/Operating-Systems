@@ -24,13 +24,16 @@ var TSOS;
                     // Logic used to parse memory rows.
                     if (i < 10) {
                         row.insertCell(cellCount).innerHTML = "0x00" + i.toString();
-                        row.insertCell(cellCount+1).innerHTML = _Memory.memory[i].toString();
+                        cellCount++;
+                        row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
                     } else if (i < 100) {
                         row.insertCell(cellCount).innerHTML = "0x0" + i.toString();
-                        row.insertCell(cellCount+1).innerHTML = _Memory.memory[i].toString();
+                        cellCount++;
+                        row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
                     } else {
                         row.insertCell(cellCount).innerHTML = "0x" + i.toString();
-                        row.insertCell(cellCount+1).innerHTML = _Memory.memory[i].toString();
+                        cellCount++;
+                        row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
                     }
                 } else {
                     cellCount++;
