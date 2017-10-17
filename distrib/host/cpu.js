@@ -29,7 +29,6 @@ var TSOS;
             this.Yreg = Yreg;
             this.Zflag = Zflag;
             this.isExecuting = isExecuting;
-            // Variables for displaying CPU data.
         }
         Cpu.prototype.init = function () {
             this.PC = 0;

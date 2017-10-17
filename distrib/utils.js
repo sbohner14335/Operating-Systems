@@ -50,18 +50,31 @@ var TSOS;
     TSOS.Utils = Utils;
 })(TSOS || (TSOS = {}));
 
-    // Below are all of the utility functions that are used to manipulate tables in html and display the data from CPU, PCB and Memory
+// Below are all of the utility functions that are used to manipulate tables in html and display the data from CPU, PCB and Memory
     displayCPUdata = function () {
         // Function that displays data currently in cpu.js and the currently executing PCB.
         var cpuDisplayValues = document.getElementById("cpuDisplayValues");
         _PCB = new TSOS.PCB(); // Initialize the global PCB object to display the Instruction register.
         var generatedRow = "<tr align='center'> <td>" + _CPU.PC + "</td>" +
-            "<td>" + _CPU.Acc + "</td>" +
-            "<td>" + _PCB.IR + "</td>" +
-            "<td>" + _CPU.Xreg + "</td>" +
-            "<td>" + _CPU.Yreg + "</td>" +
-            "<td>" + _CPU.Zflag + "</td> </tr>";
+                            "<td>" + _CPU.Acc + "</td>" +
+                            "<td>" + _PCB.IR + "</td>" +
+                            "<td>" + _CPU.Xreg + "</td>" +
+                            "<td>" + _CPU.Yreg + "</td>" +
+                            "<td>" + _CPU.Zflag + "</td> </tr>";
         cpuDisplayValues.innerHTML = generatedRow;
+    };
+    // Logic for displaying PCB data as processes
+    displayPCBdata = function () {
+        var processTable = document.getElementById("ProcessTableInfo");
+        var generatedRow = "<tr align='center'> <td>" + _PCB.PID + "</td>" +
+                            "<td>" + _PCB.state + "</td>" +
+                            "<td>" + _PCB.PC + "</td>" +
+                            "<td>" + _PCB.AC + "</td>" +
+                            "<td>" + _PCB.IR + "</td>" +
+                            "<td>" + _PCB.xRegister + "</td>" +
+                            "<td>" + _PCB.yRegister + "</td>" +
+                            "<td>" + _PCB.zFlag + "</td> </tr>";
+        processTable.innerHTML = generatedRow;
     };
     // Logic for displaying the memory in the HTML Process Memory table.
     displayProcessMemory = function () {
