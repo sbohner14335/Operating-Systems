@@ -64,34 +64,6 @@ var TSOS;
             taLog.value = str + taLog.value;
             // TODO in the future: Optionally update a log database or some streaming service.
         };
-        // Initializes the memory space (displayed in the process memory table).
-        Control.updateProcessMemory = function () {
-            var memoryTable = document.getElementById("memoryTable");
-            var row;
-            var rowCount = 0;   // Every 8 columns create a new row (increment this by 1).
-            var cellCount;
-            for (i = 0; i < _Memory.memory.length; i++) {
-                if (i === 0 || i % 8 === 0) {
-                    row = memoryTable.insertRow(rowCount);
-                    rowCount++;
-                    cellCount = 0;
-                    // Logic used to parse memory rows.
-                    if (i < 10) {
-                        row.insertCell(cellCount).innerHTML = "0x00" + i.toString();
-                        row.insertCell(cellCount+1).innerHTML = _Memory.memory[i].toString();
-                    } else if (i < 100) {
-                        row.insertCell(cellCount).innerHTML = "0x0" + i.toString();
-                        row.insertCell(cellCount+1).innerHTML = _Memory.memory[i].toString();
-                    } else {
-                        row.insertCell(cellCount).innerHTML = "0x" + i.toString();
-                        row.insertCell(cellCount+1).innerHTML = _Memory.memory[i].toString();
-                    }
-                } else {
-                    cellCount++;
-                    row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
-                }
-            }
-        };
         //
         // Host Events
         //
@@ -114,7 +86,7 @@ var TSOS;
             // ... then set the host clock pulse ...
             _Memory = new TSOS.Memory();
             _Memory.clearMemory();
-            this.updateProcessMemory();
+            _Memory.displayProcessMemory();
             _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
             // .. and call the OS Kernel Bootstrap routine.
             _Kernel = new TSOS.Kernel();

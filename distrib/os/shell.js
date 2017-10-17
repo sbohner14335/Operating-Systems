@@ -300,27 +300,23 @@ var TSOS;
             // Get the user input through the textarea and place all of the hex commands in an array.
             var userCodeInput = document.getElementById("taProgramInput").value.trim();
             var hexArray = userCodeInput.split(" ");
-            var validHex = true;
             // Check for an empty textarea
             if (userCodeInput === "") {
-                _StdOut.putText("There is nothing in the program input to load... derp")
+                _StdOut.putText("There is nothing in the program input to load... derp");
             } else {
                 // Creating a regular expression for valid hex characters. (Accept 0-9 and a-f while ignoring the case)
                 var regex = /^[0-9a-f]+$/i;
                 for (i = 0; i < hexArray.length; i++) {
                     if (regex.test(hexArray[i]) === false) {
-                        validHex = false;
+                        _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
                         break;
+                    } else {
+                        // TODO: Put the hex commands in memory and return the PID.
+                        _Memory.memory[i] = hexArray[i];
                     }
                 }
-                // Accepted command
-                if (validHex === true) {
-                    this.shellRun(hexArray);
-                    // TODO: Put the hex commands in memory.
-                } else {
-                    _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
-                }
             }
+            _Memory.displayProcessMemory();
         };
         Shell.prototype.shellRun = function (hexArray) {
             // TODO: If the hex is valid, this command will run the currently loaded hex.
