@@ -71,11 +71,12 @@ var TSOS;
             var memoryTable = document.getElementById("memoryTable");
             var row;
             var rowCount = 0;   // Every 8 columns create a new row.
-            var cellCount = 0;
+            var cellCount;
             for (i = 0; i < _Memory.memory.length; i++) {
                 if (i === 0 || i % 8 === 0) {
                     row = memoryTable.insertRow(rowCount);
                     rowCount++;
+                    cellCount = 0;
                     // Logic used to parse memory rows.
                     if (i < 10) {
                         row.insertCell(cellCount).innerHTML = "0x00" + i.toString();
@@ -85,6 +86,7 @@ var TSOS;
                         row.insertCell(cellCount).innerHTML = "0x" + i.toString();
                     }
                 } else {
+                    cellCount++;
                     row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
                 }
             }
