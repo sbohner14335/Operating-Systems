@@ -305,6 +305,7 @@ var TSOS;
             if (userCodeInput === "") {
                 _StdOut.putText("There is nothing in the program input to load... derp");
             } else {
+                _Memory.clearMemory();
                 // Creating a regular expression for valid hex characters. (Accept 0-9 and a-f while ignoring the case)
                 var regex = /^[0-9a-f]+$/i;
                 for (i = 0; i < hexArray.length; i++) {
@@ -320,10 +321,13 @@ var TSOS;
             }
             // Code that needs to run outside of the for loop, but only if a valid entry is made.
             if (validHex) {
-                _MemoryManager = new TSOS.MemoryManager();
                 _MemoryManager.read(); // Reads memory from memory.js (hardware simulation)
-                // Returns the PID and increment it by 1 for the next process.
+                // Returns the PID then increments it by 1 for the next process.
                 _StdOut.putText("Program loaded into PID " + _MemoryManager.PID);
+                // PCB created for this process.
+                _PCB.PID = _MemoryManager.PID;
+                _PCB.state = "Ready";
+                displayPCBdata();
                 _MemoryManager.PID++;
             }
             displayProcessMemory();
