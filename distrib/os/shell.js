@@ -293,13 +293,14 @@ var TSOS;
                 quote.style.display = "none"
             }
         };
-        Shell.prototype.shellBSOD = function (args) {
+        Shell.prototype.shellBSOD = function (args) { // TODO: Fix this
             _Kernel.krnTrapError("BSOD");
         };
         Shell.prototype.shellLoad = function (args) {
             // Get the user input through the textarea and place all of the hex commands in an array.
             var userCodeInput = document.getElementById("taProgramInput").value.trim();
             var hexArray = userCodeInput.split(" ");
+            var validHex = false;
             // Check for an empty textarea
             if (userCodeInput === "") {
                 _StdOut.putText("There is nothing in the program input to load... derp");
@@ -311,13 +312,19 @@ var TSOS;
                         _StdOut.putText("Invalid hex, valid hex characters include A-F and/or 0-9");
                         break;
                     } else {
+                        // This runs if a valid command is loaded.
+                        validHex = true;
                         _Memory.memory[i] = hexArray[i]; // Put the program commands in memory.
-                        // Returns the PID and increment it by 1 for the next process.
-                        _StdOut.putText("Program loaded into PID " + _MemoryManager.PID);
-                        _MemoryManager.PID++;
-                        break;
                     }
                 }
+            }
+            // Code that needs to run outside of the for loop, but only if a valid entry is made.
+            if (validHex) {
+                _MemoryManager = new TSOS.MemoryManager();
+                _MemoryManager.read(); // Reads memory from memory.js (hardware simulation)
+                // Returns the PID and increment it by 1 for the next process.
+                _StdOut.putText("Program loaded into PID " + _MemoryManager.PID);
+                _MemoryManager.PID++;
             }
             displayProcessMemory();
         };

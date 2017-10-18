@@ -88,7 +88,6 @@ var TSOS;
             // Initialize the memory and display it.
             _Memory = new TSOS.Memory();
             _Memory.clearMemory();
-            _MemoryManager = new TSOS.MemoryManager();
             displayProcessMemory();
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
