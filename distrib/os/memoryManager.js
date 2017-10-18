@@ -1,13 +1,10 @@
 var TSOS;
 (function (TSOS) {
     var MemoryManager = (function () {
-        function MemoryManager(PID) {
-            this.PID = PID;
+        function MemoryManager() {
+            this.PID = 0;
             this.memoryArray = _Memory.memory;
         }
-        MemoryManager.prototype.loadProgram = function () {
-            this.PID = 0;
-        };
         return MemoryManager;
     })();
     TSOS.MemoryManager = MemoryManager;

@@ -312,11 +312,14 @@ var TSOS;
                         break;
                     } else {
                         _Memory.memory[i] = hexArray[i]; // Put the program commands in memory.
+                        // Returns the PID and increment it by 1 for the next process.
+                        _StdOut.putText("Program loaded into PID " + _MemoryManager.PID);
+                        _MemoryManager.PID++;
+                        break;
                     }
                 }
             }
             displayProcessMemory();
-            // TODO: Return the PID.
         };
         Shell.prototype.shellRun = function (hexArray) {
             // TODO: This command will run the currently loaded program.

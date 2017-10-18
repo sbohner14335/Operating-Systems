@@ -44,7 +44,6 @@ var TSOS;
             }
             return retVal;
         };
-
         return Utils;
     })();
     TSOS.Utils = Utils;
@@ -54,7 +53,6 @@ var TSOS;
     displayCPUdata = function () {
         // Function that displays data currently in cpu.js and the currently executing PCB.
         var cpuDisplayValues = document.getElementById("cpuDisplayValues");
-        _PCB = new TSOS.PCB(); // Initialize the global PCB object to display the Instruction register.
         var generatedRow = "<tr align='center'> <td>" + _CPU.PC + "</td>" +
                             "<td>" + _CPU.Acc + "</td>" +
                             "<td>" + _PCB.IR + "</td>" +
@@ -63,7 +61,7 @@ var TSOS;
                             "<td>" + _CPU.Zflag + "</td> </tr>";
         cpuDisplayValues.innerHTML = generatedRow;
     };
-    // Logic for displaying PCB data as processes
+    // Logic for displaying PCB data as processes.
     displayPCBdata = function () {
         var processTable = document.getElementById("ProcessTableInfo");
         var generatedRow = "<tr align='center'> <td>" + _PCB.PID + "</td>" +
@@ -107,9 +105,8 @@ var TSOS;
             }
         }
     };
-
+    // Clock that displays hours, minutes and seconds when the OS is running.
     getTime = function () {
-        // Clock that displays hours, minutes and seconds when the OS is running.
         var date = new Date(); // Date object created for a clock.
         var hours = date.getHours();
         var minutes = date.getMinutes();
