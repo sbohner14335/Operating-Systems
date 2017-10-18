@@ -66,7 +66,7 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellBSOD, "bsod", "- When all else fails...");
             this.commandList[this.commandList.length] = sc;
             // load (check for hex and spaces)
-            sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Validates user code in the user code.");
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Validates user code and loads it into memory.");
             this.commandList[this.commandList.length] = sc;
             // run <pid> will run a loaded program
             sc = new TSOS.ShellCommand(this.shellRun, "run", "<pid> - Run a loaded program.");
@@ -304,6 +304,8 @@ var TSOS;
             // Check for an empty textarea
             if (userCodeInput === "") {
                 _StdOut.putText("There is nothing in the program input to load... derp");
+            } else if (hexArray.length > _Memory.memory.length) {
+                _StdOut.putText("There is not enough memory to run your program!");
             } else {
                 _Memory.clearMemory();
                 // Creating a regular expression for valid hex characters. (Accept 0-9 and a-f while ignoring the case)
@@ -322,18 +324,25 @@ var TSOS;
             // Code that needs to run outside of the for loop, but only if a valid entry is made.
             if (validHex) {
                 _MemoryManager.read(); // Reads memory from memory.js (hardware simulation)
-                // Returns the PID then increments it by 1 for the next process.
-                _StdOut.putText("Program loaded into PID " + _MemoryManager.PID);
                 // PCB created for this process.
                 _PCB.PID = _MemoryManager.PID;
+                // Returns the PID then increments it by 1 for the next process.
+                _StdOut.putText("Program loaded into PID " + _PCB.PID);
                 _PCB.state = "Ready";
                 displayPCBdata();
                 _MemoryManager.PID++;
             }
             displayProcessMemory();
         };
-        Shell.prototype.shellRun = function (hexArray) {
-            // TODO: This command will run the currently loaded program.
+        // This command runs the currently loaded program.
+        Shell.prototype.shellRun = function (args) {
+            var command = args[0];
+            // Run the loaded program if the PID is in the PCB.
+            if (command === _PCB.PID.toString()) {
+                _PCB.state = "Running";
+            } else {
+                _StdOut.putText("You did not enter a valid PID.");
+            }
         };
         return Shell;
     })();
