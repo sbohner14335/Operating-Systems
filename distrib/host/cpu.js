@@ -110,7 +110,7 @@ var TSOS;
         // Load the accumulator with a constant.
         Cpu.prototype.loadConstant = function () {
             this.PC++;
-            this.Acc = parseInt(_Memory.memory[this.Acc], 16);
+            this.Acc = parseInt(_MemoryManager.readMemory(this.PC), 16);
             this.PC++;
         };
         // Load accumulator from memory.
@@ -120,9 +120,14 @@ var TSOS;
         // Store the AC in memory.
         Cpu.prototype.storeAC = function () {
             this.PC++;
+            _MemoryManager.writeToMemory(this.PC, this.Acc);
+            this.PC++;
         };
         // Adds contents of an address to the contents of the accumulator and keeps the result in the accumulator.
         Cpu.prototype.addWithCarry = function () {
+            this.PC++;
+            var number = parseInt(_MemoryManager.readMemory(this.PC), 16);
+            this.Acc += number;
             this.PC++;
         };
         // Load the xreg with a constant.
@@ -133,7 +138,7 @@ var TSOS;
         };
         // Load the xreg from memory.
         Cpu.prototype.loadXfromMemory = function () {
-
+            this.PC++;
         };
         // Load the yreg with a constant.
         Cpu.prototype.loadYwithConstant = function () {
@@ -143,23 +148,23 @@ var TSOS;
         };
         // Load the yreg from memory.
         Cpu.prototype.loadYfromMemory = function () {
-
+            this.PC++;
         };
         // Break (system call)
         Cpu.prototype.break = function () {
-
+            this.PC++;
         };
         // Compare a byte in memory to the xreg, sets the zflag if equal.
         Cpu.prototype.compareByte = function () {
-
+            this.PC++;
         };
         // Branch n bytes if zflag = 0
         Cpu.prototype.branchBytes = function () {
-
+            this.PC++;
         };
         // Increment the value of a byte.
         Cpu.prototype.incrementValue = function () {
-
+            this.PC++;
         };
         // System call: xreg = print the int stored in the yreg.
         // xreg = print the 00-terminated string stored at the address in the yreg.
