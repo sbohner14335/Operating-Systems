@@ -3,7 +3,7 @@ var TSOS;
     var MemoryManager = (function () {
         function MemoryManager() {
             this.PID = 0;
-            this.memoryArray = new Array(_MemorySize);
+            this.programCode = [];
         }
         return MemoryManager;
     })();

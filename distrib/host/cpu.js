@@ -16,15 +16,17 @@
 var TSOS;
 (function (TSOS) {
     var Cpu = (function () {
-        function Cpu(PC, Acc, Xreg, Yreg, Zflag, isExecuting) {
+        function Cpu(PC, Acc, IR, Xreg, Yreg, Zflag, isExecuting) {
             if (PC === void 0) { PC = 0; }
             if (Acc === void 0) { Acc = 0; }
+            if (IR === void 0) { IR = "" }
             if (Xreg === void 0) { Xreg = 0; }
             if (Yreg === void 0) { Yreg = 0; }
             if (Zflag === void 0) { Zflag = 0; }
             if (isExecuting === void 0) { isExecuting = false; }
             this.PC = PC;
             this.Acc = Acc;
+            this.IR = IR;
             this.Xreg = Xreg;
             this.Yreg = Yreg;
             this.Zflag = Zflag;
@@ -41,6 +43,7 @@ var TSOS;
         Cpu.prototype.loadPCB = function () {
             this.PC = _PCB.PC;
             this.Acc = _PCB.AC;
+            this.IR = _PCB.IR;
             this.Xreg = _PCB.xRegister;
             this.Yreg = _PCB.yRegister;
             this.Zflag = _PCB.zFlag;
@@ -48,128 +51,124 @@ var TSOS;
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
-            // Do the real work here. Be sure to set this.isExecuting appropriately.
+            // Load the current PCB in to prepare for fetch, decode and execute.
             _PCB.state = "Running";
+            this.loadPCB();
             // Switch case for decoding the instruction.
-            switch (_PCB.IR) {
+            switch (this.IR) {
                 case "A9":
-                    // Load the accumulator with a constant.
                     this.loadConstant();
                     break;
                 case "AD":
-                    // Load accumulator from memory.
                     this.loadAccumulator();
                     break;
                 case "8D":
-                    // Store the AC in memory.
                     this.storeAC();
                     break;
                 case "6D":
-                    // Add with carry
                     this.addWithCarry();
                     break;
                 case "A2":
-                    // Load the xreg with a constant.
                     this.loadXwithConstant();
                     break;
                 case "AE":
-                    // Load the xreg from memory.
                     this.loadXfromMemory();
                     break;
                 case "A0":
-                    // Load the yreg with a constant.
                     this.loadYwithConstant();
                     break;
                 case "AC":
-                    // Load the yreg from memory.
                     this.loadYfromMemory();
                     break;
                 case "EA":
-                    // No operation.
                     this.noOperation();
                     break;
                 case "00":
-                    // Break (system call)
                     this.break();
                     break;
                 case "EC":
-                    // Compare a byte in memory to the xreg, sets the zflag if equal.
                     this.compareByte();
                     break;
                 case "D0":
-                    // Branch n bytes if zflag = 0
                     this.branchBytes();
                     break;
                 case "EE":
-                    // Increment the value of a byte.
                     this.incrementValue();
                     break;
                 case "FF":
-                    // System call: xreg = print the int stored in the yreg.
-                    // xreg = print the 00-terminated string stored at the address in the yreg.
                     this.systemCall();
                     break;
                 default:
                     _StdOut("There is an illegal instruction in memory.");
                     this.isExecuting = false;
             }
-            // Load the accumulator with a constant.
-            Cpu.prototype.loadConstant = function () {
+            // Code below runs directly after an instruction is executed.
+            this.isExecuting = false;
+            displayCPUdata();
+            _PCB.updatePCB(this.PC, this.Acc, this.IR, this.Xreg, this.Yreg, this.Zflag);
+        };
+        // Load the accumulator with a constant.
+        Cpu.prototype.loadConstant = function () {
+            this.PC++;
+            this.Acc = parseInt(_MemoryManager.programCode[this.Acc], 16);
+            this.PC++;
+        };
+        // Load accumulator from memory.
+        Cpu.prototype.loadAccumulator = function () {
 
-            };
-            // Load accumulator from memory.
-            Cpu.prototype.loadAccumulator = function () {
+        };
+        // Store the AC in memory.
+        Cpu.prototype.storeAC = function () {
 
-            };
-            // Store the AC in memory.
-            Cpu.prototype.storeAC = function () {
+        };
+        // Adds contents of an address to the contents of the accumulator and keeps the result in the accumulator.
+        Cpu.prototype.addWithCarry = function () {
 
-            };
-            // Adds contents of an address to the contents of the accumulator and keeps the result in the accumulator.
-            Cpu.prototype.addWithCarry = function () {
+        };
+        // Load the xreg with a constant.
+        Cpu.prototype.loadXwithConstant = function () {
+            this.PC++;
+            this.Xreg = parseInt(_MemoryManager.programCode[this.PC], 16);
+            this.PC++;
+        };
+        // Load the xreg from memory.
+        Cpu.prototype.loadXfromMemory = function () {
 
-            };
-            // Load the xreg with a constant.
-            Cpu.prototype.loadXwithConstant = function () {
+        };
+        // Load the yreg with a constant.
+        Cpu.prototype.loadYwithConstant = function () {
+            this.PC++;
+            this.Yreg = parseInt(_MemoryManager.programCode[this.PC], 16);
+            this.PC++;
+        };
+        // Load the yreg from memory.
+        Cpu.prototype.loadYfromMemory = function () {
 
-            };
-            // Load the xreg from memory.
-            Cpu.prototype.loadXfromMemory = function () {
+        };
+        // No operation.
+        Cpu.prototype.noOperation = function () {
 
-            };
-            // Load the yreg with a constant.
-            Cpu.prototype.loadYwithConstant = function () {
+        };
+        // Break (system call)
+        Cpu.prototype.break = function () {
 
-            };
-            // Load the yreg from memory.
-            Cpu.prototype.loadYfromMemory = function () {
+        };
+        // Compare a byte in memory to the xreg, sets the zflag if equal.
+        Cpu.prototype.compareByte = function () {
 
-            };
-            // No operation.
-            Cpu.prototype.noOperation = function () {
+        };
+        // Branch n bytes if zflag = 0
+        Cpu.prototype.branchBytes = function () {
 
-            };
-            // Break (system call)
-            Cpu.prototype.break = function () {
+        };
+        // Increment the value of a byte.
+        Cpu.prototype.incrementValue = function () {
 
-            };
-            // Compare a byte in memory to the xreg, sets the zflag if equal.
-            Cpu.prototype.compareByte = function () {
+        };
+        // System call: xreg = print the int stored in the yreg.
+        // xreg = print the 00-terminated string stored at the address in the yreg.
+        Cpu.prototype.systemCall = function () {
 
-            };
-            // Branch n bytes if zflag = 0
-            Cpu.prototype.branchBytes = function () {
-
-            };
-            // Increment the value of a byte.
-            Cpu.prototype.incrementValue = function () {
-
-            };
-            // System call: xreg = print the int stored in the yreg.
-            // xreg = print the 00-terminated string stored at the address in the yreg.
-            Cpu.prototype.systemCall = function () {
-
-            };
         };
         return Cpu;
     })();

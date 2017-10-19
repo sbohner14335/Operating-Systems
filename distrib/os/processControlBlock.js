@@ -44,6 +44,7 @@ var TSOS;
             this.xRegister = xRegister;
             this.yRegister = yRegister;
             this.zFlag = zFlag;
+            displayPCBdata();
         };
     return PCB;
 })();
