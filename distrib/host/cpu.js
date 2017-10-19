@@ -1,6 +1,6 @@
 ///<reference path="../globals.ts" />
 /* ------------
-     CPU.ts
+     CPU.js
 
      Requires global.ts.
 

@@ -158,7 +158,7 @@ var TSOS;
             _StdOut.clearScreen();
             // Insert BSOD
             _DrawingContext.beginPath();
-            _DrawingContext.rect(0, 0, 500, 400);
+            _DrawingContext.rect(0, 0, 500, 500);
             _DrawingContext.fillStyle = "#ad1000";
             _DrawingContext.fill();
             _DrawingContext.fillStyle = "white";
