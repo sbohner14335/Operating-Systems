@@ -10,11 +10,6 @@ var TSOS;
                 this.memoryArray[i] = _Memory.memory[i];
             }
         };
-        MemoryManager.prototype.runProgram = function () {
-            for (i = 0; i < this.memoryArray.length; i++) {
-                
-            }
-        };
         return MemoryManager;
     })();
     TSOS.MemoryManager = MemoryManager;

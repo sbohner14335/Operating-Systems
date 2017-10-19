@@ -298,7 +298,7 @@ var TSOS;
         };
         Shell.prototype.shellLoad = function (args) {
             // Get the user input through the textarea and place all of the hex commands in an array.
-            var userCodeInput = document.getElementById("taProgramInput").value.trim();
+            var userCodeInput = document.getElementById("taProgramInput").value.trim().toUpperCase();
             var hexArray = userCodeInput.split(" ");
             var validHex = false;
             // Check for an empty textarea
@@ -339,7 +339,7 @@ var TSOS;
             var command = args[0];
             // Run the loaded program if the PID is in the PCB.
             if (command === _PCB.PID.toString()) {
-                _PCB.state = "Running";
+                // TODO: Run program
             } else {
                 _StdOut.putText("You did not enter a valid PID.");
             }

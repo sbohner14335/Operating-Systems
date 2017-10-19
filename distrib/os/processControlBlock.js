@@ -37,6 +37,14 @@ var TSOS;
             this.base = base;
             this.limit = limit;
         }
+        PCB.prototype.updatePCB = function (PC, AC, IR, xRegister, yRegister, zFlag) {
+            this.PC = PC;
+            this.AC = AC;
+            this.IR = IR;
+            this.xRegister = xRegister;
+            this.yRegister = yRegister;
+            this.zFlag = zFlag;
+        };
     return PCB;
 })();
 TSOS.PCB = PCB;
