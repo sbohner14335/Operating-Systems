@@ -22,6 +22,16 @@ var TSOS;
                 this.memory[i] = "00";
             }
         };
+        Memory.prototype.read = function () {
+            for (i = 0; i < this.memory.length; i++) {
+                _MemoryManager.memoryArray[i] = this.memory[i];
+            }
+        };
+        Memory.prototype.write = function (hexArray) {
+            for (i = 0; i < hexArray.length; i++) {
+                this.memory[i] = hexArray[i];
+            }
+        };
         return Memory;
     })();
     TSOS.Memory = Memory;

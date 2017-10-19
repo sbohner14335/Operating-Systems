@@ -317,13 +317,12 @@ var TSOS;
                     } else {
                         // This runs if a valid command is loaded.
                         validHex = true;
-                        _Memory.memory[i] = hexArray[i]; // Put the program commands in memory.
                     }
                 }
             }
             // Code that needs to run outside of the for loop, but only if a valid entry is made.
             if (validHex) {
-                _MemoryManager.read(); // Reads memory from memory.js (hardware simulation)
+                _Memory.write(hexArray); // Put the program commands in memory.
                 // PCB created for this process.
                 _PCB.PID = _MemoryManager.PID;
                 // Returns the PID then increments it by 1 for the next process.
@@ -340,6 +339,7 @@ var TSOS;
             // Run the loaded program if the PID is in the PCB.
             if (command === _PCB.PID.toString()) {
                 // TODO: Run program
+                _Memory.read(); // Reads memory from memory.js (hardware simulation)
             } else {
                 _StdOut.putText("You did not enter a valid PID.");
             }

@@ -76,6 +76,7 @@ var TSOS;
     };
     // Logic for displaying the memory in the HTML Process Memory table.
     displayProcessMemory = function () {
+        //TODO: Display must be in hex.
         var memoryTable = document.getElementById("memoryTable");
         var row;
         var rowCount = 0;   // Every 8 columns create a new row (increment this by 1).
