@@ -81,7 +81,7 @@ var TSOS;
                     this.loadYfromMemory();
                     break;
                 case "EA":
-                    this.noOperation();
+                    this.PC++;
                     break;
                 case "00":
                     this.break();
@@ -110,20 +110,20 @@ var TSOS;
         // Load the accumulator with a constant.
         Cpu.prototype.loadConstant = function () {
             this.PC++;
-            this.Acc = parseInt(_MemoryManager.programCode[this.Acc], 16);
+            this.Acc = parseInt(_Memory.memory[this.Acc], 16);
             this.PC++;
         };
         // Load accumulator from memory.
         Cpu.prototype.loadAccumulator = function () {
-
+            this.PC++;
         };
         // Store the AC in memory.
         Cpu.prototype.storeAC = function () {
-
+            this.PC++;
         };
         // Adds contents of an address to the contents of the accumulator and keeps the result in the accumulator.
         Cpu.prototype.addWithCarry = function () {
-
+            this.PC++;
         };
         // Load the xreg with a constant.
         Cpu.prototype.loadXwithConstant = function () {
@@ -143,10 +143,6 @@ var TSOS;
         };
         // Load the yreg from memory.
         Cpu.prototype.loadYfromMemory = function () {
-
-        };
-        // No operation.
-        Cpu.prototype.noOperation = function () {
 
         };
         // Break (system call)

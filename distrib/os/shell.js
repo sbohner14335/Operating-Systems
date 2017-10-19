@@ -341,9 +341,8 @@ var TSOS;
             if (command === _PCB.PID.toString()) {
                 // TODO: Run program
                 for (i = 0; i < _MemoryManager.programCode.length; i++) {
-                    _PCB.IR = _MemoryManager.programCode[i];
                     _CPU.isExecuting = true;
-                    _CPU.cycle();
+                    _PCB.IR = _MemoryManager.programCode[i];
                 }
                 _CPU.isExecuting = false;
             } else {
