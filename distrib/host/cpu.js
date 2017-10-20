@@ -54,7 +54,6 @@ var TSOS;
             // Load the current PCB in to prepare for fetch, decode and execute.
             _PCB.state = "Running";
             this.loadPCB();
-            console.log(this.IR);
             // Switch case for decoding the instruction.
             switch (this.IR) {
                 case "A9":
@@ -107,6 +106,10 @@ var TSOS;
             // Code below runs directly after an instruction is executed.
             displayCPUdata();
             _PCB.updatePCB(this.PC, this.Acc, _Memory.memory[this.PC], this.Xreg, this.Yreg, this.Zflag);
+            // Stop the program if it goes out of bounds.
+            if (this.PC >= 255) {
+                this.isExecuting = false;
+            }
         };
         // Load the accumulator with a constant.
         Cpu.prototype.loadConstant = function () {
@@ -193,7 +196,15 @@ var TSOS;
                 var hex = _MemoryManager.readMemoryAtLocation(this.PC);
                 this.PC++;
                 var jump = parseInt(hex, 16);
-                this.PC += jump;
+                // If the jump will send us out of bounds.
+                if (this.PC + jump > 255) {
+                    // find the value that will get us to our bound.
+                    var toMax = 255 - this.PC;
+                    var offset = jump - toMax; // Subtract that value from the jump
+                    this.PC = offset; // Set the PC to the remaining jump.
+                } else {
+                    this.PC += jump;
+                }
             } else {
                 this.PC++;
             }
@@ -217,6 +228,7 @@ var TSOS;
                 var string = _MemoryManager.readMemoryAtLocation(this.Yreg);
                 _StdOut.putText(string);
             }
+            this.PC++;
         };
         return Cpu;
     })();
