@@ -6,7 +6,7 @@ var TSOS;
             this.programCode = [];
         }
         // Will return the value in memory based on the location in memory.
-        MemoryManager.prototype.readMemory = function (location) {
+        MemoryManager.prototype.readMemoryAtLocation = function (location) {
             return _Memory.memory[location];
         };
         // Writes to an assigned location in memory.

@@ -322,7 +322,7 @@ var TSOS;
             }
             // Code that needs to run outside of the for loop, but only if a valid entry is made.
             if (validHex) {
-                _Memory.write(hexArray); // Put the program commands in memory.
+                _Memory.loadProgramCode(hexArray); // Put the program commands in memory.
                 _Memory.read(hexArray); // Reads memory from memory.js (hardware simulation)
                 // PCB created for this process.
                 _PCB.PID = _MemoryManager.PID;

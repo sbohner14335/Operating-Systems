@@ -110,66 +110,112 @@ var TSOS;
         // Load the accumulator with a constant.
         Cpu.prototype.loadConstant = function () {
             this.PC++;
-            this.Acc = parseInt(_MemoryManager.readMemory(this.PC), 16);
+            this.Acc = parseInt(_MemoryManager.readMemoryAtLocation(this.PC), 16);
             this.PC++;
         };
         // Load accumulator from memory.
         Cpu.prototype.loadAccumulator = function () {
             this.PC++;
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            this.PC++;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            // Convert the hex string to base 10.
+            this.Acc = _MemoryManager.readMemoryAtLocation(parseInt(memoryLoc, 16));
+            this.PC++;
         };
-        // Store the AC in memory.
+        // Store the accumulator in memory.
         Cpu.prototype.storeAC = function () {
             this.PC++;
-            _MemoryManager.writeToMemory(this.PC, this.Acc);
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            this.PC++;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            _MemoryManager.writeToMemory(parseInt(memoryLoc, 16), this.Acc);
             this.PC++;
         };
         // Adds contents of an address to the contents of the accumulator and keeps the result in the accumulator.
         Cpu.prototype.addWithCarry = function () {
             this.PC++;
-            var number = parseInt(_MemoryManager.readMemory(this.PC), 16);
-            this.Acc += number;
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            this.PC++;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            this.Acc += parseInt(memoryLoc, 16);
             this.PC++;
         };
         // Load the xreg with a constant.
         Cpu.prototype.loadXwithConstant = function () {
             this.PC++;
-            this.Xreg = parseInt(_MemoryManager.programCode[this.PC], 16);
+            this.Xreg = parseInt(_MemoryManager.read(this.PC), 16);
             this.PC++;
         };
         // Load the xreg from memory.
         Cpu.prototype.loadXfromMemory = function () {
             this.PC++;
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            this.PC++;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            this.Xreg = parseInt(memoryLoc, 16);
+            this.PC++;
         };
         // Load the yreg with a constant.
         Cpu.prototype.loadYwithConstant = function () {
             this.PC++;
-            this.Yreg = parseInt(_MemoryManager.programCode[this.PC], 16);
+            this.Yreg = parseInt(_MemoryManager.readMemoryAtLocation(this.PC), 16);
             this.PC++;
         };
         // Load the yreg from memory.
         Cpu.prototype.loadYfromMemory = function () {
             this.PC++;
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            this.PC++;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            this.Yreg = parseInt(memoryLoc, 16);
+            this.PC++;
         };
         // Break (system call)
         Cpu.prototype.break = function () {
-            this.PC++;
+            this.systemCall();
         };
         // Compare a byte in memory to the xreg, sets the zflag if equal.
         Cpu.prototype.compareByte = function () {
             this.PC++;
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            this.PC++;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            if (this.Xreg === parseInt(memoryLoc, 16)) {
+                this.Zflag = 1;
+            }
         };
         // Branch n bytes if zflag = 0
         Cpu.prototype.branchBytes = function () {
             this.PC++;
+            if (this.Zflag === 0) {
+                var hex = _MemoryManager.readMemoryAtLocation(this.PC);
+                this.PC++;
+                var jump = parseInt(hex, 16);
+                this.PC += jump;
+            } else {
+                this.PC++;
+            }
         };
         // Increment the value of a byte.
         Cpu.prototype.incrementValue = function () {
             this.PC++;
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            this.PC++;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            memoryLoc = parseInt(memoryLoc, 16);
+            var incremented = memoryLoc++;
+            _MemoryManager.writeToMemory(memoryLoc, incremented.toString(16));
         };
         // System call: xreg = print the int stored in the yreg.
         // xreg = print the 00-terminated string stored at the address in the yreg.
         Cpu.prototype.systemCall = function () {
-
+            if (this.Xreg === 1) {
+                _StdOut.putText(this.Yreg);
+            } else {
+                var string = _MemoryManager.readMemoryAtLocation(this.Yreg);
+                _StdOut.putText(string);
+            }
         };
         return Cpu;
     })();

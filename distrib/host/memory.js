@@ -27,7 +27,7 @@ var TSOS;
                 _MemoryManager.programCode[i] = this.memory[i];
             }
         };
-        Memory.prototype.write = function (hexArray) {
+        Memory.prototype.loadProgramCode = function (hexArray) {
             for (i = 0; i < hexArray.length; i++) {
                 this.memory[i] = hexArray[i];
             }
