@@ -54,6 +54,7 @@ var TSOS;
             // Load the current PCB in to prepare for fetch, decode and execute.
             _PCB.state = "Running";
             this.loadPCB();
+            console.log(this.IR);
             // Switch case for decoding the instruction.
             switch (this.IR) {
                 case "A9":
@@ -100,14 +101,14 @@ var TSOS;
                     this.systemCall();
                     break;
                 default:
-                    _StdOut("There is an illegal instruction in memory.");
+                    _StdOut.putText("There is an illegal instruction in memory.");
                     this.isExecuting = false;
             }
             // Code below runs directly after an instruction is executed.
             displayCPUdata();
             _PCB.updatePCB(this.PC, this.Acc, _Memory.memory[this.PC], this.Xreg, this.Yreg, this.Zflag);
             // Stop the program if it goes out of bounds.
-            if (this.PC >= 255) {
+            if (this.PC >= _MemoryManager.programCode.length) {
                 this.isExecuting = false;
             }
         };
@@ -194,7 +195,7 @@ var TSOS;
             this.PC++;
             if (this.Zflag === 0) {
                 var hex = _MemoryManager.readMemoryAtLocation(this.PC);
-                this.PC++;
+                //this.PC++;
                 var jump = parseInt(hex, 16);
                 // If the jump will send us out of bounds.
                 if (this.PC + jump > 255) {
