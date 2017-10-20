@@ -19,7 +19,7 @@ var TSOS;
         function Cpu(PC, Acc, IR, Xreg, Yreg, Zflag, isExecuting) {
             if (PC === void 0) { PC = 0; }
             if (Acc === void 0) { Acc = 0; }
-            if (IR === void 0) { IR = "" }
+            if (IR === void 0) { IR = "00" }
             if (Xreg === void 0) { Xreg = 0; }
             if (Yreg === void 0) { Yreg = 0; }
             if (Zflag === void 0) { Zflag = 0; }
@@ -54,6 +54,7 @@ var TSOS;
             // Load the current PCB in to prepare for fetch, decode and execute.
             _PCB.state = "Running";
             this.loadPCB();
+            console.log(this.IR);
             // Switch case for decoding the instruction.
             switch (this.IR) {
                 case "A9":
@@ -96,6 +97,7 @@ var TSOS;
                     this.incrementValue();
                     break;
                 case "FF":
+                    _KernelInterruptQueue.enqueue(new TSOS.Interrupt(SYSTEM_CALL_IRQ, ''));
                     this.systemCall();
                     break;
                 default:
@@ -103,9 +105,8 @@ var TSOS;
                     this.isExecuting = false;
             }
             // Code below runs directly after an instruction is executed.
-            this.isExecuting = false;
             displayCPUdata();
-            _PCB.updatePCB(this.PC, this.Acc, this.IR, this.Xreg, this.Yreg, this.Zflag);
+            _PCB.updatePCB(this.PC, this.Acc, _Memory.memory[this.PC], this.Xreg, this.Yreg, this.Zflag);
         };
         // Load the accumulator with a constant.
         Cpu.prototype.loadConstant = function () {
@@ -144,7 +145,7 @@ var TSOS;
         // Load the xreg with a constant.
         Cpu.prototype.loadXwithConstant = function () {
             this.PC++;
-            this.Xreg = parseInt(_MemoryManager.read(this.PC), 16);
+            this.Xreg = parseInt(_MemoryManager.readMemoryAtLocation(this.PC), 16);
             this.PC++;
         };
         // Load the xreg from memory.

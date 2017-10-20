@@ -11,6 +11,8 @@
      IR = Instruction register
      x,y registers
      z flag
+     base memory
+     limit memory
      ------------ */
 var TSOS;
 (function (TSOS) {
@@ -20,7 +22,7 @@ var TSOS;
             if (state === void 0) { state = ""; }
             if (PC === void 0) { PC = 0; }
             if (AC === void 0) { AC = 0; }
-            if (IR === void 0) { IR = "00"; }
+            if (IR === void 0) { IR = ""; }
             if (xRegister === void 0) { xRegister = 0; }
             if (yRegister === void 0) { yRegister = 0; }
             if (zFlag === void 0) { zFlag = 0; }

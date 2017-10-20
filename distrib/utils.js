@@ -55,7 +55,7 @@ var TSOS;
         var cpuDisplayValues = document.getElementById("cpuDisplayValues");
         var generatedRow = "<tr align='center'> <td>" + _CPU.PC + "</td>" +
                             "<td>" + _CPU.Acc + "</td>" +
-                            "<td>" + _PCB.IR + "</td>" +
+                            "<td>" + _CPU.IR + "</td>" +
                             "<td>" + _CPU.Xreg + "</td>" +
                             "<td>" + _CPU.Yreg + "</td>" +
                             "<td>" + _CPU.Zflag + "</td> </tr>";

@@ -1,7 +1,7 @@
 /* ------------
      memory.js
 
-     Requires global.ts.
+     Requires global.js.
 
      Routines for the host Memory simulation, NOT for the OS itself.
      This file defines the maximum memory that our "hardware" will use.
