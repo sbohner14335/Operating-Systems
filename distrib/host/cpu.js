@@ -122,7 +122,7 @@ var TSOS;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
             // Convert the hex string to base 10.
             memoryLoc = parseInt(memoryLoc, 16);
-            this.Acc = _MemoryManager.readMemoryAtLocation(memoryLoc);
+            this.Acc = parseInt(_MemoryManager.readMemoryAtLocation(memoryLoc), 16);
             this.PC++;
         };
         // Store the accumulator in memory.
@@ -132,7 +132,7 @@ var TSOS;
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
-            _MemoryManager.writeToMemory(memoryLoc, this.Acc);
+            _MemoryManager.writeToMemory(memoryLoc, this.Acc.toString(16));
             this.PC++;
         };
         // Adds contents of an address to the contents of the accumulator and keeps the result in the accumulator.
@@ -142,7 +142,7 @@ var TSOS;
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
-            this.Acc += parseInt(_MemoryManager.readMemoryAtLocation(memoryLoc));
+            this.Acc += parseInt(_MemoryManager.readMemoryAtLocation(memoryLoc), 16);
             this.PC++;
         };
         // Load the xreg with a constant.
@@ -158,7 +158,7 @@ var TSOS;
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
-            this.Xreg = parseInt(_Memory.memory[memoryLoc]);
+            this.Xreg = parseInt(_Memory.memory[memoryLoc], 16);
             this.PC++;
         };
         // Load the yreg with a constant.
@@ -174,7 +174,7 @@ var TSOS;
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
-            this.Yreg = parseInt(_Memory.memory[memoryLoc]);
+            this.Yreg = parseInt(_Memory.memory[memoryLoc], 16);
             this.PC++;
         };
         // Break (system call)
@@ -183,6 +183,7 @@ var TSOS;
             _Memory.clearMemory();
             displayProcessMemory();
             _PCB.state = "Terminated";
+            _StdOut.putText(_OsShell.promptStr);
         };
         // Compare a byte in memory to the xreg, sets the zflag if equal.
         Cpu.prototype.compareByte = function () {
@@ -191,7 +192,7 @@ var TSOS;
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
-            if (this.Xreg === parseInt(_Memory.memory[memoryLoc])) {
+            if (this.Xreg === parseInt(_Memory.memory[memoryLoc], 16)) {
                 this.Zflag = 1;
             }
             this.PC++;
@@ -205,14 +206,14 @@ var TSOS;
                 // If the jump will send us out of bounds.
                 if (this.PC + jump > 255) {
                     // find the value that will get us to our bound.
-                    var toMax = 255 - this.PC;
+                    var toMax = 256 - this.PC;
                     jump -= toMax;
                     this.PC = jump; // Set the PC to the remaining jump.
                 } else {
                     this.PC += jump;
                 }
             } else {
-                this.PC++; // Increment by 2 to avoid the hex after the D0 OP code.
+                this.PC+=2; // Increment by 2 to avoid the hex after the D0 OP code.
             }
         };
         // Increment the value of a byte.
@@ -222,9 +223,9 @@ var TSOS;
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
-            var incremented = parseInt(_Memory.memory[memoryLoc]);
+            var incremented = parseInt(_Memory.memory[memoryLoc], 16);
             incremented++;
-            _MemoryManager.writeToMemory(memoryLoc, incremented);
+            _MemoryManager.writeToMemory(memoryLoc, incremented.toString(16));
             this.PC++;
         };
         // System call: xreg = print the int stored in the yreg.
