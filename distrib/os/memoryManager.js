@@ -16,7 +16,7 @@ var TSOS;
         // Writes to an assigned location in memory.
         MemoryManager.prototype.writeToMemory = function (location, param) {
             if (location < 256) {
-                _Memory.memory[location] = param.toString();
+                _Memory.memory[location] = param;
             } else {
                 alert("Cannot write to out of bounds memory at" + location);
             }

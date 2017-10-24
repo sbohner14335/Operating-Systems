@@ -17,7 +17,6 @@ var TSOS;
         function Shell() {
             // Properties
             this.promptStr = ">";
-            this.hexCode = [];
             this.commandList = [];
             this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
             this.apologies = "[sorry]";
