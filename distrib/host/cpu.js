@@ -142,7 +142,7 @@ var TSOS;
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
-            this.Acc += _Memory.memory[memoryLoc];
+            this.Acc += parseInt(_MemoryManager.readMemoryAtLocation(memoryLoc));
             this.PC++;
         };
         // Load the xreg with a constant.
@@ -201,6 +201,7 @@ var TSOS;
             if (this.Zflag === 0) {
                 this.PC++;
                 var jump = parseInt(_MemoryManager.readMemoryAtLocation(this.PC), 16); // Read how far to jump.
+                this.PC++;
                 // If the jump will send us out of bounds.
                 if (this.PC + jump > 255) {
                     // find the value that will get us to our bound.
@@ -211,7 +212,7 @@ var TSOS;
                     this.PC += jump;
                 }
             } else {
-                this.PC+=2; // Increment by 2 to avoid the hex after the D0 OP code.
+                this.PC++; // Increment by 2 to avoid the hex after the D0 OP code.
             }
         };
         // Increment the value of a byte.
@@ -236,7 +237,7 @@ var TSOS;
                 var address = this.Yreg;
                 var string = _MemoryManager.readMemoryAtLocation(address);
                 while (string !== "00") {
-                    var print = String.fromCharCode(parseInt(string));
+                    var print = String.fromCharCode(parseInt(string, 16));
                     output += print;
                     address++;
                     string = _MemoryManager.readMemoryAtLocation(address);
