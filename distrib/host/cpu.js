@@ -107,10 +107,6 @@ var TSOS;
             // Code below runs directly after an instruction is executed.
             displayCPUdata();
             _PCB.updatePCB(this.PC, this.Acc, _Memory.memory[this.PC], this.Xreg, this.Yreg, this.Zflag);
-            // Stop the program if it goes out of bounds.
-            if (this.PC >= _MemoryManager.programCode.length) {
-                this.isExecuting = false;
-            }
         };
         // Load the accumulator with a constant.
         Cpu.prototype.loadConstant = function () {
@@ -183,7 +179,10 @@ var TSOS;
         };
         // Break (system call)
         Cpu.prototype.break = function () {
-            this.systemCall();
+            this.init();
+            _Memory.clearMemory();
+            displayProcessMemory();
+            _PCB.state = "Terminated";
         };
         // Compare a byte in memory to the xreg, sets the zflag if equal.
         Cpu.prototype.compareByte = function () {
@@ -205,14 +204,14 @@ var TSOS;
                 // If the jump will send us out of bounds.
                 if (this.PC + jump > 255) {
                     // find the value that will get us to our bound.
-                    var toMax = 255 - jump;
+                    var toMax = 255 - this.PC;
                     jump -= toMax;
                     this.PC = jump; // Set the PC to the remaining jump.
                 } else {
                     this.PC += jump;
                 }
             } else {
-                this.PC++;
+                this.PC+=2; // Increment by 2 to avoid the hex after the D0 OP code.
             }
         };
         // Increment the value of a byte.
@@ -234,14 +233,15 @@ var TSOS;
                 _StdOut.putText(this.Yreg.toString());
             } else {
                 var output = "";
-                var string = _MemoryManager.readMemoryAtLocation(this.Yreg);
+                var address = this.Yreg;
+                var string = _MemoryManager.readMemoryAtLocation(address);
                 while (string !== "00") {
-                    var print = String.fromCharCode(parseInt(string, 16));
+                    var print = String.fromCharCode(parseInt(string));
                     output += print;
-                    this.Yreg++;
-                    string = _MemoryManager.readMemoryAtLocation(this.Yreg);
+                    address++;
+                    string = _MemoryManager.readMemoryAtLocation(address);
                 }
-                _StdOut.putText(string);
+                _StdOut.putText(output);
             }
             _Console.advanceLine();
             this.PC++;
