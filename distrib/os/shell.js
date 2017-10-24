@@ -325,13 +325,12 @@ var TSOS;
                 _Memory.loadProgramCode(hexArray); // Put the program commands in memory.
                 _Memory.read(hexArray); // Reads memory from memory.js (hardware simulation)
                 // PCB created for this process.
+                _MemoryManager.PID++;
                 _PCB.PID = _MemoryManager.PID;
                 _PCB.IR = _MemoryManager.programCode[0];
-                // Returns the PID then increments it by 1 for the next process.
                 _StdOut.putText("Program loaded into PID " + _PCB.PID);
                 _PCB.state = "Ready";
                 displayPCBdata();
-                _MemoryManager.PID++;
             }
             displayProcessMemory();
         };
@@ -340,7 +339,6 @@ var TSOS;
             var command = args[0];
             // Run the loaded program if the PID is in the PCB.
             if (command === _PCB.PID.toString()) {
-                // TODO: Run the program.
                 _CPU.isExecuting = true;
             } else {
                 _StdOut.putText("You did not enter a valid PID.");

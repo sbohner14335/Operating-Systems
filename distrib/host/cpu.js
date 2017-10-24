@@ -125,7 +125,8 @@ var TSOS;
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
             // Convert the hex string to base 10.
-            this.Acc = _MemoryManager.readMemoryAtLocation(parseInt(memoryLoc, 16));
+            memoryLoc = parseInt(memoryLoc, 16);
+            this.Acc = _MemoryManager.readMemoryAtLocation(memoryLoc);
             this.PC++;
         };
         // Store the accumulator in memory.
@@ -134,7 +135,8 @@ var TSOS;
             var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
-            _MemoryManager.writeToMemory(parseInt(memoryLoc, 16), this.Acc);
+            memoryLoc = parseInt(memoryLoc, 16);
+            _MemoryManager.writeToMemory(memoryLoc, this.Acc);
             this.PC++;
         };
         // Adds contents of an address to the contents of the accumulator and keeps the result in the accumulator.
@@ -143,7 +145,8 @@ var TSOS;
             var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
-            this.Acc += parseInt(memoryLoc, 16);
+            memoryLoc = parseInt(memoryLoc, 16);
+            this.Acc += _Memory.memory[memoryLoc];
             this.PC++;
         };
         // Load the xreg with a constant.
@@ -158,7 +161,8 @@ var TSOS;
             var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
-            this.Xreg = parseInt(memoryLoc, 16);
+            memoryLoc = parseInt(memoryLoc, 16);
+            this.Xreg = parseInt(_Memory.memory[memoryLoc]);
             this.PC++;
         };
         // Load the yreg with a constant.
@@ -173,7 +177,8 @@ var TSOS;
             var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
-            this.Yreg = parseInt(memoryLoc, 16);
+            memoryLoc = parseInt(memoryLoc, 16);
+            this.Yreg = parseInt(_Memory.memory[memoryLoc]);
             this.PC++;
         };
         // Break (system call)
@@ -186,23 +191,23 @@ var TSOS;
             var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
-            if (this.Xreg === parseInt(memoryLoc, 16)) {
+            memoryLoc = parseInt(memoryLoc, 16);
+            if (this.Xreg === parseInt(_Memory.memory[memoryLoc])) {
                 this.Zflag = 1;
             }
+            this.PC++;
         };
         // Branch n bytes if zflag = 0
         Cpu.prototype.branchBytes = function () {
-            this.PC++;
             if (this.Zflag === 0) {
-                var hex = _MemoryManager.readMemoryAtLocation(this.PC);
-                //this.PC++;
-                var jump = parseInt(hex, 16);
+                this.PC++;
+                var jump = parseInt(_MemoryManager.readMemoryAtLocation(this.PC), 16); // Read how far to jump.
                 // If the jump will send us out of bounds.
                 if (this.PC + jump > 255) {
                     // find the value that will get us to our bound.
-                    var toMax = 255 - this.PC;
-                    var offset = jump - toMax; // Subtract that value from the jump
-                    this.PC = offset; // Set the PC to the remaining jump.
+                    var toMax = 255 - jump;
+                    jump -= toMax;
+                    this.PC = jump; // Set the PC to the remaining jump.
                 } else {
                     this.PC += jump;
                 }
@@ -217,18 +222,28 @@ var TSOS;
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
-            var incremented = memoryLoc++;
-            _MemoryManager.writeToMemory(memoryLoc, incremented.toString(16));
+            var incremented = parseInt(_Memory.memory[memoryLoc]);
+            incremented++;
+            _MemoryManager.writeToMemory(memoryLoc, incremented);
+            this.PC++;
         };
         // System call: xreg = print the int stored in the yreg.
         // xreg = print the 00-terminated string stored at the address in the yreg.
         Cpu.prototype.systemCall = function () {
             if (this.Xreg === 1) {
-                _StdOut.putText(this.Yreg);
+                _StdOut.putText(this.Yreg.toString());
             } else {
+                var output = "";
                 var string = _MemoryManager.readMemoryAtLocation(this.Yreg);
+                while (string !== "00") {
+                    var print = String.fromCharCode(parseInt(string, 16));
+                    output += print;
+                    this.Yreg++;
+                    string = _MemoryManager.readMemoryAtLocation(this.Yreg);
+                }
                 _StdOut.putText(string);
             }
+            _Console.advanceLine();
             this.PC++;
         };
         return Cpu;
