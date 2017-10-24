@@ -18,7 +18,7 @@ var TSOS;
 (function (TSOS) {
     var PCB = (function () {
         function PCB(PID, state, PC, AC, IR, xRegister, yRegister, zFlag, base, limit) {
-            if (PID === void 0) { PID = 0; }
+            if (PID === void 0) { PID = -1; }
             if (state === void 0) { state = ""; }
             if (PC === void 0) { PC = 0; }
             if (AC === void 0) { AC = 0; }

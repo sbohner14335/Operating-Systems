@@ -88,21 +88,21 @@ var TSOS;
                 cellCount = 0;
                 // Logic used to parse memory rows.
                 if (i < 10) {
-                    row.insertCell(cellCount).innerHTML = "0x00" + i.toString();
+                    row.insertCell(cellCount).innerHTML = "0x000" + i.toString(16).toUpperCase();
                     cellCount++;
-                    row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
-                } else if (i < 100) {
-                    row.insertCell(cellCount).innerHTML = "0x0" + i.toString();
+                    row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString(16).toUpperCase();
+                } else if (i < 249) {
+                    row.insertCell(cellCount).innerHTML = "0x00" + i.toString(16).toUpperCase();
                     cellCount++;
-                    row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
+                    row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString(16).toUpperCase();
                 } else {
-                    row.insertCell(cellCount).innerHTML = "0x" + i.toString();
+                    row.insertCell(cellCount).innerHTML = "0x0" + i.toString(16).toUpperCase();
                     cellCount++;
-                    row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
+                    row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString(16).toUpperCase();
                 }
             } else {
                 cellCount++;
-                row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString();
+                row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString(16).toUpperCase();
             }
         }
     };
