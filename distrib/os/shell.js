@@ -70,6 +70,9 @@ var TSOS;
             // run <pid> will run a loaded program
             sc = new TSOS.ShellCommand(this.shellRun, "run", "<pid> - Run a loaded program.");
             this.commandList[this.commandList.length] = sc;
+            // clearmem will clear all memory partitions/segments.
+            sc = new TSOS.ShellCommand(this.shellClearmem, "clearmem", "- Clears all memory partitions/segments.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -342,6 +345,11 @@ var TSOS;
             } else {
                 _StdOut.putText("You did not enter a valid PID.");
             }
+        };
+        // This command will clear all memory partitions/segments.
+        Shell.prototype.shellClearmem = function (args) {
+            _Memory.clearMemory();
+            displayProcessMemory();
         };
         return Shell;
     })();

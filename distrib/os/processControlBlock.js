@@ -27,7 +27,7 @@ var TSOS;
             if (yRegister === void 0) { yRegister = 0; }
             if (zFlag === void 0) { zFlag = 0; }
             if (base === void 0) { base = 0; }
-            if (limit === void 0) { limit = _MemorySize; }
+            if (limit === void 0) { limit = _MaxMemory; }
             this.PID = PID;
             this.state = state;
             this.PC = PC;
