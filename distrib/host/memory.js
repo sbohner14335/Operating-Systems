@@ -14,18 +14,12 @@ var TSOS;
 (function (TSOS) {
     var Memory = (function () {
         function Memory() {
-            this.memory = new Array(_MaxMemory);
+            this.memory = [];
         }
         // Initializes the memory space, setting all values to 00.
         Memory.prototype.clearMemory = function () {
             for (i = 0; i < this.memory.length; i++) {
                 this.memory[i] = "00";
-            }
-        };
-        // Reads the hex code provided by the load shell command and loads it into the memory manager.
-        Memory.prototype.read = function (hexArray) {
-            for (i = 0; i < hexArray.length; i++) {
-                _MemoryManager.programCode[i] = this.memory[i];
             }
         };
         // Loads the program code (hex) into memory, provided via the load shell command.

@@ -4,7 +4,22 @@ var TSOS;
         function MemoryManager() {
             this.PID = -1;
             this.programCode = [];
+            this.base = 0;
+            this.segment1 = 256;
+            this.segment2 = 512;
+            this.limit = _MaxMemory;
         }
+        // Reads from memory (host).
+        MemoryManager.prototype.read = function () {
+            if (_Memory.memory.length > this.segment1 -1) {
+
+            } else if (_Memory.memory.length > this.segment2 -1) {
+
+            }
+            for (i = 0; i < _Memory.memory.length; i++) {
+                this.programCode[i] = _Memory.memory[i];
+            }
+        };
         // Will return the value in memory based on the location in memory.
         MemoryManager.prototype.readMemoryAtLocation = function (location) {
             if (location < 256) {

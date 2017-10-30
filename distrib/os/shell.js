@@ -306,7 +306,7 @@ var TSOS;
             // Check for an empty textarea
             if (userCodeInput === "") {
                 _StdOut.putText("There is nothing in the program input to load... derp");
-            } else if (hexArray.length > _Memory.memory.length) {
+            } else if (hexArray.length > 255) {
                 _StdOut.putText("There is not enough memory to run your program!");
             } else {
                 _Memory.clearMemory();
@@ -325,7 +325,7 @@ var TSOS;
             // Code that needs to run outside of the for loop, but only if a valid entry is made.
             if (validHex) {
                 _Memory.loadProgramCode(hexArray); // Put the program commands in memory.
-                _Memory.read(hexArray); // Reads memory from memory.js (hardware simulation)
+                _MemoryManager.read(); // Reads memory from memory.js (hardware simulation)
                 // PCB created for this process.
                 _MemoryManager.PID++;
                 _PCB.PID = _MemoryManager.PID;

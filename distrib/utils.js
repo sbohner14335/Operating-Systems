@@ -49,7 +49,7 @@ var TSOS;
     TSOS.Utils = Utils;
 })(TSOS || (TSOS = {}));
 
-// Below are all of the utility functions that are used to manipulate tables in html and display the data from CPU, PCB and Memory
+// Below are all of the utility functions that are used to manipulate tables in html and display the data from the CPU, PCB and Memory
     displayCPUdata = function () {
         // Function that displays data currently in cpu.js and the currently executing PCB.
         var cpuDisplayValues = document.getElementById("cpuDisplayValues");
@@ -76,7 +76,6 @@ var TSOS;
     };
     // Logic for displaying the memory in the HTML Process Memory table.
     displayProcessMemory = function () {
-        //TODO: Display must be in hex.
         var memoryTable = document.getElementById("memoryTable");
         var row;
         var rowCount = 0;   // Every 8 columns create a new row (increment this by 1).
