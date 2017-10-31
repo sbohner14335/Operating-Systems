@@ -6,23 +6,45 @@ var TSOS;
         }
         // Loads the program code (hex) into memory, provided via the load shell command.
         MemoryManager.prototype.allocateMemory = function (hexArray) {
+
             // Check to see if the first segment of memory is available.
             if (_Memory.memory[_Memory.base] === "00") {
+                // PCB created for a process.
+                this.PID++;
+                _PCB.PID = this.PID;
+                _PCB.IR = _Memory.memory[0];
+                _StdOut.putText("Program loaded into PID " + _PCB.PID);
+                _PCB.state = "Ready";
                 for (i = 0; i < hexArray.length; i++) {
                     _Memory.memory[i] = hexArray[i];
                 }
             } else if (_Memory.memory[_Memory.segment1] === "00") { // Check for the second segment of memory.
+                // PCB created for a process.
+                this.PID++;
+                _PCB.PID = this.PID;
+                _PCB.IR = _Memory.memory[0];
+                _StdOut.putText("Program loaded into PID " + _PCB.PID);
+                _PCB.state = "Ready";
                 for (j = 0; j < hexArray.length; j++) {
                     _Memory.memory[_Memory.segment1++] = hexArray[j];
                 }
                 _Memory.segment1 = 256; // Reset memory segment after second segment is allocated.
-            } else {
+            } else if (_Memory.memory[_Memory.segment2] === "00") {
+                // PCB created for a process.
+                this.PID++;
+                _PCB.PID = this.PID;
+                _PCB.IR = _Memory.memory[0];
+                _StdOut.putText("Program loaded into PID " + _PCB.PID);
+                _PCB.state = "Ready";
                 // If the first two segments are filled, fill the last segment.
                 for (k = 0; k < hexArray.length; k++) {
                     _Memory.memory[_Memory.segment2++] = hexArray[k];
                 }
+                _Memory.segment2 = 512;
+            } else {
+                _StdOut.putText("You can only allocate memory for up to 3 programs.");
             }
-            console.log(_Memory.memory);
+            displayPCBdata();
         };
         // Will return the value in memory based on the location in memory.
         MemoryManager.prototype.readMemoryAtLocation = function (location) {

@@ -323,14 +323,7 @@ var TSOS;
             }
             // Code that needs to run outside of the for loop, but only if a valid entry is made.
             if (validHex) {
-                _MemoryManager.PID++;
                 _MemoryManager.allocateMemory(hexArray); // Put the program commands in memory.
-                // PCB created for this process.
-                _PCB.PID = _MemoryManager.PID;
-                _PCB.IR = _Memory.memory[0];
-                _StdOut.putText("Program loaded into PID " + _PCB.PID);
-                _PCB.state = "Ready";
-                displayPCBdata();
             }
             displayProcessMemory();
         };
