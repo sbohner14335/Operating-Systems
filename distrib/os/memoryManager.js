@@ -3,22 +3,26 @@ var TSOS;
     var MemoryManager = (function () {
         function MemoryManager() {
             this.PID = -1;
-            this.programCode = [];
-            this.base = 0;
-            this.segment1 = 256;
-            this.segment2 = 512;
-            this.limit = _MaxMemory;
         }
-        // Reads from memory (host).
-        MemoryManager.prototype.read = function () {
-            if (_Memory.memory.length > this.segment1 -1) {
-
-            } else if (_Memory.memory.length > this.segment2 -1) {
-
+        // Loads the program code (hex) into memory, provided via the load shell command.
+        MemoryManager.prototype.allocateMemory = function (hexArray) {
+            // Check to see if the first segment of memory is available.
+            if (_Memory.memory[_Memory.base] === "00") {
+                for (i = 0; i < hexArray.length; i++) {
+                    _Memory.memory[i] = hexArray[i];
+                }
+            } else if (_Memory.memory[_Memory.segment1] === "00") { // Check for the second segment of memory.
+                for (j = 0; j < hexArray.length; j++) {
+                    _Memory.memory[_Memory.segment1++] = hexArray[j];
+                }
+                _Memory.segment1 = 256; // Reset memory segment after second segment is allocated.
+            } else {
+                // If the first two segments are filled, fill the last segment.
+                for (k = 0; k < hexArray.length; k++) {
+                    _Memory.memory[_Memory.segment2++] = hexArray[k];
+                }
             }
-            for (i = 0; i < _Memory.memory.length; i++) {
-                this.programCode[i] = _Memory.memory[i];
-            }
+            console.log(_Memory.memory);
         };
         // Will return the value in memory based on the location in memory.
         MemoryManager.prototype.readMemoryAtLocation = function (location) {

@@ -295,7 +295,7 @@ var TSOS;
                 quote.style.display = "none"
             }
         };
-        Shell.prototype.shellBSOD = function (args) { // TODO: Fix this
+        Shell.prototype.shellBSOD = function (args) {
             _Kernel.krnTrapError("BSOD");
         };
         Shell.prototype.shellLoad = function (args) {
@@ -303,13 +303,12 @@ var TSOS;
             var userCodeInput = document.getElementById("taProgramInput").value.trim().toUpperCase();
             var hexArray = userCodeInput.split(" ");
             var validHex = false;
-            // Check for an empty textarea
+            // Check for an empty textarea.
             if (userCodeInput === "") {
                 _StdOut.putText("There is nothing in the program input to load... derp");
             } else if (hexArray.length > 255) {
                 _StdOut.putText("There is not enough memory to run your program!");
             } else {
-                _Memory.clearMemory();
                 // Creating a regular expression for valid hex characters. (Accept 0-9 and a-f while ignoring the case)
                 var regex = /^[0-9a-f]+$/i;
                 for (i = 0; i < hexArray.length; i++) {
@@ -324,12 +323,11 @@ var TSOS;
             }
             // Code that needs to run outside of the for loop, but only if a valid entry is made.
             if (validHex) {
-                _Memory.loadProgramCode(hexArray); // Put the program commands in memory.
-                _MemoryManager.read(); // Reads memory from memory.js (hardware simulation)
-                // PCB created for this process.
                 _MemoryManager.PID++;
+                _MemoryManager.allocateMemory(hexArray); // Put the program commands in memory.
+                // PCB created for this process.
                 _PCB.PID = _MemoryManager.PID;
-                _PCB.IR = _MemoryManager.programCode[0];
+                _PCB.IR = _Memory.memory[0];
                 _StdOut.putText("Program loaded into PID " + _PCB.PID);
                 _PCB.state = "Ready";
                 displayPCBdata();
