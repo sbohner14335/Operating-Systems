@@ -334,12 +334,25 @@ var TSOS;
         // This command runs the currently loaded program.
         Shell.prototype.shellRun = function (args) {
             var command = args[0];
-            // Run the loaded program if the PID is in the PCB.
-            if (command === _PCB.PID.toString()) {
+            var validPID = false;
+            // Run the loaded program if the PID is in the resident list.
+            for (i = 0; i < _ProcessManager.residentList.length; i++) {
+                if (command === _ProcessManager.residentList[i].PID.toString()) {
+                    var PID = _ProcessManager.residentList[i].PID;
+                    // Place the desired process onto the ready queue and remove it from the resident list.
+                    _ProcessManager.readyQueue.enqueue(_ProcessManager.residentList[PID]);
+                    var index = _ProcessManager.residentList.indexOf(_ProcessManager.residentList[i].PID);
+                    _ProcessManager.residentList.splice(index, 1);
+                    validPID = true;
+                }
+            }
+            // Checks if a valid PID was found.
+            if (validPID) {
                 _CPU.isExecuting = true;
             } else {
                 _StdOut.putText("You did not enter a valid PID.");
             }
+            console.log(_ProcessManager.residentList);
         };
         // This command will clear all memory partitions/segments.
         Shell.prototype.shellClearmem = function (args) {
