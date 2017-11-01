@@ -74,7 +74,11 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellClearmem, "clearmem", "- Clears all memory partitions/segments.");
             this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
+            sc = new TSOS.ShellCommand(this.shellPs, "ps", "- Lists the running processes and their IDs.");
+            this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
+            sc = new TSOS.ShellCommand(this.shellKill, "kill", "<pid>- Kills a selected process.");
+            this.commandList[this.commandList.length] = sc;
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -341,6 +345,14 @@ var TSOS;
         Shell.prototype.shellClearmem = function (args) {
             _Memory.clearMemory();
             displayProcessMemory();
+        };
+        // TODO: This command will display the running processes and their IDs.
+        Shell.prototype.shellPs = function (args) {
+
+        };
+        // TODO: This command will kill a currently running process.
+        Shell.prototype.shellKill = function (args) {
+
         };
         return Shell;
     })();

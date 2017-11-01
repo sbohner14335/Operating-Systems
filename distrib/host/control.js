@@ -83,13 +83,11 @@ var TSOS;
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new TSOS.Cpu(); // Note: We could simulate multi-core systems by instantiating more than one instance of the CPU here.
             _CPU.init(); //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
-            _PCB = new TSOS.PCB(); // Initialize the global PCB object to display processes.
+            _PCB = new TSOS.PCB(); // Initialize a PCB object.
             displayCPUdata();
-            // Initialize the memory and display it.
+            // Initialize the memory.
             _Memory = new TSOS.Memory();
             _Memory.clearMemory();
-            _MemoryManager = new TSOS.MemoryManager();
-            displayProcessMemory();
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
             // .. and call the OS Kernel Bootstrap routine.
