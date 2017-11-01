@@ -46,7 +46,7 @@ var TSOS;
             this.xRegister = xRegister;
             this.yRegister = yRegister;
             this.zFlag = zFlag;
-            displayPCBdata();
+            updateProcess(this.PID);
         };
     return PCB;
 })();

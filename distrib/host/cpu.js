@@ -181,7 +181,7 @@ var TSOS;
         Cpu.prototype.break = function () {
             this.init();
             _Memory.clearMemory();
-            displayProcessMemory();
+            displayMemory();
             _PCB.state = "Terminated";
             _StdOut.putText(_OsShell.promptStr);
         };

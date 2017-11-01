@@ -70,6 +70,9 @@ var TSOS;
             // run <pid> will run a loaded program
             sc = new TSOS.ShellCommand(this.shellRun, "run", "<pid> - Run a loaded program.");
             this.commandList[this.commandList.length] = sc;
+            // runall will execute all loaded programs at once.
+            sc = new TSOS.ShellCommand(this.shellRunall, "runall", "- Runs all loaded programs at once.");
+            this.commandList[this.commandList.length] = sc;
             // clearmem will clear all memory partitions/segments.
             sc = new TSOS.ShellCommand(this.shellClearmem, "clearmem", "- Clears all memory partitions/segments.");
             this.commandList[this.commandList.length] = sc;
@@ -329,7 +332,7 @@ var TSOS;
             if (validHex) {
                 _MemoryManager.allocateMemory(hexArray); // Put the program commands in memory.
             }
-            displayProcessMemory();
+            displayMemory();
         };
         // This command runs the currently loaded program.
         Shell.prototype.shellRun = function (args) {
@@ -349,15 +352,20 @@ var TSOS;
             // Checks if a valid PID was found.
             if (validPID) {
                 _CPU.isExecuting = true;
+                updateProcess();
             } else {
                 _StdOut.putText("You did not enter a valid PID.");
             }
             console.log(_ProcessManager.residentList);
         };
+        // TODO: This command will run all loaded programs at once.
+        Shell.prototype.shellRunall = function () {
+
+        };
         // This command will clear all memory partitions/segments.
         Shell.prototype.shellClearmem = function (args) {
             _Memory.clearMemory();
-            displayProcessMemory();
+            displayMemory();
         };
         // TODO: This command will display the running processes and their IDs.
         Shell.prototype.shellPs = function (args) {

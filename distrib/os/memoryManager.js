@@ -30,7 +30,6 @@ var TSOS;
             } else {
                 _StdOut.putText("You can only allocate memory for up to 3 programs.");
             }
-            displayPCBdata();
         };
         // Will return the value in memory based on the location in memory.
         MemoryManager.prototype.readMemoryAtLocation = function (location) {

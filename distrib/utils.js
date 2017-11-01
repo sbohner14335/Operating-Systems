@@ -62,7 +62,7 @@ var TSOS;
         cpuDisplayValues.innerHTML = generatedRow;
     };
     // Logic for displaying PCB data as processes.
-    displayPCBdata = function () {
+    updateProcess = function (PID) {
         var processTable = document.getElementById("ProcessTableInfo");
         var generatedRow = "<tr align='center'> <td>" + _PCB.PID + "</td>" +
                             "<td>" + _PCB.state + "</td>" +
@@ -74,8 +74,21 @@ var TSOS;
                             "<td>" + _PCB.zFlag + "</td> </tr>";
         processTable.innerHTML = generatedRow;
     };
+    // Logic for updating a selected process.
+    displayProcessdata = function () {
+        var processTable = document.getElementById("ProcessTableInfo");
+        var generatedRow = "<tr align='center'> <td>" + _PCB.PID + "</td>" +
+            "<td>" + _PCB.state + "</td>" +
+            "<td>" + _PCB.PC + "</td>" +
+            "<td>" + _PCB.AC + "</td>" +
+            "<td>" + _PCB.IR + "</td>" +
+            "<td>" + _PCB.xRegister + "</td>" +
+            "<td>" + _PCB.yRegister + "</td>" +
+            "<td>" + _PCB.zFlag + "</td> </tr>";
+        processTable.innerHTML += generatedRow;
+    };
     // Logic for displaying the memory in the HTML Process Memory table.
-    displayProcessMemory = function () {
+    displayMemory = function () {
         var memoryTable = document.getElementById("memoryTable");
         var row;
         var rowCount = 0;   // Every 8 columns create a new row (increment this by 1).

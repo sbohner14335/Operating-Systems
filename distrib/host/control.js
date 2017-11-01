@@ -84,7 +84,6 @@ var TSOS;
             _CPU = new TSOS.Cpu(); // Note: We could simulate multi-core systems by instantiating more than one instance of the CPU here.
             _CPU.init(); //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
             _PCB = new TSOS.PCB(); // Initialize a PCB object.
-            displayCPUdata();
             // Initialize the memory.
             _Memory = new TSOS.Memory();
             _Memory.clearMemory();

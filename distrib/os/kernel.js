@@ -38,7 +38,6 @@ var TSOS;
             this.krnTrace(_krnKeyboardDriver.status);
             // Initialize the memory manager, and display memory.
             _MemoryManager = new TSOS.MemoryManager();
-            displayProcessMemory();
             // Initialize the process manager.
             _ProcessManager = new TSOS.ProcessManager();
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
@@ -48,6 +47,9 @@ var TSOS;
             this.krnTrace("Creating and Launching the shell.");
             _OsShell = new TSOS.Shell();
             _OsShell.init();
+            // Display utilities.
+            displayMemory();
+            displayCPUdata();
             // Finally, initiate student testing protocol.
             if (_GLaDOS) {
                 _GLaDOS.afterStartup();
@@ -159,9 +161,8 @@ var TSOS;
         };
         Kernel.prototype.krnTrapError = function (msg) {
             TSOS.Control.hostLog("OS ERROR - TRAP: " + msg);
-            // TODO: Display error on console, perhaps in some sort of colored screen. (Maybe blue?)
             _StdOut.clearScreen();
-            // Insert BSOD
+            // BSOD
             _DrawingContext.beginPath();
             _DrawingContext.rect(0, 0, 500, 500);
             _DrawingContext.fillStyle = "#ad1000";
