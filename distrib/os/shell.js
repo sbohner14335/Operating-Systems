@@ -374,9 +374,14 @@ var TSOS;
             _Memory.clearMemory();
             displayMemory();
         };
-        // TODO: This command will display the running processes and their IDs.
+        // This command will display the running processes and their IDs.
         Shell.prototype.shellPs = function (args) {
-
+            _StdOut.putText("Processes running:");
+            _Console.advanceLine();
+            for (i = 0; i < _ProcessManager.readyQueue.getSize(); i++) {
+                _StdOut.putText("PID " + _ProcessManager.readyQueue.q[i].PID);
+                _Console.advanceLine();
+            }
         };
         // This command will kill a currently running process.
         Shell.prototype.shellKill = function (args) {
@@ -384,8 +389,8 @@ var TSOS;
             if (args.length > 0) {
                 for (i = 0; i < _ProcessManager.readyQueue.getSize(); i++) {
                     if (command === _ProcessManager.readyQueue.q[i].PID.toString()) {
-                        var process = _ProcessManager.readyQueue.q[i];
-                        process.splice(i, 1);
+                        var process = _ProcessManager.readyQueue.q;
+                        //process.splice(i, 1); // Remove the PCB from the readyQueue.
                         _StdOut.putText("Process ID " + command + "killed.");
                     }
                 }
