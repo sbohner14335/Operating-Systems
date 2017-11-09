@@ -343,8 +343,6 @@ var TSOS;
                 if (command === _ProcessManager.residentList[i].PID.toString()) {
                     // Place the desired process onto the ready queue and remove it from the resident list.
                     _ProcessManager.readyQueue.enqueue(_ProcessManager.residentList[i]);
-                    var PCB = _ProcessManager.readyQueue.dequeue();
-                    _ProcessManager.loadCurrentPCB(PCB);
                     _ProcessManager.residentList.splice(i, 1);
                     validPID = true;
                     break;
@@ -357,9 +355,19 @@ var TSOS;
                 _StdOut.putText("You did not enter a valid PID.");
             }
         };
-        // TODO: This command will run all loaded programs at once.
+        // This command will run all loaded programs at once.
         Shell.prototype.shellRunall = function () {
-
+            if (_ProcessManager.residentList.length !== 0) {
+                for (i = 0; i < _ProcessManager.residentList.length; i++) {
+                    // Place the desired processes onto the ready queue and remove it from the resident list.
+                    _ProcessManager.readyQueue.enqueue(_ProcessManager.residentList[i]);
+                    _ProcessManager.residentList.splice(i, 1); // Removes process from residentList.
+                    i--;
+                }
+                _CPU.isExecuting = true;
+            } else {
+                _StdOut.putText("There are no programs to run.");
+            }
         };
         // This command clears all memory partitions/segments.
         Shell.prototype.shellClearmem = function (args) {

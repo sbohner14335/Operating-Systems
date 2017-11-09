@@ -51,9 +51,14 @@ var TSOS;
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
+            // Check to see if the CPU is running and the readyQueue has a program, if not dequeue the next program and run it.
+            if (_PCB.state !== "Running" && _ProcessManager.readyQueue.getSize() !== 0) {
+                var PCB = _ProcessManager.readyQueue.dequeue();
+                _ProcessManager.loadCurrentPCB(PCB);
+            }
             // Load the current PCB in to prepare for fetch, decode and execute.
-            _PCB.state = "Running";
             this.loadPCB();
+            _PCB.state = "Running";
             // Switch case for decoding the instruction.
             switch (this.IR) {
                 case "A9":
@@ -101,6 +106,7 @@ var TSOS;
                     break;
                 default:
                     _StdOut.putText("There is an illegal instruction in memory.");
+                    _PCB.state = "Terminated";
                     this.isExecuting = false;
             }
             // Code below runs directly after an instruction is executed.
@@ -178,11 +184,14 @@ var TSOS;
         };
         // Break (system call)
         Cpu.prototype.break = function () {
-            this.init();
             _MemoryManager.deallocateMemory(_PCB.base, _PCB.limit);
             displayMemory();
             _PCB.state = "Terminated";
             _StdOut.putText(_OsShell.promptStr);
+            // If the ready queue is empty, clear the CPU.
+            if (_ProcessManager.readyQueue.isEmpty()) {
+                this.init();
+            }
         };
         // Compare a byte in memory to the xreg, sets the zflag if equal.
         Cpu.prototype.compareByte = function () {
