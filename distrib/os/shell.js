@@ -80,9 +80,11 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellPs, "ps", "- Lists the running processes and their IDs.");
             this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
-            sc = new TSOS.ShellCommand(this.shellKill, "kill", "<pid>- Kills a selected process.");
+            sc = new TSOS.ShellCommand(this.shellKill, "kill", "<pid> - Kills a selected process.");
             this.commandList[this.commandList.length] = sc;
-            //
+            // quantum <int> - sets the quantum for round robin scheduling.
+            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Sets the quantum for round robin scheduling.");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -393,6 +395,7 @@ var TSOS;
                         // Clear the memory block for the killed program.
                         _MemoryManager.deallocateMemory(_ProcessManager.readyQueue.q[i].base, _ProcessManager.readyQueue.q[i].limit);
                         //updateProcess(_ProcessManager.readyQueue.q[i]);
+                        console.log(_ProcessManager.readyQueue.q[i]);
                         _StdOut.putText("Process ID " + command + " killed.");
                         break;
                     }
@@ -400,6 +403,10 @@ var TSOS;
             } else {
                 _StdOut.putText("Usage: PID <string>  Please supply a PID.");
             }
+        };
+        // TODO: Sets a quantum for round robin CPU scheduling.
+        Shell.prototype.shellQuantum = function (args) {
+
         };
         return Shell;
     })();
