@@ -378,9 +378,20 @@ var TSOS;
         Shell.prototype.shellPs = function (args) {
 
         };
-        // TODO: This command will kill a currently running process.
+        // This command will kill a currently running process.
         Shell.prototype.shellKill = function (args) {
-
+            var command = args[0];
+            if (args.length > 0) {
+                for (i = 0; i < _ProcessManager.readyQueue.getSize(); i++) {
+                    if (command === _ProcessManager.readyQueue.q[i].PID.toString()) {
+                        var process = _ProcessManager.readyQueue.q[i];
+                        process.splice(i, 1);
+                        _StdOut.putText("Process ID " + command + "killed.");
+                    }
+                }
+            } else {
+                _StdOut.putText("Usage: PID <string>  Please supply a PID.");
+            }
         };
         return Shell;
     })();
