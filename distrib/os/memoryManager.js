@@ -31,20 +31,25 @@ var TSOS;
                 _StdOut.putText("You can only allocate memory for up to 3 programs.");
             }
         };
+        MemoryManager.prototype.deallocateMemory = function (base, limit) {
+            for (i = base; i < limit; i++) {
+                _Memory.memory[i] = "00";
+            }
+        };
         // Will return the value in memory based on the location in memory.
-        MemoryManager.prototype.readMemoryAtLocation = function (location) {
-            if (location < 256) {
+        MemoryManager.prototype.readMemoryAtLocation = function (location, limit) {
+            if (location < limit) {
                 return _Memory.memory[location];
             } else {
-                alert("Cannot access out of bounds memory at" + location);
+                alert("Cannot access out of bounds memory at " + location);
             }
         };
         // Writes to an assigned location in memory.
-        MemoryManager.prototype.writeToMemory = function (location, param) {
-            if (location < 256) {
+        MemoryManager.prototype.writeToMemory = function (location, param, limit) {
+            if (location < limit) {
                 _Memory.memory[location] = param;
             } else {
-                alert("Cannot write to out of bounds memory at" + location);
+                alert("Cannot write to out of bounds memory at " + location);
             }
         };
         return MemoryManager;

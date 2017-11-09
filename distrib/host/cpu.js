@@ -54,7 +54,6 @@ var TSOS;
             // Load the current PCB in to prepare for fetch, decode and execute.
             _PCB.state = "Running";
             this.loadPCB();
-            console.log(this.IR);
             // Switch case for decoding the instruction.
             switch (this.IR) {
                 case "A9":
@@ -111,52 +110,52 @@ var TSOS;
         // Load the accumulator with a constant.
         Cpu.prototype.loadConstant = function () {
             this.PC++;
-            this.Acc = parseInt(_MemoryManager.readMemoryAtLocation(this.PC), 16);
+            this.Acc = parseInt(_MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit), 16);
             this.PC++;
         };
         // Load accumulator from memory.
         Cpu.prototype.loadAccumulator = function () {
             this.PC++;
-            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
-            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
             // Convert the hex string to base 10.
             memoryLoc = parseInt(memoryLoc, 16);
-            this.Acc = parseInt(_MemoryManager.readMemoryAtLocation(memoryLoc), 16);
+            this.Acc = parseInt(_MemoryManager.readMemoryAtLocation(memoryLoc, _PCB.limit), 16);
             this.PC++;
         };
         // Store the accumulator in memory.
         Cpu.prototype.storeAC = function () {
             this.PC++;
-            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
-            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
-            _MemoryManager.writeToMemory(memoryLoc, this.Acc.toString(16));
+            _MemoryManager.writeToMemory(memoryLoc, this.Acc.toString(16), _PCB.limit);
             this.PC++;
         };
         // Adds contents of an address to the contents of the accumulator and keeps the result in the accumulator.
         Cpu.prototype.addWithCarry = function () {
             this.PC++;
-            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
-            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
-            this.Acc += parseInt(_MemoryManager.readMemoryAtLocation(memoryLoc), 16);
+            this.Acc += parseInt(_MemoryManager.readMemoryAtLocation(memoryLoc, _PCB.limit), 16);
             this.PC++;
         };
         // Load the xreg with a constant.
         Cpu.prototype.loadXwithConstant = function () {
             this.PC++;
-            this.Xreg = parseInt(_MemoryManager.readMemoryAtLocation(this.PC), 16);
+            this.Xreg = parseInt(_MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit), 16);
             this.PC++;
         };
         // Load the xreg from memory.
         Cpu.prototype.loadXfromMemory = function () {
             this.PC++;
-            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
-            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
             this.Xreg = parseInt(_Memory.memory[memoryLoc], 16);
             this.PC++;
@@ -164,15 +163,15 @@ var TSOS;
         // Load the yreg with a constant.
         Cpu.prototype.loadYwithConstant = function () {
             this.PC++;
-            this.Yreg = parseInt(_MemoryManager.readMemoryAtLocation(this.PC), 16);
+            this.Yreg = parseInt(_MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit), 16);
             this.PC++;
         };
         // Load the yreg from memory.
         Cpu.prototype.loadYfromMemory = function () {
             this.PC++;
-            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
-            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
             this.Yreg = parseInt(_Memory.memory[memoryLoc], 16);
             this.PC++;
@@ -180,7 +179,7 @@ var TSOS;
         // Break (system call)
         Cpu.prototype.break = function () {
             this.init();
-            _Memory.clearMemory();
+            _MemoryManager.deallocateMemory(_PCB.base, _PCB.limit);
             displayMemory();
             _PCB.state = "Terminated";
             _StdOut.putText(_OsShell.promptStr);
@@ -188,9 +187,9 @@ var TSOS;
         // Compare a byte in memory to the xreg, sets the zflag if equal.
         Cpu.prototype.compareByte = function () {
             this.PC++;
-            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
-            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
             if (this.Xreg === parseInt(_Memory.memory[memoryLoc], 16)) {
                 this.Zflag = 1;
@@ -201,7 +200,7 @@ var TSOS;
         Cpu.prototype.branchBytes = function () {
             if (this.Zflag === 0) {
                 this.PC++;
-                var jump = parseInt(_MemoryManager.readMemoryAtLocation(this.PC), 16); // Read how far to jump.
+                var jump = parseInt(_MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit), 16); // Read how far to jump.
                 this.PC++;
                 // If the jump will send us out of bounds.
                 if (this.PC + jump > 255) {
@@ -219,13 +218,13 @@ var TSOS;
         // Increment the value of a byte.
         Cpu.prototype.incrementValue = function () {
             this.PC++;
-            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC);
+            var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
-            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC) + memoryLoc;
+            memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
             memoryLoc = parseInt(memoryLoc, 16);
             var incremented = parseInt(_Memory.memory[memoryLoc], 16);
             incremented++;
-            _MemoryManager.writeToMemory(memoryLoc, incremented.toString(16));
+            _MemoryManager.writeToMemory(memoryLoc, incremented.toString(16), _PCB.limit);
             this.PC++;
         };
         // System call: xreg = print the int stored in the yreg.
@@ -236,12 +235,12 @@ var TSOS;
             } else {
                 var output = "";
                 var address = this.Yreg;
-                var string = _MemoryManager.readMemoryAtLocation(address);
+                var string = _MemoryManager.readMemoryAtLocation(address, _PCB.limit);
                 while (string !== "00") {
                     var print = String.fromCharCode(parseInt(string, 16));
                     output += print;
                     address++;
-                    string = _MemoryManager.readMemoryAtLocation(address);
+                    string = _MemoryManager.readMemoryAtLocation(address, _PCB.limit);
                 }
                 _StdOut.putText(output);
             }
