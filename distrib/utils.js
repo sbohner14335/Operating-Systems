@@ -61,39 +61,48 @@ var TSOS;
                             "<td>" + _CPU.Zflag + "</td> </tr>";
         cpuDisplayValues.innerHTML = generatedRow;
     };
-    // Logic for displaying PCB data as processes when the user loads a program.
-    updateProcess = function () {
-        var processTable = document.getElementById("ProcessTableInfo");
-        var generatedRow = "<tr align='center'> <td>" + _PCB.PID + "</td>" +
-            "<td>" + _PCB.state + "</td>" +
-            "<td>" + _PCB.PC + "</td>" +
-            "<td>" + _PCB.AC + "</td>" +
-            "<td>" + _PCB.IR + "</td>" +
-            "<td>" + _PCB.xRegister + "</td>" +
-            "<td>" + _PCB.yRegister + "</td>" +
-            "<td>" + _PCB.zFlag + "</td>" +
-            "<td>" + _PCB.base + "</td>" +
-            "<td>" + _PCB.limit + "</td> </tr>";
-        processTable.innerHTML = generatedRow;
-    };
     // Logic for updating a selected process.
+    updateProcess = function (PCB) {
+        var processTable = document.getElementById("ProcessTableInfo");
+        // Get all rows (or processes)
+        var rows = processTable.getElementsByTagName("tr");
+        for (i = 0; i < rows.length; i++) {
+            var row = rows[i].getElementsByTagName("td");
+            // Find the row with the matching PID.
+            if (row[0].innerHTML === PCB.PID.toString()) {
+                rows[i].innerHTML = "<td>" + PCB.PID + "</td>" +
+                                    "<td>" + PCB.state + "</td>" +
+                                    "<td>" + PCB.PC + "</td>" +
+                                    "<td>" + PCB.AC + "</td>" +
+                                    "<td>" + PCB.IR + "</td>" +
+                                    "<td>" + PCB.xRegister + "</td>" +
+                                    "<td>" + PCB.yRegister + "</td>" +
+                                    "<td>" + PCB.zFlag + "</td>" +
+                                    "<td>" + PCB.base + "</td>" +
+                                    "<td>" + PCB.limit + "</td>";
+                                    break;
+            }
+        }
+    };
+    // Logic for displaying PCB data as processes when the user loads a program.
     displayProcessdata = function (newProcess) {
         var processTable = document.getElementById("ProcessTableInfo");
         var generatedRow = "<tr align='center'> <td>" + newProcess.PID + "</td>" +
-            "<td>" + newProcess.state + "</td>" +
-            "<td>" + newProcess.PC + "</td>" +
-            "<td>" + newProcess.AC + "</td>" +
-            "<td>" + newProcess.IR + "</td>" +
-            "<td>" + newProcess.xRegister + "</td>" +
-            "<td>" + newProcess.yRegister + "</td>" +
-            "<td>" + newProcess.zFlag + "</td>" +
-            "<td>" + newProcess.base + "</td>" +
-            "<td>" + newProcess.limit + "</td> </tr>";
+                            "<td>" + newProcess.state + "</td>" +
+                            "<td>" + newProcess.PC + "</td>" +
+                            "<td>" + newProcess.AC + "</td>" +
+                            "<td>" + newProcess.IR + "</td>" +
+                            "<td>" + newProcess.xRegister + "</td>" +
+                            "<td>" + newProcess.yRegister + "</td>" +
+                            "<td>" + newProcess.zFlag + "</td>" +
+                            "<td>" + newProcess.base + "</td>" +
+                            "<td>" + newProcess.limit + "</td> </tr>";
         processTable.innerHTML += generatedRow;
     };
     // Logic for displaying the memory in the HTML Process Memory table.
     displayMemory = function () {
         var memoryTable = document.getElementById("memoryTable");
+        memoryTable.innerHTML = "";
         var row;
         var rowCount = 0;   // Every 8 columns create a new row (increment this by 1).
         var cellCount;
@@ -118,7 +127,7 @@ var TSOS;
                 }
             } else {
                 cellCount++;
-                row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString(16).toUpperCase();
+                row.insertCell(cellCount).innerHTML = _Memory.memory[i].toString().toUpperCase();
             }
         }
     };
