@@ -11,14 +11,14 @@ var TSOS;
                     _Memory.memory[i] = hexArray[i];
                 }
                 // PCB created for a process.
-                _ProcessManager.createProcess(_Memory.base, _Memory.segment1, "Ready");
+                _ProcessManager.createProcess(_Memory.base, _Memory.segment1);
             } else if (_Memory.memory[_Memory.segment1] === "00") { // Check for the second segment of memory.
                 for (j = 0; j < hexArray.length; j++) {
                     _Memory.memory[_Memory.segment1++] = hexArray[j];
                 }
                 _Memory.segment1 = 256; // Reset memory segment after second segment is allocated.
                 // PCB created for a process.
-                _ProcessManager.createProcess(_Memory.segment1, _Memory.segment2, "Waiting");
+                _ProcessManager.createProcess(_Memory.segment1, _Memory.segment2);
             } else if (_Memory.memory[_Memory.segment2] === "00") {
                 // If the first two segments are filled, fill the last segment.
                 for (k = 0; k < hexArray.length; k++) {
@@ -26,7 +26,7 @@ var TSOS;
                 }
                 _Memory.segment2 = 512;
                 // PCB created for a process.
-                _ProcessManager.createProcess(_Memory.segment2, _Memory.limit, "Waiting");
+                _ProcessManager.createProcess(_Memory.segment2, _Memory.limit);
             } else {
                 _StdOut.putText("You can only allocate memory for up to 3 programs.");
             }

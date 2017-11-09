@@ -342,6 +342,7 @@ var TSOS;
             for (i = 0; i < _ProcessManager.residentList.length; i++) {
                 if (command === _ProcessManager.residentList[i].PID.toString()) {
                     // Place the desired process onto the ready queue and remove it from the resident list.
+                    _ProcessManager.residentList[i].state = "Running";
                     _ProcessManager.readyQueue.enqueue(_ProcessManager.residentList[i]);
                     _ProcessManager.residentList.splice(i, 1);
                     validPID = true;
@@ -389,9 +390,11 @@ var TSOS;
             if (args.length > 0) {
                 for (i = 0; i < _ProcessManager.readyQueue.getSize(); i++) {
                     if (command === _ProcessManager.readyQueue.q[i].PID.toString()) {
-                        var process = _ProcessManager.readyQueue.q;
-                        //process.splice(i, 1); // Remove the PCB from the readyQueue.
-                        _StdOut.putText("Process ID " + command + "killed.");
+                        // Clear the memory block for the killed program.
+                        _MemoryManager.deallocateMemory(_ProcessManager.readyQueue.q[i].base, _ProcessManager.readyQueue.q[i].limit);
+                        //updateProcess(_ProcessManager.readyQueue.q[i]);
+                        _StdOut.putText("Process ID " + command + " killed.");
+                        break;
                     }
                 }
             } else {

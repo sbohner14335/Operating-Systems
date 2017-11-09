@@ -7,11 +7,11 @@ var TSOS;
             this.PID = -1;
         }
         // Creates a process and puts it into the resident list.
-        ProcessManager.prototype.createProcess = function (base, limit, state) {
+        ProcessManager.prototype.createProcess = function (base, limit) {
             var newProcess = new TSOS.PCB(); // Creates a new PCB object.
             this.PID++;
             newProcess.PID = this.PID;
-            newProcess.state = state;
+            newProcess.state = "Loaded";
             newProcess.PC = base;
             newProcess.AC = 0;
             newProcess.IR = _Memory.memory[base];

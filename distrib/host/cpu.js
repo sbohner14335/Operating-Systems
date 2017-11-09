@@ -55,6 +55,7 @@ var TSOS;
             if (_PCB.state !== "Running" && _ProcessManager.readyQueue.getSize() !== 0) {
                 var PCB = _ProcessManager.readyQueue.dequeue();
                 _ProcessManager.loadCurrentPCB(PCB);
+                _PCB.state = "Running";
             }
             // Load the current PCB in to prepare for fetch, decode and execute.
             this.loadPCB();
