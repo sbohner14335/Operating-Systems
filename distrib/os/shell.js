@@ -345,7 +345,7 @@ var TSOS;
                 if (command === _ProcessManager.residentList[i].PID.toString()) {
                     // Place the desired process onto the ready queue and remove it from the resident list.
                     _ProcessManager.residentList[i].state = "Running";
-                    _ProcessManager.readyQueue.enqueue(_ProcessManager.residentList[i]);
+                    _ProcessManager.readyQueue.push(_ProcessManager.residentList[i]);
                     _ProcessManager.residentList.splice(i, 1);
                     validPID = true;
                     break;
@@ -363,7 +363,7 @@ var TSOS;
             if (_ProcessManager.residentList.length !== 0) {
                 for (i = 0; i < _ProcessManager.residentList.length; i++) {
                     // Place the desired processes onto the ready queue and remove it from the resident list.
-                    _ProcessManager.readyQueue.enqueue(_ProcessManager.residentList[i]);
+                    _ProcessManager.readyQueue.push(_ProcessManager.residentList[i]);
                     _ProcessManager.residentList.splice(i, 1); // Removes process from residentList.
                     i--;
                 }
@@ -381,8 +381,8 @@ var TSOS;
         Shell.prototype.shellPs = function (args) {
             _StdOut.putText("Processes running:");
             _Console.advanceLine();
-            for (i = 0; i < _ProcessManager.readyQueue.getSize(); i++) {
-                _StdOut.putText("PID " + _ProcessManager.readyQueue.q[i].PID);
+            for (i = 0; i < _ProcessManager.readyQueue.length; i++) {
+                _StdOut.putText("PID " + _ProcessManager.readyQueue[i].PID);
                 _Console.advanceLine();
             }
         };
@@ -390,12 +390,12 @@ var TSOS;
         Shell.prototype.shellKill = function (args) {
             var command = args[0];
             if (args.length > 0) {
-                for (i = 0; i < _ProcessManager.readyQueue.getSize(); i++) {
-                    if (command === _ProcessManager.readyQueue.q[i].PID.toString()) {
+                for (i = 0; i < _ProcessManager.readyQueue.length; i++) {
+                    if (command === _ProcessManager.readyQueue[i].PID.toString()) {
                         // Clear the memory block for the killed program.
-                        _MemoryManager.deallocateMemory(_ProcessManager.readyQueue.q[i].base, _ProcessManager.readyQueue.q[i].limit);
-                        //updateProcess(_ProcessManager.readyQueue.q[i]);
-                        console.log(_ProcessManager.readyQueue.q[i]);
+                        _MemoryManager.deallocateMemory(_ProcessManager.readyQueue[i].base, _ProcessManager.readyQueue[i].limit);
+                        updateProcess(_ProcessManager.readyQueue[i]);
+                        console.log(_ProcessManager.readyQueue[i]);
                         _StdOut.putText("Process ID " + command + " killed.");
                         break;
                     }

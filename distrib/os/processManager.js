@@ -2,7 +2,7 @@ var TSOS;
 (function (TSOS) {
     var ProcessManager = (function () {
         function ProcessManager() {
-            this.readyQueue = new TSOS.Queue();
+            this.readyQueue = [];
             this.residentList = [];
             this.PID = -1;
         }

@@ -52,8 +52,9 @@ var TSOS;
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Check to see if the CPU is running and the readyQueue has a program, if not dequeue the next program and run it.
-            if (_PCB.state !== "Running" && _ProcessManager.readyQueue.getSize() !== 0) {
-                var PCB = _ProcessManager.readyQueue.dequeue();
+            if (_PCB.state !== "Running" && _ProcessManager.readyQueue.length !== 0) {
+                var PCB = _ProcessManager.readyQueue.shift();
+                console.log(PCB);
                 _ProcessManager.loadCurrentPCB(PCB);
                 _PCB.state = "Running";
             }
@@ -190,7 +191,7 @@ var TSOS;
             _PCB.state = "Terminated";
             _StdOut.putText(_OsShell.promptStr);
             // If the ready queue is empty, clear the CPU.
-            if (_ProcessManager.readyQueue.isEmpty()) {
+            if (_ProcessManager.readyQueue.length === 0) {
                 this.init();
             }
         };
