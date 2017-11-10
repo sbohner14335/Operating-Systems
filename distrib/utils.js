@@ -69,7 +69,7 @@ var TSOS;
         for (i = 0; i < rows.length; i++) {
             var row = rows[i].getElementsByTagName("td");
             // Find the row with the matching PID.
-            if (row[0].innerHTML === PCB.PID.toString()) {
+            if (row[0].innerHTML == PCB.PID.toString()) {
                 rows[i].innerHTML = "<td>" + PCB.PID + "</td>" +
                                     "<td>" + PCB.state + "</td>" +
                                     "<td>" + PCB.PC + "</td>" +

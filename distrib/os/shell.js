@@ -394,8 +394,7 @@ var TSOS;
                     if (command === _ProcessManager.readyQueue[i].PID.toString()) {
                         // Clear the memory block for the killed program.
                         _MemoryManager.deallocateMemory(_ProcessManager.readyQueue[i].base, _ProcessManager.readyQueue[i].limit);
-                        updateProcess(_ProcessManager.readyQueue[i]);
-                        console.log(_ProcessManager.readyQueue[i]);
+                        _ProcessManager.readyQueue.splice(i, 1);
                         _StdOut.putText("Process ID " + command + " killed.");
                         break;
                     }
