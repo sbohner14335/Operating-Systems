@@ -344,7 +344,6 @@ var TSOS;
             for (i = 0; i < _ProcessManager.residentList.length; i++) {
                 if (command === _ProcessManager.residentList[i].PID.toString()) {
                     // Place the desired process onto the ready queue and remove it from the resident list.
-                    _ProcessManager.residentList[i].state = "Running";
                     _ProcessManager.readyQueue.push(_ProcessManager.residentList[i]);
                     _ProcessManager.residentList.splice(i, 1);
                     validPID = true;

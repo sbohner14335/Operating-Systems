@@ -59,7 +59,6 @@ var TSOS;
             }
             // Load the current PCB in to prepare for fetch, decode and execute.
             this.loadPCB();
-            _PCB.state = "Running";
             // Switch case for decoding the instruction.
             switch (this.IR) {
                 case "A9":
@@ -114,7 +113,8 @@ var TSOS;
             displayCPUdata();
             _PCB.updatePCB(this.PC, this.Acc, _Memory.memory[this.PC], this.Xreg, this.Yreg, this.Zflag);
             _CpuScheduler.ticks++;
-            if (_CpuScheduler.ticks > _CpuScheduler.quantum) {
+            // Enforce a context switch if the ticks are greater than the quantum and the ready queue has a process waiting.
+            if (_CpuScheduler.ticks >= _CpuScheduler.quantum && _ProcessManager.readyQueue.length > 0) {
                 _KernelInterruptQueue.enqueue(new TSOS.Interrupt(TIMER_IRQ, ''));
                 _CpuScheduler.contextSwitch();
             }
@@ -132,7 +132,7 @@ var TSOS;
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
             // Convert the hex string to base 10.
-            memoryLoc = parseInt(memoryLoc, 16);
+            memoryLoc = parseInt(memoryLoc, 16) + _PCB.base;
             this.Acc = parseInt(_MemoryManager.readMemoryAtLocation(memoryLoc, _PCB.limit), 16);
             this.PC++;
         };
@@ -142,7 +142,7 @@ var TSOS;
             var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
-            memoryLoc = parseInt(memoryLoc, 16);
+            memoryLoc = parseInt(memoryLoc, 16) + _PCB.base;
             _MemoryManager.writeToMemory(memoryLoc, this.Acc.toString(16), _PCB.limit);
             this.PC++;
         };
@@ -152,7 +152,7 @@ var TSOS;
             var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
-            memoryLoc = parseInt(memoryLoc, 16);
+            memoryLoc = parseInt(memoryLoc, 16) + _PCB.base;
             this.Acc += parseInt(_MemoryManager.readMemoryAtLocation(memoryLoc, _PCB.limit), 16);
             this.PC++;
         };
@@ -168,7 +168,7 @@ var TSOS;
             var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
-            memoryLoc = parseInt(memoryLoc, 16);
+            memoryLoc = parseInt(memoryLoc, 16) + _PCB.base;
             this.Xreg = parseInt(_Memory.memory[memoryLoc], 16);
             this.PC++;
         };
@@ -184,7 +184,7 @@ var TSOS;
             var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
-            memoryLoc = parseInt(memoryLoc, 16);
+            memoryLoc = parseInt(memoryLoc, 16) + _PCB.base;
             this.Yreg = parseInt(_Memory.memory[memoryLoc], 16);
             this.PC++;
         };
@@ -205,7 +205,7 @@ var TSOS;
             var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
-            memoryLoc = parseInt(memoryLoc, 16);
+            memoryLoc = parseInt(memoryLoc, 16) + _PCB.base;
             if (this.Xreg === parseInt(_Memory.memory[memoryLoc], 16)) {
                 this.Zflag = 1;
             }
@@ -218,9 +218,9 @@ var TSOS;
                 var jump = parseInt(_MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit), 16); // Read how far to jump.
                 this.PC++;
                 // If the jump will send us out of bounds.
-                if (this.PC + jump > 255) {
+                if (this.PC + jump > _PCB.limit -1) {
                     // find the value that will get us to our bound.
-                    var toMax = 256 - this.PC;
+                    var toMax = _PCB.limit - this.PC;
                     jump -= toMax;
                     this.PC = jump; // Set the PC to the remaining jump.
                 } else {
@@ -236,7 +236,7 @@ var TSOS;
             var memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit);
             this.PC++;
             memoryLoc = _MemoryManager.readMemoryAtLocation(this.PC, _PCB.limit) + memoryLoc;
-            memoryLoc = parseInt(memoryLoc, 16);
+            memoryLoc = parseInt(memoryLoc, 16) + _PCB.base;
             var incremented = parseInt(_Memory.memory[memoryLoc], 16);
             incremented++;
             _MemoryManager.writeToMemory(memoryLoc, incremented.toString(16), _PCB.limit);
@@ -249,7 +249,7 @@ var TSOS;
                 _StdOut.putText(this.Yreg.toString());
             } else {
                 var output = "";
-                var address = this.Yreg;
+                var address = this.Yreg + _PCB.base;
                 var string = _MemoryManager.readMemoryAtLocation(address, _PCB.limit);
                 while (string !== "00") {
                     var print = String.fromCharCode(parseInt(string, 16));
