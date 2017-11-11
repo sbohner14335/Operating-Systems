@@ -40,6 +40,7 @@ var TSOS;
             _MemoryManager = new TSOS.MemoryManager();
             // Initialize the process manager.
             _ProcessManager = new TSOS.ProcessManager();
+            _CpuScheduler = new TSOS.CpuScheduler();
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
             this.krnEnableInterrupts();

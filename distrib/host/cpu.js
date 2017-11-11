@@ -53,7 +53,7 @@ var TSOS;
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Check to see if the CPU is running and the readyQueue has a program, if not dequeue the next program and run it.
             if (_PCB.state !== "Running" && _ProcessManager.readyQueue.length !== 0) {
-                var PCB = _ProcessManager.readyQueue.shift();
+                var PCB = _ProcessManager.readyQueue.pop();
                 _ProcessManager.loadCurrentPCB(PCB);
                 _PCB.state = "Running";
             }
@@ -113,6 +113,11 @@ var TSOS;
             // Code below runs directly after an instruction is executed.
             displayCPUdata();
             _PCB.updatePCB(this.PC, this.Acc, _Memory.memory[this.PC], this.Xreg, this.Yreg, this.Zflag);
+            _CpuScheduler.ticks++;
+            if (_CpuScheduler.ticks > _CpuScheduler.quantum) {
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(TIMER_IRQ, ''));
+                _CpuScheduler.contextSwitch();
+            }
         };
         // Load the accumulator with a constant.
         Cpu.prototype.loadConstant = function () {

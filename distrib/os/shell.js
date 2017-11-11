@@ -363,7 +363,7 @@ var TSOS;
             if (_ProcessManager.residentList.length !== 0) {
                 for (i = 0; i < _ProcessManager.residentList.length; i++) {
                     // Place the desired processes onto the ready queue and remove it from the resident list.
-                    _ProcessManager.readyQueue.push(_ProcessManager.residentList[i]);
+                    _ProcessManager.readyQueue.unshift(_ProcessManager.residentList[i]);
                     _ProcessManager.residentList.splice(i, 1); // Removes process from residentList.
                     i--;
                 }
@@ -393,8 +393,8 @@ var TSOS;
                 for (i = 0; i < _ProcessManager.readyQueue.length; i++) {
                     if (command === _ProcessManager.readyQueue[i].PID.toString()) {
                         // Clear the memory block for the killed program.
-                        _MemoryManager.deallocateMemory(_ProcessManager.readyQueue[i].base, _ProcessManager.readyQueue[i].limit);
-                        _ProcessManager.readyQueue.splice(i, 1);
+                        // _MemoryManager.deallocateMemory(_ProcessManager.readyQueue[i].base, _ProcessManager.readyQueue[i].limit);
+                        console.log(_ProcessManager.readyQueue[i]);
                         _StdOut.putText("Process ID " + command + " killed.");
                         break;
                     }
@@ -403,9 +403,14 @@ var TSOS;
                 _StdOut.putText("Usage: PID <string>  Please supply a PID.");
             }
         };
-        // TODO: Sets a quantum for round robin CPU scheduling.
+        // Sets a quantum for round robin CPU scheduling.
         Shell.prototype.shellQuantum = function (args) {
-
+            var command = args[0];
+            if (args.length > 0) {
+                _CpuScheduler.quantum = parseInt(command);
+            } else {
+                _StdOut.putText("Usage: Quantum <int>  Please supply a quantum.");
+            }
         };
         return Shell;
     })();
