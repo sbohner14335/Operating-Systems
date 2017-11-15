@@ -36,9 +36,9 @@ var TSOS;
             _krnKeyboardDriver = new TSOS.DeviceDriverKeyboard(); // Construct it.
             _krnKeyboardDriver.driverEntry(); // Call the driverEntry() initialization routine.
             this.krnTrace(_krnKeyboardDriver.status);
-            // Initialize the memory manager, and display memory.
+            // Initialize the memory manager.
             _MemoryManager = new TSOS.MemoryManager();
-            // Initialize the process manager.
+            // Initialize the process manager and cpu scheduler.
             _ProcessManager = new TSOS.ProcessManager();
             _CpuScheduler = new TSOS.CpuScheduler();
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)

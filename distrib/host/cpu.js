@@ -114,7 +114,7 @@ var TSOS;
             _PCB.updatePCB(this.PC, this.Acc, _Memory.memory[this.PC], this.Xreg, this.Yreg, this.Zflag);
             _CpuScheduler.ticks++;
             // Enforce a context switch if the ticks are greater than the quantum and the ready queue has a process waiting.
-            if (_CpuScheduler.ticks >= _CpuScheduler.quantum && _ProcessManager.readyQueue.length > 0) {
+            if (_CpuScheduler.algorithm === "Round Robin" && _CpuScheduler.ticks >= _CpuScheduler.quantum && _ProcessManager.readyQueue.length > 0) {
                 _KernelInterruptQueue.enqueue(new TSOS.Interrupt(TIMER_IRQ, ''));
                 _CpuScheduler.contextSwitch();
             }

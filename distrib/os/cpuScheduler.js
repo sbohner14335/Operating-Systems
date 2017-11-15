@@ -2,8 +2,9 @@ var TSOS;
 (function (TSOS) {
     var CpuScheduler = (function () {
         function CpuScheduler() {
-            this.quantum = 6;
+            this.quantum = _DefaultQuantum;
             this.ticks = 0;
+            this.algorithm = "Round Robin";
         }
         CpuScheduler.prototype.contextSwitch = function () {
             // Reset the clock ticks.

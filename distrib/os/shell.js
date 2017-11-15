@@ -85,6 +85,12 @@ var TSOS;
             // quantum <int> - sets the quantum for round robin scheduling.
             sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Sets the quantum for round robin scheduling.");
             this.commandList[this.commandList.length] = sc;
+            // setschedule <rr, fcfs, priority> - sets the cpu scheduling algorithm.
+            sc = new TSOS.ShellCommand(this.shellSetschedule, "setschedule", "<string> - Sets the CPU scheduling algorithm.");
+            this.commandList[this.commandList.length] = sc;
+            // getschedule - displays the current CPU scheduling algorithm.
+            sc = new TSOS.ShellCommand(this.shellGetschedule, "getschedule", "- Displays the current CPU scheduling algorithm.");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -104,7 +110,7 @@ var TSOS;
             // Determine the command and execute it.
             //
             // TypeScript/JavaScript may not support associative arrays in all browsers so we have to iterate over the
-            // command list in attempt to find a match.  TODO: Is there a better way? Probably. Someone work it out and tell me in class.
+            // command list in attempt to find a match.
             var index = 0;
             var found = false;
             var fn = undefined;
@@ -215,7 +221,6 @@ var TSOS;
             _StdOut.putText("Shutting down...");
             // Call Kernel shutdown routine.
             _Kernel.krnShutdown();
-            // TODO: Stop the final prompt from being displayed.  If possible.  Not a high priority.  (Damn OCD!)
         };
         Shell.prototype.shellCls = function (args) {
             _StdOut.clearScreen();
@@ -410,6 +415,35 @@ var TSOS;
             } else {
                 _StdOut.putText("Usage: Quantum <int>  Please supply a quantum.");
             }
+        };
+        // Sets the CPU scheduling algorithm for running programs.
+        Shell.prototype.shellSetschedule = function (args) {
+            var command = args[0];
+            if (args.length > 0) {
+                if (command === "rr") {
+                    _CpuScheduler.algorithm = "Round Robin";
+                    _CpuScheduler.quantum = _DefaultQuantum;
+                } else if (command === "fcfs") {
+                    _CpuScheduler.algorithm = "First Come First Serve";
+                    _CpuScheduler.quantum = 10000000; // Really big quantum to achieve First Come First Serve CPU scheduling.
+                } else if (command === "priority") {
+                    _CpuScheduler.algorithm = "Priority";
+                } else {
+                    _StdOut.putText("Valid CPU scheduling algorithms:");
+                    _Console.advanceLine();
+                    _StdOut.putText("  rr - Round Robin (Quantum = 6)");
+                    _Console.advanceLine();
+                    _StdOut.putText("  fcfs - First Come First Serve");
+                    _Console.advanceLine();
+                    _StdOut.putText("  priority - Priority (Scale: 1-10)");
+                }
+            } else {
+                _StdOut.putText("Usage: Algorithm <string>  Please set a scheduling algorithm - rr, fcfs, or priority.");
+            }
+        };
+        // Displays the current CPU scheduling algorithm.
+        Shell.prototype.shellGetschedule = function () {
+            _StdOut.putText("CPU Scheduling Algorithm - " + _CpuScheduler.algorithm);
         };
         return Shell;
     })();

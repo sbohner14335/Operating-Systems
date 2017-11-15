@@ -26,9 +26,11 @@ var _OSclock = 0; // Page 23.
 // Memory
 var _Memory; // Initialize the memory object (used in control.js).
 var _MemoryManager;
+var _MaxMemory = 768;
+// Program and CPU scheduling
 var _ProcessManager;
 var _CpuScheduler;
-var _MaxMemory = 768;
+var _DefaultQuantum = 6;
 var _PCB; // Global Process Control Block
 var _Mode = 0; // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
 var _Canvas; // Initialized in Control.hostInit().
