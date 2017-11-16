@@ -41,7 +41,7 @@ var TSOS;
             if (location < limit) {
                 return _Memory.memory[location];
             } else {
-                alert("Cannot access out of bounds memory at " + location);
+                _StdOut.putText("Cannot access out of bounds memory at " + location);
             }
         };
         // Writes to an assigned location in memory.
@@ -49,7 +49,7 @@ var TSOS;
             if (location < limit) {
                 _Memory.memory[location] = param;
             } else {
-                alert("Cannot write to out of bounds memory at " + location);
+                _StdOut.putText("Cannot write to out of bounds memory at " + location);
             }
         };
         return MemoryManager;

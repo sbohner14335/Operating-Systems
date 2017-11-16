@@ -53,7 +53,7 @@ var TSOS;
     displayCPUdata = function () {
         // Function that displays data currently in cpu.js and the currently executing PCB.
         var cpuDisplayValues = document.getElementById("cpuDisplayValues");
-        var generatedRow = "<tr align='center'> <td>" + _CPU.PC + "</td>" +
+        var generatedRow = "<tr align='center'> <td>" + _CPU.PC.toString(16).toUpperCase() + "</td>" +
                             "<td>" + _CPU.Acc + "</td>" +
                             "<td>" + _CPU.IR + "</td>" +
                             "<td>" + _CPU.Xreg + "</td>" +
@@ -72,7 +72,7 @@ var TSOS;
             if (row[0].innerHTML == PCB.PID.toString()) {
                 rows[i].innerHTML = "<td>" + PCB.PID + "</td>" +
                                     "<td>" + PCB.state + "</td>" +
-                                    "<td>" + PCB.PC + "</td>" +
+                                    "<td>" + PCB.PC.toString(16).toUpperCase() + "</td>" +
                                     "<td>" + PCB.AC + "</td>" +
                                     "<td>" + PCB.IR + "</td>" +
                                     "<td>" + PCB.xRegister + "</td>" +
