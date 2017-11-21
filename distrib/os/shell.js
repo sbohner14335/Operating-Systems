@@ -383,24 +383,38 @@ var TSOS;
         };
         // This command will display the running processes and their IDs.
         Shell.prototype.shellPs = function (args) {
-            _StdOut.putText("Processes running:");
-            _Console.advanceLine();
-            for (i = 0; i < _ProcessManager.readyQueue.length; i++) {
-                _StdOut.putText("PID " + _ProcessManager.readyQueue[i].PID);
+            if (_CPU.isExecuting) {
+                _StdOut.putText("Processes running:");
                 _Console.advanceLine();
+                if (_PCB.PID > -1) {
+                    _StdOut.putText("PID " + _PCB.PID);
+                    _Console.advanceLine();
+                }
+                for (i = 0; i < _ProcessManager.readyQueue.length; i++) {
+                    _StdOut.putText("PID " + _ProcessManager.readyQueue[i].PID);
+                    _Console.advanceLine();
+                }
+            } else {
+                _StdOut.putText("There are currently no running processes.");
             }
         };
         // This command will kill a currently running process.
         Shell.prototype.shellKill = function (args) {
             var command = args[0];
             if (args.length > 0) {
-                for (i = 0; i < _ProcessManager.readyQueue.length; i++) {
-                    if (command === _ProcessManager.readyQueue[i].PID.toString()) {
-                        // Clear the memory block for the killed program.
-                        _MemoryManager.deallocateMemory(_ProcessManager.readyQueue[i].base, _ProcessManager.readyQueue[i].limit);
-                        _ProcessManager.readyQueue.splice(i, 1);
-                        _StdOut.putText("Process ID " + command + " killed.");
-                        break;
+                // Checks if the PID is the current PCB.
+                if (command === _PCB.PID.toString()) {
+                    _MemoryManager.deallocateMemory(_PCB.base, _PCB.limit);
+                    _PCB.state = "Killed";
+                    updateProcess(_PCB);
+                    _StdOut.putText("Process ID " + command + " killed.")
+                } else {
+                    // Checks if there was a match in the ready queue.
+                    for (i = 0; i < _ProcessManager.readyQueue.length; i++) {
+                        if (command === _ProcessManager.readyQueue[i].PID.toString()) {
+                            _ProcessManager.killProcess(i);
+                            break;
+                        }
                     }
                 }
             } else {
@@ -423,11 +437,15 @@ var TSOS;
                 if (command === "rr") {
                     _CpuScheduler.algorithm = "Round Robin";
                     _CpuScheduler.quantum = _DefaultQuantum;
+                    _StdOut.putText("Scheduling algorithm switched to " + _CpuScheduler.algorithm);
                 } else if (command === "fcfs") {
                     _CpuScheduler.algorithm = "First Come First Serve";
                     _CpuScheduler.quantum = 10000000; // Really big quantum to achieve First Come First Serve CPU scheduling.
+                    _StdOut.putText("Scheduling algorithm switched to " + _CpuScheduler.algorithm);
                 } else if (command === "priority") {
                     _CpuScheduler.algorithm = "Priority";
+                    // TODO: Set up priority scheduling.
+                    _StdOut.putText("Scheduling algorithm switched to " + _CpuScheduler.algorithm);
                 } else {
                     _StdOut.putText("Valid CPU scheduling algorithms:");
                     _Console.advanceLine();

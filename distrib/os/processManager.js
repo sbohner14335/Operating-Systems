@@ -24,6 +24,15 @@ var TSOS;
             _StdOut.putText("Program loaded into PID " + newProcess.PID);
             displayProcessdata(newProcess);
         };
+        // Kills a selected process.
+        ProcessManager.prototype.killProcess = function (index) {
+            // Clear the memory block for a killed process.
+            _MemoryManager.deallocateMemory(_ProcessManager.readyQueue[index].base, _ProcessManager.readyQueue[index].limit);
+            _ProcessManager.readyQueue[index].state = "Killed";
+            updateProcess(_ProcessManager.readyQueue[index]);
+            _StdOut.putText("Process ID " + _ProcessManager.readyQueue[index].PID + " killed.");
+            _ProcessManager.readyQueue.splice(index, 1);
+        };
         // Loads the current PCB when the user runs a program.
         ProcessManager.prototype.loadCurrentPCB = function (PCB) {
             _PCB.PID = PCB.PID;
