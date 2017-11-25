@@ -342,8 +342,10 @@ var TSOS;
                     if (args.length > 0) {
                         priority = parseInt(command);
                         // If hex is valid, allocate memory for the process.
-                        if (validHex) {
+                        if (validHex && !isNaN(priority)) {
                             _MemoryManager.allocateMemory(hexArray, priority); // Put the program commands in memory.
+                        } else {
+                            _StdOut.putText("Please give a valid priority from 1-10.");
                         }
                     } else {
                         _StdOut.putText("Usage: Priority <int> Please supply a priority from 1-10.");
