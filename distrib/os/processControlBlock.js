@@ -17,8 +17,9 @@
 var TSOS;
 (function (TSOS) {
     var PCB = (function () {
-        function PCB(PID, state, PC, AC, IR, xRegister, yRegister, zFlag, base, limit) {
+        function PCB(PID, priority, state, PC, AC, IR, xRegister, yRegister, zFlag, base, limit) {
             if (PID === void 0) { PID = -1; }
+            if (priority === void 0) { priority = -1; }
             if (state === void 0) { state = ""; }
             if (PC === void 0) { PC = 0; }
             if (AC === void 0) { AC = 0; }
@@ -29,6 +30,7 @@ var TSOS;
             if (base === void 0) { base = 0; }
             if (limit === void 0) { limit = _MaxMemory; }
             this.PID = PID;
+            this.priority = priority;
             this.state = state;
             this.PC = PC;
             this.AC = AC;

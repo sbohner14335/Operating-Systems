@@ -77,7 +77,7 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellClearmem, "clearmem", "- Clears all memory partitions/segments.");
             this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
-            sc = new TSOS.ShellCommand(this.shellPs, "ps", "- Lists the running processes and their IDs.");
+            sc = new TSOS.ShellCommand(this.shellPs, "ps", "- Lists the running processes and their PIDs.");
             this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
             sc = new TSOS.ShellCommand(this.shellKill, "kill", "<pid> - Kills a selected process.");
@@ -273,7 +273,7 @@ var TSOS;
                 _StdOut.putText(args.join(' ') + " = '" + TSOS.Utils.rot13(args.join(' ')) + "'");
             }
             else {
-                _StdOut.putText("Usage: rot13 <string>  Please supply a string.");
+                _StdOut.putText("Usage: rot13 <string> Please supply a string.");
             }
         };
         Shell.prototype.shellPrompt = function (args) {
@@ -281,7 +281,7 @@ var TSOS;
                 _OsShell.promptStr = args[0];
             }
             else {
-                _StdOut.putText("Usage: prompt <string>  Please supply a string.");
+                _StdOut.putText("Usage: prompt <string> Please supply a string.");
             }
         };
         Shell.prototype.shellDate = function (args) {
@@ -298,7 +298,7 @@ var TSOS;
                 var status = args.toString(); // Parse the array using toString.
                 document.getElementById("status").innerText = "{" + status.split(",").join(" ") + "}";
             } else {
-                _StdOut.putText("Usage: status <string>  Please supply a string.");
+                _StdOut.putText("Usage: status <string> Please supply a string.");
             }
         };
         Shell.prototype.shellQuote = function () {
@@ -334,10 +334,25 @@ var TSOS;
                         validHex = true;
                     }
                 }
-            }
-            // Code that needs to run outside of the for loop, but only if a valid entry is made.
-            if (validHex) {
-                _MemoryManager.allocateMemory(hexArray); // Put the program commands in memory.
+                // Next, check for priority scheduling.
+                var priority = -1; // This represents the default priority if the priority algorithms is NOT selected.
+                if (_CpuScheduler.algorithm === "Priority") {
+                    // Make sure the user selects a priority with their loaded process.
+                    var command = args[0];
+                    if (args.length > 0) {
+                        priority = parseInt(command);
+                        // If hex is valid, allocate memory for the process.
+                        if (validHex) {
+                            _MemoryManager.allocateMemory(hexArray, priority); // Put the program commands in memory.
+                        }
+                    } else {
+                        _StdOut.putText("Usage: Priority <int> Please supply a priority from 1-10.");
+                    }
+                } else {
+                    if (validHex) {
+                        _MemoryManager.allocateMemory(hexArray, priority); // Put the program commands in memory.
+                    }
+                }
             }
             displayMemory();
         };
@@ -386,10 +401,12 @@ var TSOS;
             if (_CPU.isExecuting) {
                 _StdOut.putText("Processes running:");
                 _Console.advanceLine();
+                // Displays the current PCB.
                 if (_PCB.PID > -1) {
                     _StdOut.putText("PID " + _PCB.PID);
                     _Console.advanceLine();
                 }
+                // Displays all other processes currently in the ready queue.
                 for (i = 0; i < _ProcessManager.readyQueue.length; i++) {
                     _StdOut.putText("PID " + _ProcessManager.readyQueue[i].PID);
                     _Console.advanceLine();
@@ -418,7 +435,7 @@ var TSOS;
                     }
                 }
             } else {
-                _StdOut.putText("Usage: PID <string>  Please supply a PID.");
+                _StdOut.putText("Usage: PID <string> Please supply a PID.");
             }
         };
         // Sets a quantum for round robin CPU scheduling.
@@ -427,7 +444,7 @@ var TSOS;
             if (args.length > 0) {
                 _CpuScheduler.quantum = parseInt(command);
             } else {
-                _StdOut.putText("Usage: Quantum <int>  Please supply a quantum.");
+                _StdOut.putText("Usage: Quantum <int> Please supply a quantum.");
             }
         };
         // Sets the CPU scheduling algorithm for running programs.
@@ -456,7 +473,7 @@ var TSOS;
                     _StdOut.putText("  priority - Priority (Scale: 1-10)");
                 }
             } else {
-                _StdOut.putText("Usage: Algorithm <string>  Please set a scheduling algorithm - rr, fcfs, or priority.");
+                _StdOut.putText("Usage: Algorithm <string> Please set a scheduling algorithm - rr, fcfs, or priority.");
             }
         };
         // Displays the current CPU scheduling algorithm.
