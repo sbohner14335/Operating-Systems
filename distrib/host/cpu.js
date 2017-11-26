@@ -50,13 +50,8 @@ var TSOS;
         };
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
-            // TODO: Accumulate CPU usage and profiling statistics here.
-            // Check to see if the CPU is running and the readyQueue has a program, if not dequeue the next program and run it.
-            if (_PCB.state !== "Running" && _ProcessManager.readyQueue.length !== 0) {
-                var PCB = _ProcessManager.readyQueue.pop();
-                _ProcessManager.loadCurrentPCB(PCB);
-                _PCB.state = "Running";
-            }
+            // Find the next process if needed.
+            _CpuScheduler.nextProcess();
             // Load the current PCB in to prepare for fetch, decode and execute.
             this.loadPCB();
             // Switch case for decoding the instruction.

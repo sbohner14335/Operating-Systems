@@ -6,6 +6,17 @@ var TSOS;
             this.ticks = 0;
             this.algorithm = "Round Robin";
         }
+        // Based on the scheduling algorithm, this function appropriately gets the next process.
+        CpuScheduler.prototype.nextProcess = function () {
+            // Check to see if the CPU is running and if the readyQueue has a process, if not dequeue the next process and run it.
+            if (this.algorithm === "First Come First Serve" && _PCB.state !== "Running" && _ProcessManager.readyQueue.length !== 0) {
+                var PCB = _ProcessManager.readyQueue.pop();
+                _ProcessManager.loadCurrentPCB(PCB);
+                _PCB.state = "Running";
+            } else if (this.algorithm === "Priority") {
+                // TODO: Priority scheduling.
+            }
+        };
         CpuScheduler.prototype.contextSwitch = function () {
             // Reset the clock ticks.
             this.ticks = 0;

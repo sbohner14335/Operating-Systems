@@ -457,6 +457,8 @@ var TSOS;
                     _CpuScheduler.algorithm = "Round Robin";
                     _CpuScheduler.quantum = _DefaultQuantum;
                     _StdOut.putText("Scheduling algorithm switched to " + _CpuScheduler.algorithm);
+                    _Console.advanceLine();
+                    _StdOut.putText("  Quantum: " + _CpuScheduler.quantum);
                 } else if (command === "fcfs") {
                     _CpuScheduler.algorithm = "First Come First Serve";
                     _CpuScheduler.quantum = 10000000; // Really big quantum to achieve First Come First Serve CPU scheduling.
@@ -481,6 +483,10 @@ var TSOS;
         // Displays the current CPU scheduling algorithm.
         Shell.prototype.shellGetschedule = function () {
             _StdOut.putText("CPU Scheduling Algorithm - " + _CpuScheduler.algorithm);
+            if (_CpuScheduler.algorithm === "Round Robin") {
+                _Console.advanceLine();
+                _StdOut.putText("  Quantum: " + _CpuScheduler.quantum);
+            }
         };
         return Shell;
     })();
