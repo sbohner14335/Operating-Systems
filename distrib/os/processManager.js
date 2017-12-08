@@ -23,6 +23,10 @@ var TSOS;
             newProcess.limit = limit;
             this.residentList.push(newProcess);
             _StdOut.putText("Program loaded into PID " + newProcess.PID);
+            if (newProcess.priority !== -1) {
+                _Console.advanceLine();
+                _StdOut.putText("  Priority - " + newProcess.priority);
+            }
             displayProcessdata(newProcess);
         };
         // Kills a selected process.
