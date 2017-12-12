@@ -41,6 +41,8 @@ var TSOS;
             // Initialize the process manager and cpu scheduler.
             _ProcessManager = new TSOS.ProcessManager();
             _CpuScheduler = new TSOS.CpuScheduler();
+            // Initialize FileSystem driver.
+            _FileSystemDriver = new TSOS.FileSystemDriver();
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
             this.krnEnableInterrupts();

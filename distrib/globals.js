@@ -11,7 +11,7 @@
 // Global CONSTANTS (TypeScript 1.5 introduced const. Very cool.)
 //
 var APP_NAME = "RollerballOS";
-var APP_VERSION = "3.0";
+var APP_VERSION = "4.0";
 var CPU_CLOCK_INTERVAL = 100; // This is in ms (milliseconds) so 1000 = 1 second.
 var TIMER_IRQ = 0; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
@@ -27,6 +27,9 @@ var _OSclock = 0; // Page 23.
 var _Memory; // Initialize the memory object (used in control.js).
 var _MemoryManager;
 var _MaxMemory = 768;
+// HDD and FileSystem driver
+var _HDD;
+var _FileSystemDriver;
 // Program and CPU scheduling
 var _ProcessManager;
 var _CpuScheduler;

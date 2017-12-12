@@ -16,6 +16,7 @@
    <script type="text/javascript" src="distrib/host/devices.js"></script>
    <script type="text/javascript" src="distrib/host/cpu.js"></script>
    <script type="text/javascript" src="distrib/host/memory.js"></script>
+   <script type="text/javascript" src="distrib/host/HDD.js"></script>
 
    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
    <script type="text/javascript" src="distrib/os/interrupt.js"></script>
@@ -31,6 +32,7 @@
    <script type="text/javascript" src="distrib/os/memoryManager.js"></script>
    <script type="text/javascript" src="distrib/os/processManager.js"></script>
    <script type="text/javascript" src="distrib/os/cpuScheduler.js"></script>
+   <script type="text/javascript" src="distrib/os/deviceDriverFilesystem.js"></script>
    <script type="text/javascript" src="distrib/os/kernel.js"></script>
 
    <!-- Other Routines -->
@@ -130,6 +132,21 @@
             <th>Z</th>
          </tr>
          <tbody id="cpuDisplayValues">
+         </tbody>
+      </table>
+   </div>
+   <br><br>
+
+   <div id="divHDD">
+      <label style="color: white; margin:4px; font-weight: bold; border: 1px solid white; background-color: black;">HDD</label>
+      <table id="HDDdisplay" cellpadding="6" style="margin:4px;">
+         <tr>
+            <th>TSB</th>
+            <th>Bit</th>
+            <th>Loc</th>
+            <th>Data</th>
+         </tr>
+         <tbody id="HDDTableBody">
          </tbody>
       </table>
    </div>
