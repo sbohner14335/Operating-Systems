@@ -42,6 +42,7 @@ var TSOS;
             _ProcessManager = new TSOS.ProcessManager();
             _CpuScheduler = new TSOS.CpuScheduler();
             // Initialize FileSystem driver.
+            this.krnTrace("Loading the File System device driver.");
             _FileSystemDriver = new TSOS.FileSystemDriver();
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");

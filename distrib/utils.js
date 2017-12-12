@@ -131,6 +131,11 @@ var TSOS;
             }
         }
     };
+    // Logic for displaying the HDD.
+    displayHDD = function () {
+        var HDDtable = document.getElementById("HDDTableBody");
+
+    };
     // Clock that displays hours, minutes and seconds when the OS is running.
     getTime = function () {
         var date = new Date(); // Date object created for a clock.

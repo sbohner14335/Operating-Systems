@@ -91,6 +91,9 @@ var TSOS;
             // getschedule - displays the current CPU scheduling algorithm.
             sc = new TSOS.ShellCommand(this.shellGetschedule, "getschedule", "- Displays the current CPU scheduling algorithm.");
             this.commandList[this.commandList.length] = sc;
+            // format - initializes all tracks, sectors, and blocks in the HDD.
+            sc = new TSOS.ShellCommand(this.shellFormat, "format", "- Initializes all tracks, sectors, and blocks in the HDD.");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -465,7 +468,6 @@ var TSOS;
                     _StdOut.putText("Scheduling algorithm switched to " + _CpuScheduler.algorithm);
                 } else if (command === "priority") {
                     _CpuScheduler.algorithm = "Priority";
-                    // TODO: Set up priority scheduling.
                     _StdOut.putText("Scheduling algorithm switched to " + _CpuScheduler.algorithm);
                 } else {
                     _StdOut.putText("Valid CPU scheduling algorithms:");
@@ -487,6 +489,11 @@ var TSOS;
                 _Console.advanceLine();
                 _StdOut.putText("  Quantum: " + _CpuScheduler.quantum);
             }
+        };
+        // Initializes all tracks, sectors, and blocks in the HDD.
+        Shell.prototype.shellFormat = function () {
+            _FileSystemDriver.formatHDD();
+            _StdOut.putText("The HDD has been formatted successfully!");
         };
         return Shell;
     })();
