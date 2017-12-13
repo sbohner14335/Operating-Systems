@@ -534,14 +534,26 @@ var TSOS;
         Shell.prototype.shellWrite = function (args) {
             if (_FileSystemDriver.isFormatted()) {
                 var filename = args[0];
-                var data = args[1];
+                var data = "";
                 if (args.length > 0) {
+                    // Ensure that the entry is valid.
                     if (args.length < 2) {
-                        _StdOut.putText("Please provide data to write:");
+                        _StdOut.putText("Please provide data to write within quotations:");
                         _StdOut.advanceLine();
                         _StdOut.putText("  write <filename> " + "\"data\"");
                     } else {
-                        _FileSystemDriver.writeToFile(filename, data);
+                        // Loop through the arguments to form the "data".
+                        for (i = 1; i < args.length; i++) {
+                            data += args[i] + " ";
+                        }
+                        data = data.trim();
+                        // Ensure the data is surrounded by quotations
+                        if (data.substring(0, 1) !== "\"" && data.substring(data.length-1, data.length) !== "\"") {
+                            _StdOut.putText("Please surround the data with " + "\"quotations\".");
+                        } else {
+                            data = data.replace(/"/g, "");
+                            _FileSystemDriver.writeToFile(filename, data);
+                        }
                     }
                 } else {
                     _StdOut.putText("Usage: File <filename> Please supply a filename.");
