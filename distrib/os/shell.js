@@ -97,8 +97,14 @@ var TSOS;
             // create - creates a file in the HDD and denotes success or failure.
             sc = new TSOS.ShellCommand(this.shellCreate, "create", "<filename> - Creates a file on the HDD.");
             this.commandList[this.commandList.length] = sc;
+            // ls - lists all files currently stored on the HDD.
+            sc = new TSOS.ShellCommand(this.shellList, "ls", "- Lists all files on the HDD.");
+            this.commandList[this.commandList.length] = sc;
             // write - write to a file in the HDD and denote success or failure.
             sc = new TSOS.ShellCommand(this.shellWrite, "write", "<filename> - Write to a file on the HDD.");
+            this.commandList[this.commandList.length] = sc;
+            // read - reads a file based on a provided filename.
+            sc = new TSOS.ShellCommand(this.shellRead, "read", "<filename> - Reads from a file based on the filename.");
             this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
@@ -503,20 +509,30 @@ var TSOS;
         };
         // Creates a file in the HDD and denotes success or failure.
         Shell.prototype.shellCreate = function (args) {
-            if (_FileSystemDriver.formatted === true) {
+            if (_FileSystemDriver.isFormatted()) {
                 var command = args[0];
                 if (args.length > 0) {
-                        _FileSystemDriver.createFile(command);
+                    _FileSystemDriver.createFile(command);
                 } else {
                     _StdOut.putText("Usage: File <filename> Please supply a filename.");
                 }
-            } else {
-                _StdOut.putText("The HDD has not been formatted!");
+            }
+        };
+        // Lists all files currently on the HDD.
+        Shell.prototype.shellList = function () {
+            if (_FileSystemDriver.isFormatted()) {
+                if (sessionStorage.getItem('0:0:0').substring(0, 1) === "0") {
+                    _StdOut.putText("There are no files on the HDD.");
+                } else {
+                    _StdOut.putText("HDD Files:");
+                    _Console.advanceLine();
+                    _FileSystemDriver.listFiles();
+                }
             }
         };
         // Write to a file in the HDD and denote success or failure.
         Shell.prototype.shellWrite = function (args) {
-            if (_FileSystemDriver.formatted === true) {
+            if (_FileSystemDriver.isFormatted()) {
                 var filename = args[0];
                 var data = args[1];
                 if (args.length > 0) {
@@ -530,8 +546,17 @@ var TSOS;
                 } else {
                     _StdOut.putText("Usage: File <filename> Please supply a filename.");
                 }
-            } else {
-                _StdOut.putText("The HDD has not been formatted!");
+            }
+        };
+        // Reads a file based on a provided filename.
+        Shell.prototype.shellRead = function (args) {
+            if (_FileSystemDriver.isFormatted()) {
+                var filename = args[0];
+                if (args.length > 0) {
+                    _FileSystemDriver.readFromFile(filename);
+                } else {
+                    _StdOut.putText("Usage: File <filename> Please supply a filename.");
+                }
             }
         };
         return Shell;

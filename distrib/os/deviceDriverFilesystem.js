@@ -12,6 +12,13 @@ var TSOS;
             }
             return formatted;
         };
+        FileSystemDriver.prototype.isFormatted = function () {
+            if (this.formatted !== true) {
+                _StdOut.putText("The HDD has not been formatted!");
+            } else {
+                return true;
+            }
+        };
         // Formats the HDD by looping through all tracks, sectors, and blocks of the HDD and declaring the keys/values in HTML session storage.
         FileSystemDriver.prototype.formatHDD = function () {
             sessionStorage.clear();
@@ -41,7 +48,7 @@ var TSOS;
                 }
             }
         };
-        // Finds a file by name and returns the track, sector and block.
+        // Finds a file by name and returns the track, sector and block (or key).
         FileSystemDriver.prototype.findFileByName = function (filename) {
             var track = 0;
             for (j = 0; j < _HDD.sectors; j++) {
@@ -76,7 +83,7 @@ var TSOS;
                         sessionStorage.setItem(nextFreeBlock, 1);
                         var freeBlockKey = nextFreeBlock.split(":").join("");
                         sessionStorage.setItem(track + ":" + j + ":" + k, 1 + freeBlockKey + filename);
-                        return _StdOut.putText(filename + " has been created!");
+                        return _StdOut.putText("File " + "\"" + filename + "\"" + " has been created!");
                     } else {
                         if (block.toString().indexOf(filename) !== -1) {
                             return _StdOut.putText("The filename: " + "\"" + filename + "\"" + " already exists.");
@@ -89,13 +96,40 @@ var TSOS;
             }
             displayHDD();
         };
+        // Displays all current files located on the HDD.
+        FileSystemDriver.prototype.listFiles = function () {
+            var track = 0;
+            for (j = 0; j < _HDD.sectors; j++) {
+                for (k = 0; k < _HDD.blocks; k++) {
+                    var block = sessionStorage.getItem(track + ":" + j + ":" + k);
+                    var bit = parseInt(block.substring(0, 1));
+                    if (bit === 1) {
+                        _StdOut.putText("  " + block.substring(4));
+                        _Console.advanceLine();
+                    }
+                }
+            }
+        };
+        // Logic that concatenates data to the string of a designated block.
         FileSystemDriver.prototype.writeToFile = function (filename, data) {
             var key = this.findFileByName(filename);
             if (key !== undefined) {
                 var block = sessionStorage.getItem(key);
-                sessionStorage.setItem(key, block + data);
+                if (data.length > 60) {
+                    // TODO: Loop that for the length of the data, will enter the next HDD block.
+
+                } else {
+                    sessionStorage.setItem(key, block + data);
+                }
             }
             displayHDD();
+        };
+        // Reads the data of a file based on the filename provided.
+        FileSystemDriver.prototype.readFromFile = function (filename) {
+            var key = this.findFileByName(filename);
+            if (key !== undefined) {
+                var block = sessionStorage.getItem(key);
+            }
         };
         return FileSystemDriver;
     })();
