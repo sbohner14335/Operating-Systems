@@ -95,7 +95,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellFormat, "format", "- Initializes all tracks, sectors, and blocks in the HDD.");
             this.commandList[this.commandList.length] = sc;
             // create - creates a file in the HDD and denotes success or failure.
-            sc = new TSOS.ShellCommand(this.shellCreate, "create", "<filename> - Creates a file in the HDD.");
+            sc = new TSOS.ShellCommand(this.shellCreate, "create", "<filename> - Creates a file on the HDD.");
+            this.commandList[this.commandList.length] = sc;
+            // write - write to a file in the HDD and denote success or failure.
+            sc = new TSOS.ShellCommand(this.shellWrite, "write", "<filename> - Write to a file on the HDD.");
             this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
@@ -500,15 +503,35 @@ var TSOS;
         };
         // Creates a file in the HDD and denotes success or failure.
         Shell.prototype.shellCreate = function (args) {
-            var command = args[0];
-            if (args.length > 0) {
-                if (_FileSystemDriver.formatted === true) {
-                    _FileSystemDriver.createFile(command);
+            if (_FileSystemDriver.formatted === true) {
+                var command = args[0];
+                if (args.length > 0) {
+                        _FileSystemDriver.createFile(command);
                 } else {
-                    _StdOut.putText("The HDD has not been formatted!");
+                    _StdOut.putText("Usage: File <filename> Please supply a filename.");
                 }
             } else {
-                _StdOut.putText("Usage: File <filename> Please supply a filename.");
+                _StdOut.putText("The HDD has not been formatted!");
+            }
+        };
+        // Write to a file in the HDD and denote success or failure.
+        Shell.prototype.shellWrite = function (args) {
+            if (_FileSystemDriver.formatted === true) {
+                var filename = args[0];
+                var data = args[1];
+                if (args.length > 0) {
+                    if (args.length < 2) {
+                        _StdOut.putText("Please provide data to write:");
+                        _StdOut.advanceLine();
+                        _StdOut.putText("  write <filename> " + "\"data\"");
+                    } else {
+                        _FileSystemDriver.writeToFile(filename, data);
+                    }
+                } else {
+                    _StdOut.putText("Usage: File <filename> Please supply a filename.");
+                }
+            } else {
+                _StdOut.putText("The HDD has not been formatted!");
             }
         };
         return Shell;

@@ -8,7 +8,7 @@ var TSOS;
         FileSystemDriver.prototype.formatBlock = function () {
             var formatted = "";
             for (i = 0; i < _HDD.blockSize; i++) {
-                formatted += "-";
+                formatted += "0";
             }
             return formatted;
         };
@@ -41,6 +41,23 @@ var TSOS;
                 }
             }
         };
+        // Finds a file by name and returns the track, sector and block.
+        FileSystemDriver.prototype.findFileByName = function (filename) {
+            var track = 0;
+            for (j = 0; j < _HDD.sectors; j++) {
+                for (k = 0; k < _HDD.blocks; k++) {
+                    var block = sessionStorage.getItem(track + ":" + j + ":" + k);
+                    var bit = parseInt(block.substring(0, 1));
+                    if (bit === 1) {
+                        var file = block.substring(4);
+                        if (filename === file) {
+                            return block.substring(1, 2) + ":" + block.substring(2, 3) + ":" + block.substring(3, 4);
+                        }
+                    }
+                }
+            }
+            return _StdOut.putText("Filename does not exist.");
+        };
         // Creates a file directory in the HDD.
         FileSystemDriver.prototype.createFile = function (filename) {
             var track = 0;
@@ -72,7 +89,14 @@ var TSOS;
             }
             displayHDD();
         };
-
+        FileSystemDriver.prototype.writeToFile = function (filename, data) {
+            var key = this.findFileByName(filename);
+            if (key !== undefined) {
+                var block = sessionStorage.getItem(key);
+                sessionStorage.setItem(key, block + data);
+            }
+            displayHDD();
+        };
         return FileSystemDriver;
     })();
     TSOS.FileSystemDriver = FileSystemDriver;
