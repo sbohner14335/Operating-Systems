@@ -19,17 +19,44 @@ var TSOS;
             for (i = 0; i < _HDD.tracks; i++) {
                 for (j = 0; j < _HDD.sectors; j++) {
                     for (k = 0; k < _HDD.blocks; k++) {
+                        // Set the key as the track, sector and block.
                         sessionStorage.setItem(i + ":" + j + ":" + k, formatBlock);
                     }
                 }
             }
-            if (this.formatted !== true) {
-                displayHDD();
-            }
+            displayHDD();
             this.formatted = true;
         };
-        FileSystemDriver.prototype.createFile = function () {
-
+        // Creates a file directory in the HDD.
+        FileSystemDriver.prototype.createFile = function (filename) {
+            var track = 0;
+            for (j = 0; j < _HDD.sectors; j++) {
+                for (k = 0; k < _HDD.blocks; k++) {
+                    // Get the first bit to verify whether the block is set or not.
+                    var block = sessionStorage.getItem(track + ":" + j + ":" + k);
+                    var bit = parseInt(block.substring(0, 1));
+                    // Check only the first track (since that is only for files).
+                    if (bit !== 1) {
+                        // Ensure there is not a file already created with the same name.
+                        if (block.indexOf(filename) === -1) {
+                            if (filename.length > 60) {
+                                _StdOut.putText("The filename is too long to be stored.");
+                                break;
+                            } else {
+                                sessionStorage.setItem(track + ":" + j + ":" + k, 1 + track+1 + filename);
+                                break;
+                            }
+                        } else {
+                            _StdOut.putText(filename + " already exists.");
+                            break;
+                        }
+                    } else {
+                        _StdOut.putText("The max amount of directories have been reached.");
+                        break;
+                    }
+                }
+            }
+            displayHDD();
         };
 
         return FileSystemDriver;

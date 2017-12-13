@@ -94,6 +94,9 @@ var TSOS;
             // format - initializes all tracks, sectors, and blocks in the HDD.
             sc = new TSOS.ShellCommand(this.shellFormat, "format", "- Initializes all tracks, sectors, and blocks in the HDD.");
             this.commandList[this.commandList.length] = sc;
+            // create - creates a file in the HDD and denotes success or failure.
+            sc = new TSOS.ShellCommand(this.shellCreate, "create", "- Creates a file in the HDD.");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -293,7 +296,7 @@ var TSOS;
             _StdOut.advanceLine();
             _StdOut.putText(_Date);
         };
-        Shell.prototype.shellWhereami = function (args) {
+        Shell.prototype.shellWhereami = function () {
             _StdOut.putText("You're speeding on rollerblades in a pit with a ball in your hand.");
         };
         Shell.prototype.shellStatus = function (args) {
@@ -312,7 +315,7 @@ var TSOS;
                 quote.style.display = "none"
             }
         };
-        Shell.prototype.shellBSOD = function (args) {
+        Shell.prototype.shellBSOD = function () {
             _Kernel.krnTrapError("BSOD");
         };
         Shell.prototype.shellLoad = function (args) {
@@ -397,12 +400,12 @@ var TSOS;
             }
         };
         // This command clears all memory partitions/segments.
-        Shell.prototype.shellClearmem = function (args) {
+        Shell.prototype.shellClearmem = function () {
             _Memory.clearMemory();
             displayMemory();
         };
         // This command will display the running processes and their IDs.
-        Shell.prototype.shellPs = function (args) {
+        Shell.prototype.shellPs = function () {
             if (_CPU.isExecuting) {
                 _StdOut.putText("Processes running:");
                 _Console.advanceLine();
@@ -494,6 +497,15 @@ var TSOS;
         Shell.prototype.shellFormat = function () {
             _FileSystemDriver.formatHDD();
             _StdOut.putText("The HDD has been formatted successfully!");
+        };
+        // Creates a file in the HDD and denotes success or failure.
+        Shell.prototype.shellCreate = function (args) {
+            var command = args[0];
+            if (args.length > 0) {
+                _FileSystemDriver.createFile(command);
+            } else {
+                _StdOut.putText("Usage: File <string> Please supply a filename.");
+            }
         };
         return Shell;
     })();

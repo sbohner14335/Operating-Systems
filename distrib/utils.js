@@ -134,7 +134,8 @@ var TSOS;
     // Logic for displaying the HDD.
     displayHDD = function () {
         var HDDtable = document.getElementById("HDDTableBody");
-        var generatedRow;
+        HDDtable.innerHTML = "";
+        var generatedRow; // String created for inner HTML.
         for (i = 0; i < _HDD.tracks; i++) {
             for (j = 0; j < _HDD.sectors; j++) {
                 for (k = 0; k < _HDD.blocks; k++) {
