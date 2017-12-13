@@ -20,9 +20,11 @@ var TSOS;
                 for (j = 0; j < _HDD.sectors; j++) {
                     for (k = 0; k < _HDD.blocks; k++) {
                         sessionStorage.setItem(i + ":" + j + ":" + k, formatBlock);
-                        displayHDD(i, j, k);
                     }
                 }
+            }
+            if (this.formatted !== true) {
+                displayHDD();
             }
             this.formatted = true;
         };

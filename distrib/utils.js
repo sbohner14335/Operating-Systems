@@ -134,7 +134,20 @@ var TSOS;
     // Logic for displaying the HDD.
     displayHDD = function () {
         var HDDtable = document.getElementById("HDDTableBody");
-
+        var generatedRow;
+        for (i = 0; i < _HDD.tracks; i++) {
+            for (j = 0; j < _HDD.sectors; j++) {
+                for (k = 0; k < _HDD.blocks; k++) {
+                    generatedRow = "<tr align=\"center\">\n" +
+                                    "<td>" + i + ":" + j + ":" + k + "</td>" +
+                                    "<td>" + sessionStorage.getItem(i + ":" + j + ":" + k).substring(0, 1) + "</td>" +
+                                    "<td>" + sessionStorage.getItem(i + ":" + j + ":" + k).substring(1, 4) + "</td>" +
+                                    "<td>" + sessionStorage.getItem(i + ":" + j + ":" + k).substring(4, 64) + "</td>" +
+                                   "</tr>";
+                    HDDtable.innerHTML += generatedRow;
+                }
+            }
+        }
     };
     // Clock that displays hours, minutes and seconds when the OS is running.
     getTime = function () {
