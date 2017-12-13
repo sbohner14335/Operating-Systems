@@ -95,7 +95,7 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellFormat, "format", "- Initializes all tracks, sectors, and blocks in the HDD.");
             this.commandList[this.commandList.length] = sc;
             // create - creates a file in the HDD and denotes success or failure.
-            sc = new TSOS.ShellCommand(this.shellCreate, "create", "- Creates a file in the HDD.");
+            sc = new TSOS.ShellCommand(this.shellCreate, "create", "<filename> - Creates a file in the HDD.");
             this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
@@ -502,9 +502,13 @@ var TSOS;
         Shell.prototype.shellCreate = function (args) {
             var command = args[0];
             if (args.length > 0) {
-                _FileSystemDriver.createFile(command);
+                if (_FileSystemDriver.formatted === true) {
+                    _FileSystemDriver.createFile(command);
+                } else {
+                    _StdOut.putText("The HDD has not been formatted!");
+                }
             } else {
-                _StdOut.putText("Usage: File <string> Please supply a filename.");
+                _StdOut.putText("Usage: File <filename> Please supply a filename.");
             }
         };
         return Shell;
