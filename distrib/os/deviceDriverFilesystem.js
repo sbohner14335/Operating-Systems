@@ -117,7 +117,7 @@ var TSOS;
             if (key !== undefined) {
                 // Check if the length of the data will fit into the block.
                 if (dataLength < (_HDD.blockSize - _HDD.headerSize)) {
-                    return sessionStorage.setItem(key, this.bit + "000" + data);
+                    sessionStorage.setItem(key, this.bit + "000" + data);
                 } else {
                     // Split the data up into groups of 60 bits and put in dataArray.
                     while (dataLength % (_HDD.blockSize - _HDD.headerSize) >= 1) {
@@ -126,10 +126,11 @@ var TSOS;
                         data = data.replace(data60Bits, "");
                         dataLength = dataLength - (_HDD.blockSize - _HDD.headerSize);
                     }
-                    // Fill all blocks with appropriate data.
+                    // Fill the first block with appropriate data.
                     var TSBpointer = this.findFreeBlock();
                     TSBpointer = TSBpointer.split(":").join("");
                     sessionStorage.setItem(key, this.bit + TSBpointer + dataArray[0]);
+                    // However long the dataArray is (groups of 60 bits) loop through that and fill all blocks.
                     for (i = 1; i < dataArray.length; i++) {
                         var pointerKey = this.findFreeBlock();
                         sessionStorage.setItem(pointerKey, this.bit);
@@ -142,6 +143,7 @@ var TSOS;
                         }
                     }
                 }
+                return _StdOut.putText("Data written to " + "\"" + filename + "\"");
             }
             displayHDD();
         };
