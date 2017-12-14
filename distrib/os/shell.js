@@ -106,6 +106,9 @@ var TSOS;
             // read - reads a file based on a provided filename.
             sc = new TSOS.ShellCommand(this.shellRead, "read", "<filename> - Reads from a file based on the filename.");
             this.commandList[this.commandList.length] = sc;
+            // delete - deletes a filename from storage and denotes success or failure.
+            sc = new TSOS.ShellCommand(this.shellDelete, "delete", "<filename> - Deletes a file from storage.");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -569,6 +572,18 @@ var TSOS;
                 var filename = args[0];
                 if (args.length > 0) {
                     _FileSystemDriver.readFromFile(filename);
+                } else {
+                    _StdOut.putText("Usage: File <filename> Please supply a filename.");
+                }
+                displayHDD();
+            }
+        };
+        // Deletes a file that is in storage on HDD.
+        Shell.prototype.shellDelete = function (args) {
+            if (_FileSystemDriver.isFormatted()) {
+                var filename = args[0];
+                if (args.length > 0) {
+                    _FileSystemDriver.deleteFile(filename);
                 } else {
                     _StdOut.putText("Usage: File <filename> Please supply a filename.");
                 }

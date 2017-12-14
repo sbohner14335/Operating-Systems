@@ -6,7 +6,7 @@ var TSOS;
             this.bit = 1; // Bit that distinguishes whether the block is set or not.
         }
         // Used for initializing an HDD block.
-        FileSystemDriver.prototype.formatBlock = function () {
+        FileSystemDriver.prototype.formattedBlock = function () {
             var formatted = "";
             for (i = 0; i < _HDD.blockSize; i++) {
                 formatted += "0";
@@ -23,7 +23,7 @@ var TSOS;
         // Formats the HDD by looping through all tracks, sectors, and blocks of the HDD and declaring the keys/values in HTML session storage.
         FileSystemDriver.prototype.formatHDD = function () {
             sessionStorage.clear();
-            var formatBlock = this.formatBlock();
+            var formatBlock = this.formattedBlock();
             for (i = 0; i < _HDD.tracks; i++) {
                 for (j = 0; j < _HDD.sectors; j++) {
                     for (k = 0; k < _HDD.blocks; k++) {
@@ -150,6 +150,47 @@ var TSOS;
             var key = this.findFileByName(filename);
             if (key !== undefined) {
                 var block = sessionStorage.getItem(key);
+                var TSB = block.substring(1, 2) + ":" + block.substring(2, 3) + ":" + block.substring(3, 4);
+                var contents = block.substring(4);
+                while (TSB !== "0:0:0") {
+                    block = sessionStorage.getItem(TSB);
+                    TSB = block.substring(1, 2) + ":" + block.substring(2, 3) + ":" + block.substring(3, 4);
+                    contents += block.substring(4);
+                }
+                _StdOut.putText(contents);
+            }
+        };
+        // Deletes a file that is in storage on HDD.
+        FileSystemDriver.prototype.deleteFile = function (filename) {
+            // Delete all file pointers.
+            var key = this.findFileByName(filename);
+            var clearedBlock = this.formattedBlock(); // Get a cleared disk block.
+            if (key !== undefined) {
+                // Get the block based on the filename
+                var block = sessionStorage.getItem(key);
+                // Get the TSB for the block the file is pointing to.
+                var TSB = block.substring(1, 2) + ":" + block.substring(2, 3) + ":" + block.substring(3, 4);
+                sessionStorage.setItem(key, clearedBlock);
+                while (TSB !== "0:0:0") {
+                    block = sessionStorage.getItem(TSB);
+                    sessionStorage.setItem(TSB, clearedBlock);
+                    TSB = block.substring(1, 2) + ":" + block.substring(2, 3) + ":" + block.substring(3, 4);
+                }
+            }
+            // Clear the actual file (directory) on HDD.
+            var track = 0;
+            for (j = 0; j < _HDD.sectors; j++) {
+                for (k = 0; k < _HDD.blocks; k++) {
+                    var fileBlock = sessionStorage.getItem(track + ":" + j + ":" + k);
+                    var bit = parseInt(fileBlock.substring(0, 1));
+                    if (bit === 1) {
+                        var file = fileBlock.substring(4);
+                        if (filename === file) {
+                            sessionStorage.setItem(track + ":" + j + ":" + k, clearedBlock);
+                            return _StdOut.putText(filename + " and its contents deleted.");
+                        }
+                    }
+                }
             }
         };
         return FileSystemDriver;
