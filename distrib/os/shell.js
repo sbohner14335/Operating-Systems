@@ -506,6 +506,7 @@ var TSOS;
         Shell.prototype.shellFormat = function () {
             _FileSystemDriver.formatHDD();
             _StdOut.putText("The HDD has been formatted successfully!");
+            displayHDD();
         };
         // Creates a file in the HDD and denotes success or failure.
         Shell.prototype.shellCreate = function (args) {
@@ -516,6 +517,7 @@ var TSOS;
                 } else {
                     _StdOut.putText("Usage: File <filename> Please supply a filename.");
                 }
+                displayHDD();
             }
         };
         // Lists all files currently on the HDD.
@@ -558,6 +560,7 @@ var TSOS;
                 } else {
                     _StdOut.putText("Usage: File <filename> Please supply a filename.");
                 }
+                displayHDD();
             }
         };
         // Reads a file based on a provided filename.
@@ -569,6 +572,7 @@ var TSOS;
                 } else {
                     _StdOut.putText("Usage: File <filename> Please supply a filename.");
                 }
+                displayHDD();
             }
         };
         return Shell;

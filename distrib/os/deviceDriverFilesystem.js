@@ -3,6 +3,7 @@ var TSOS;
     var FileSystemDriver = (function () {
         function FileSystemDriver() {
             this.formatted = false;
+            this.bit = 1; // Bit that distinguishes whether the block is set or not.
         }
         // Used for initializing an HDD block.
         FileSystemDriver.prototype.formatBlock = function () {
@@ -31,7 +32,6 @@ var TSOS;
                     }
                 }
             }
-            displayHDD();
             this.formatted = true;
         };
         // Checks all blocks for an free block and returns it (Start from 2nd track).
@@ -68,7 +68,7 @@ var TSOS;
         // Creates a file directory in the HDD.
         FileSystemDriver.prototype.createFile = function (filename) {
             var track = 0;
-            if (filename.length > 60) {
+            if (filename.length > _HDD.blockSize - _HDD.headerSize) {
                 return _StdOut.putText("The filename is too long to be stored.");
             }
             for (j = 0; j < _HDD.sectors; j++) {
@@ -80,9 +80,9 @@ var TSOS;
                     if (bit !== 1) {
                         // Ensure there is not a file already created with the same name.
                         var nextFreeBlock = this.findFreeBlock();
-                        sessionStorage.setItem(nextFreeBlock, 1);
+                        sessionStorage.setItem(nextFreeBlock, this.bit);
                         var freeBlockKey = nextFreeBlock.split(":").join("");
-                        sessionStorage.setItem(track + ":" + j + ":" + k, 1 + freeBlockKey + filename);
+                        sessionStorage.setItem(track + ":" + j + ":" + k, this.bit + freeBlockKey + filename);
                         return _StdOut.putText("File " + "\"" + filename + "\"" + " has been created!");
                     } else {
                         if (block.toString().indexOf(filename) !== -1) {
@@ -94,7 +94,6 @@ var TSOS;
                     }
                 }
             }
-            displayHDD();
         };
         // Displays all current files located on the HDD.
         FileSystemDriver.prototype.listFiles = function () {
@@ -104,7 +103,7 @@ var TSOS;
                     var block = sessionStorage.getItem(track + ":" + j + ":" + k);
                     var bit = parseInt(block.substring(0, 1));
                     if (bit === 1) {
-                        _StdOut.putText("  " + block.substring(4));
+                        _StdOut.putText("  " + block.substring(_HDD.headerSize));
                         _Console.advanceLine();
                     }
                 }
@@ -113,13 +112,35 @@ var TSOS;
         // Logic that concatenates data to the string of a designated block.
         FileSystemDriver.prototype.writeToFile = function (filename, data) {
             var key = this.findFileByName(filename);
+            var dataArray = [];
+            var dataLength = data.length;
             if (key !== undefined) {
-                var block = sessionStorage.getItem(key);
-                if (data.length > 60) {
-                    // TODO: Loop that for the length of the data, will enter the next HDD block.
-
+                // Check if the length of the data will fit into the block.
+                if (dataLength < (_HDD.blockSize - _HDD.headerSize)) {
+                    return sessionStorage.setItem(key, this.bit + "000" + data);
                 } else {
-                    sessionStorage.setItem(key, block + data);
+                    // Split the data up into groups of 60 bits and put in dataArray.
+                    while (dataLength % (_HDD.blockSize - _HDD.headerSize) >= 1) {
+                        var data60Bits = data.substring(0, (_HDD.blockSize - _HDD.headerSize));
+                        dataArray.push(data60Bits);
+                        data = data.replace(data60Bits, "");
+                        dataLength = dataLength - (_HDD.blockSize - _HDD.headerSize);
+                    }
+                    // Fill all blocks with appropriate data.
+                    var TSBpointer = this.findFreeBlock();
+                    TSBpointer = TSBpointer.split(":").join("");
+                    sessionStorage.setItem(key, this.bit + TSBpointer + dataArray[0]);
+                    for (i = 1; i < dataArray.length; i++) {
+                        var pointerKey = this.findFreeBlock();
+                        sessionStorage.setItem(pointerKey, this.bit);
+                        var nextBlock = this.findFreeBlock(); // This block will be used as a reference.
+                        nextBlock = nextBlock.split(":").join("");
+                        if (i !== dataArray.length -1) {
+                            sessionStorage.setItem(pointerKey, this.bit + nextBlock + dataArray[i]);
+                        } else {
+                            sessionStorage.setItem(pointerKey, this.bit + "000" + dataArray[i]);
+                        }
+                    }
                 }
             }
             displayHDD();
